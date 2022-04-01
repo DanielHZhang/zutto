@@ -1,5 +1,5 @@
 import {createSignal, For, JSXElement} from 'solid-js';
-import {DatabaseCard} from '../components/home';
+import {ActionCard, DatabaseCard} from 'src/components/home';
 
 const data = [
   {
@@ -22,6 +22,9 @@ export default function Home(): JSXElement {
   return (
     <section class='text-gray-200 p-8'>
       <h1 class='text-3xl font-bold'>zutto - databases</h1>
+      <div>
+        <ActionCard type='' />
+      </div>
       <div class='flex space-x-8'>
         <For each={data}>{(item) => <DatabaseCard {...item} />}</For>
       </div>
