@@ -4,7 +4,7 @@ export default function Home(): JSXElement {
   const [count, setCount] = createSignal(0);
 
   return (
-    <section class='bg-gray-100 text-gray-700 p-8'>
+    <section class='text-gray-700 p-8'>
       <h1 class='text-2xl font-bold'>Home</h1>
       <p class='mt-4'>This is the home page.</p>
 
