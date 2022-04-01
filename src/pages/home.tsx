@@ -1,12 +1,20 @@
-import {createSignal, JSXElement} from 'solid-js';
+import {createSignal, For, JSXElement} from 'solid-js';
+import {DatabaseCard} from '../components/home';
+
+const data = [
+  {
+    name: 'Testing db',
+    host: 'localhost',
+  },
+];
 
 export default function Home(): JSXElement {
   const [count, setCount] = createSignal(0);
 
   return (
-    <section class='text-gray-700 p-8'>
-      <h1 class='text-2xl font-bold'>Home</h1>
-      <p class='mt-4'>This is the home page.</p>
+    <section class='text-gray-200 p-8'>
+      <h1 class='text-3xl font-bold'>zutto - databases</h1>
+      <For each={data}>{(item) => <DatabaseCard {...item} />}</For>
 
       <div class='flex items-center space-x-2'>
         <button
