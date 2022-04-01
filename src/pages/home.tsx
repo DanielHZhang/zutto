@@ -5,6 +5,14 @@ const data = [
   {
     name: 'Testing db',
     host: 'localhost',
+    port: 5432,
+    username: 'admin',
+  },
+  {
+    name: 'Testing db',
+    host: 'localhost',
+    port: 5432,
+    username: 'admin',
   },
 ];
 
@@ -14,7 +22,9 @@ export default function Home(): JSXElement {
   return (
     <section class='text-gray-200 p-8'>
       <h1 class='text-3xl font-bold'>zutto - databases</h1>
-      <For each={data}>{(item) => <DatabaseCard {...item} />}</For>
+      <div class='flex space-x-8'>
+        <For each={data}>{(item) => <DatabaseCard {...item} />}</For>
+      </div>
 
       <div class='flex items-center space-x-2'>
         <button
