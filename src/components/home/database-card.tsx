@@ -1,5 +1,5 @@
-import {JSXElement} from 'solid-js';
-import {Button} from '../base';
+import {createSignal, JSXElement} from 'solid-js';
+import {Button} from 'src/components/base';
 
 type Props = {
   name: string;
@@ -9,6 +9,7 @@ type Props = {
 };
 
 export const DatabaseCard = (props: Props): JSXElement => {
+  // const [] = createSignal();
   return (
     <div class='flex flex-col bg-slate-600 rounded-lg p-8'>
       <h1 class='text-lg font-medium'>{props.name}</h1>

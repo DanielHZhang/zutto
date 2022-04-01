@@ -1,0 +1,26 @@
+{
+	"[css][javascript][javascriptreact][typescript][typescriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[rust]": {
+		"editor.defaultFormatter": "matklad.rust-analyzer",
+		"editor.snippetSuggestions": "bottom",
+		"editor.wordBasedSuggestions": false,
+		"editor.quickSuggestionsDelay": 100,
+	},
+	"eslint.packageManager": "yarn",
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact"
+	],
+	"files.watcherExclude": {
+		"src-tauri/icons/**": true,
+		"src-tauri/target/**": true,
+	},
+	"javascript.format.enable": false,
+	"typescript.format.enable": false,
+	"typescript.preferences.importModuleSpecifier": "non-relative",
+	"typescript.tsdk": "node_modules/typescript/lib",
+}
