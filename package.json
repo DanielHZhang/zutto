@@ -1,0 +1,32 @@
+{
+	"name": "zutto",
+	"version": "0.0.0",
+	"description": "",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"serve": "vite preview",
+		"tauri": "tauri"
+	},
+	"license": "(MIT OR Apache-2.0)",
+	"eslintConfig": {
+		"extends": "@supersede"
+	},
+	"prettier": "@supersede/prettier-config",
+	"dependencies": {
+		"@tauri-apps/api": "^1.0.0-rc.3",
+		"solid-app-router": "^0.3.2",
+		"solid-js": "^1.3.13"
+	},
+	"devDependencies": {
+		"@supersede/eslint-config": "^1.3.0",
+		"@supersede/prettier-config": "^1.0.1",
+		"@tauri-apps/cli": "^1.0.0-rc.8",
+		"eslint": "^8.12.0",
+		"prettier": "^2.6.1",
+		"typescript": "^4.6.3",
+		"vite": "^2.8.6",
+		"vite-plugin-solid": "^2.2.6",
+		"vite-plugin-windicss": "^1.8.3"
+	}
+}
