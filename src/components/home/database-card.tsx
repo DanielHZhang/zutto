@@ -1,4 +1,5 @@
 import {JSXElement} from 'solid-js';
+import {Button} from '../base';
 
 type Props = {
   name: string;
@@ -15,8 +16,8 @@ export const DatabaseCard = (props: Props): JSXElement => {
       <div>{props.port}</div>
       <div>{props.username}</div>
       <div class='flex'>
-        <button>edit</button>
-        <button>{'->'}</button>
+        <Button>edit</Button>
+        <Button>{'->'}</Button>
       </div>
     </div>
   );
