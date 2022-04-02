@@ -38,7 +38,7 @@ const App: Component = () => {
         </ul>
       </nav> */}
 
-      <main class='bg-slate-900'>
+      <main class='bg-slate-900 min-h-screen flex flex-col'>
         <Route />
       </main>
     </div>

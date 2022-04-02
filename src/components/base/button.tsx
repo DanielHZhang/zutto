@@ -5,5 +5,5 @@ type Props = {
 };
 
 export const Button = (props: Props): JSXElement => {
-  return <button class='bg-stone-700 px-2'>{props.children}</button>;
+  return <button class='bg-slate-700 p-2 rounded-md'>{props.children}</button>;
 };

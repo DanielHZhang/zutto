@@ -12,13 +12,13 @@ type Props = {
 export const DatabaseCard = (props: Props): JSXElement => {
   // const [] = createSignal();
   return (
-    <div class='flex flex-col bg-slate-600 rounded-lg p-8'>
+    <div class='flex flex-col bg-slate-600 rounded-lg p-8 min-w-60'>
       {/* <DatabaseIcon /> */}
       <h1 class='text-lg font-medium'>{props.name}</h1>
       <div>{props.host}</div>
       <div>{props.port}</div>
       <div>{props.username}</div>
-      <div class='flex'>
+      <div class='flex justify-between'>
         <Button>edit</Button>
         <Button>{'->'}</Button>
       </div>

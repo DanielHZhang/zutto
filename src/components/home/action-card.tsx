@@ -6,7 +6,7 @@ type Props = {
 
 export const ActionCard = (props: Props): JSXElement => {
   return (
-    <div class='flex justify-between bg-slate-800 rounded-lg p-4 max-w-xs'>
+    <div class='flex justify-between bg-slate-800 rounded-lg p-4 max-w-xs cursor-pointer'>
       <div class='flex'>
         <div class='w-10 h-10' />
         <div class='flex flex-col'>
