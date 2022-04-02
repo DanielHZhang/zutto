@@ -28,24 +28,6 @@ export default function Home(): JSXElement {
       <div class='flex space-x-8'>
         <For each={data}>{(item) => <DatabaseCard {...item} />}</For>
       </div>
-
-      <div class='flex items-center space-x-2'>
-        <button
-          class='border rounded-lg px-2 border-gray-900'
-          onClick={() => setCount(count() - 1)}
-        >
-          -
-        </button>
-
-        <output class='p-10px'>Count: {count}</output>
-
-        <button
-          class='border rounded-lg px-2 border-gray-900'
-          onClick={() => setCount(count() + 1)}
-        >
-          +
-        </button>
-      </div>
     </section>
   );
 }
