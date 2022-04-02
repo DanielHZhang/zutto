@@ -1,9 +1,14 @@
-import {JSXElement} from 'solid-js';
+import {JSX, JSXElement, splitProps} from 'solid-js';
 
-type Props = {
+type Props = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: JSXElement;
 };
 
 export const Button = (props: Props): JSXElement => {
-  return <button class='bg-slate-700 p-2 rounded-md'>{props.children}</button>;
+  const [ownProps, htmlProps] = splitProps(props, ['children']);
+  return (
+    <button class='bg-slate-700 p-2 rounded-md' {...htmlProps}>
+      {ownProps.children}
+    </button>
+  );
 };

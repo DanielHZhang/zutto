@@ -1,17 +1,22 @@
-import {JSXElement} from 'solid-js';
+import {JSX, JSXElement, splitProps} from 'solid-js';
 
-type Props = {
-  type: '';
+type Props = JSX.HTMLAttributes<HTMLDivElement> & {
+  title: string;
+  description: string;
 };
 
 export const ActionCard = (props: Props): JSXElement => {
+  const [ownProps, htmlProps] = splitProps(props, ['title', 'description']);
   return (
-    <div class='flex justify-between bg-slate-800 rounded-lg p-4 max-w-xs cursor-pointer'>
+    <div
+      class='flex justify-between bg-slate-800 rounded-lg p-4 max-w-xs cursor-pointer'
+      {...htmlProps}
+    >
       <div class='flex'>
         <div class='w-10 h-10' />
         <div class='flex flex-col'>
-          <h1 class='font-medium'>Open Database</h1>
-          <div class='text-slate-400'>View and visualize</div>
+          <h1 class='font-medium'>{ownProps.title}</h1>
+          <div class='text-slate-400'>{ownProps.description}</div>
         </div>
       </div>
       <div>
