@@ -17,7 +17,7 @@ const data = [
   },
 ];
 
-export default function Home(): JSXElement {
+export const Home = (): JSXElement => {
   const [isModalOpen, setIsModalOpen] = createSignal(false);
 
   return (
@@ -48,4 +48,4 @@ export default function Home(): JSXElement {
       </Modal>
     </section>
   );
-}
+};
