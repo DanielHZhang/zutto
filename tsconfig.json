@@ -19,6 +19,7 @@
 				"src/*"
 			]
 		},
+		"strict": true,
 		"target": "ESNext",
 	}
 }

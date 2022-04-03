@@ -9,7 +9,7 @@ export const ActionCard = (props: Props): JSXElement => {
   const [ownProps, htmlProps] = splitProps(props, ['title', 'description']);
   return (
     <div
-      class='flex justify-between bg-slate-800 rounded-lg p-4 max-w-xs cursor-pointer'
+      class='flex justify-between bg-slate-700 hover:bg-slate-600 transition-colors rounded-lg p-4 max-w-xs cursor-pointer'
       {...htmlProps}
     >
       <div class='flex'>

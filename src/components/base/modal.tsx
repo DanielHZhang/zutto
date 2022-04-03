@@ -8,7 +8,7 @@ type Props = {
   onClose: () => any;
 };
 
-const modalRoot = document.getElementById('modals');
+const modalRoot = document.getElementById('modals')!;
 
 export const Modal = (props: Props): JSXElement => {
   return (
@@ -16,7 +16,7 @@ export const Modal = (props: Props): JSXElement => {
       <Portal mount={modalRoot}>
         <div class='fixed left-0 top-0 w-screen h-screen bg-stone-800 bg-opacity-50' />
         <div class='fixed left-0 top-0 w-screen h-screen overflow-auto flex items-center justify-center z-10'>
-          <section class=' bg-slate-800 text-gray-100 p-4 rounded-lg min-w-100 min-h-100 shadow-md'>
+          <section class=' bg-slate-800 text-gray-100 p-4 rounded-lg w-120 max-h-150 shadow-md'>
             <Button onClick={props.onClose}>x</Button>
             <div>{props.children}</div>
           </section>

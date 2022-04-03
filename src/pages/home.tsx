@@ -1,6 +1,8 @@
 import {createSignal, For, JSXElement} from 'solid-js';
 import {Button, Input, Modal} from 'src/components/base';
 import {ActionCard, DatabaseCard} from 'src/components/home';
+import {IS_TAURI_ENV} from 'src/config';
+import {createForm} from 'src/hooks';
 
 const data = [
   {
@@ -18,7 +20,12 @@ const data = [
 ];
 
 export const Home = (): JSXElement => {
+  const form = createForm();
   const [isModalOpen, setIsModalOpen] = createSignal(false);
+
+  const onSubmit = () => {
+    //
+  };
 
   return (
     <section class='flex flex-grow-1 flex-col space-y-10 text-gray-200 p-8'>
@@ -36,15 +43,17 @@ export const Home = (): JSXElement => {
         <For each={data}>{(item) => <DatabaseCard {...item} />}</For>
       </div>
       <Modal isOpen={isModalOpen()} onClose={() => setIsModalOpen(false)}>
-        <div class='flex flex-col space-y-2'>
-          <h1 class='font-semibold text-lg'>New Connection</h1>
-          <Input placeholder='Nickname' />
-          <Input placeholder='Host' />
-          <Input placeholder='Port' />
-          <Input placeholder='Username' />
-          <Input placeholder='Password' />
-          <Button>Connect</Button>
-        </div>
+        <h1 class='font-semibold text-lg'>New Connection</h1>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div class='flex flex-col space-y-2'>
+            <Input placeholder='Nickname' {...form.register('nickname')} />
+            <Input placeholder='Host' />
+            <Input placeholder='Port' />
+            <Input placeholder='Username' />
+            <Input placeholder='Password' />
+            <Button type='submit'>Connect</Button>
+          </div>
+        </form>
       </Modal>
     </section>
   );
