@@ -16,6 +16,7 @@ export function createForm<V extends Record<any, any>>(options: FormOptions<V>):
 
   return {
     handleSubmit: (onSubmit) => async (event) => {
+      console.log('being called', event);
       event.preventDefault();
       try {
         const result = await onSubmit(formState);

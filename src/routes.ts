@@ -1,25 +1,21 @@
-import type { RouteDefinition } from 'solid-app-router';
-import { lazy } from 'solid-js';
-import {Home, Tables} from 'src/pages';
-// import AboutData from './pages/about.data';
-// import Home from './pages/home';
+import type {RouteDefinition} from 'solid-app-router';
+import {lazy} from 'solid-js';
 
 export const routes: RouteDefinition[] = [
   {
     path: '/',
-    component: Home,
+    component: lazy(async () => import('src/pages/home')),
   },
-	{
-		path: '/tables',
-		component:Tables,
-	},
-  // {
-  //   path: '/about',
-  //   component: lazy(async () => import('./pages/about')),
-  //   data: AboutData,
-  // },
+  {
+    path: '/tables',
+    component: lazy(async () => import('src/pages/tables')),
+  },
+  {
+    path: '/explorer',
+    component: lazy(async () => import('src/pages/explorer')),
+  },
   {
     path: '**',
-    component: lazy(async () => import('./errors/404')),
+    component: lazy(async () => import('src/pages/not-found')),
   },
 ];

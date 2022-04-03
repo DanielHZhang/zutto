@@ -19,3 +19,5 @@ export const Tables = (): JSXElement => {
     </div>
   );
 };
+
+export default Tables;
