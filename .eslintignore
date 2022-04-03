@@ -1,0 +1,7 @@
+**/*.d.ts
+dist/**
+docs/**
+node_modules/**
+src-tauri/**
+temp/**
+tmp/**
