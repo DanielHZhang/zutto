@@ -15,8 +15,14 @@ rust-version = "1.57"
 tauri-build = { version = "1.0.0-rc.5", features = [] }
 
 [dependencies]
+directories = "4.0.1"
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
+sqlx = { version = "0.5.11", features = [
+	"runtime-tokio-rustls",
+	"postgres",
+	"uuid",
+] }
 tauri = { version = "1.0.0-rc.5", features = ["api-all"] }
 tokio = { version = "1.17.0", features = ["full"] }
 
