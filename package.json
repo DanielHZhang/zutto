@@ -12,6 +12,9 @@
 	"eslintConfig": {
 		"extends": "@supersede",
 		"rules": {
+			"@typescript-eslint/no-unused-vars": [
+				"warn"
+			],
 			"max-len": [
 				"error",
 				{
@@ -19,7 +22,8 @@
 					"tabWidth": 2,
 					"ignorePattern": "class='.+"
 				}
-			]
+			],
+			"no-unused-vars": "off"
 		}
 	},
 	"prettier": "@supersede/prettier-config",

@@ -2,6 +2,7 @@
 	"compilerOptions": {
 		"allowJs": true,
 		"allowSyntheticDefaultImports": true,
+		"allowUnusedLabels": false,
 		"baseUrl": ".",
 		"esModuleInterop": true,
 		"isolatedModules": true,
@@ -20,6 +21,10 @@
 			]
 		},
 		"strict": true,
+		"strictBindCallApply": true,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
 		"target": "ESNext",
 	}
 }

@@ -1,35 +1,39 @@
-import {createSignal, JSX} from 'solid-js';
 import {createStore} from 'solid-js/store';
 
-type FormHook = {
-  handleSubmit: (func: () => any) => (event: SubmitEvent) => void;
-  register: (key: string) => {
+type FormHook<V> = {
+  handleSubmit: (func: (values: V) => any) => (event: SubmitEvent) => void;
+  register: (key: keyof V) => {
     onInput: (event: InputEvent & {currentTarget: HTMLInputElement}) => void;
   };
 };
 
-export function createForm(): FormHook {
-  const [formState, setFormState] = createStore<Record<string, any>>({});
-  // const [formState, setFormState] = createSignal({
-  //   values: {},
-  // });
+type FormOptions<V> = {
+  initialValues: V;
+};
 
-  const handleSubmit = (func: () => any) => (event: SubmitEvent) => {
-    event.preventDefault();
-    //
-    console.log(event);
-  };
+export function createForm<V extends Record<any, any>>(options: FormOptions<V>): FormHook<V> {
+  const [formState, setFormState] = createStore(options.initialValues);
 
   return {
-    handleSubmit,
-    register: (key: string) => ({
+    handleSubmit: (onSubmit) => async (event) => {
+      event.preventDefault();
+      try {
+        const result = await onSubmit(formState);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    register: (key) => ({
       onInput: (event) => {
         if (event.currentTarget) {
-          setFormState(key, event.currentTarget.value);
+          let value: string | number = event.currentTarget.value;
+          if (typeof options.initialValues[key] === 'number') {
+            value = Number(value);
+          }
+          setFormState(key as any, value as any);
         }
-        console.log(formState);
-        // console.log(event.currentTarget.value)
       },
+      value: formState[key],
     }),
   };
 }
