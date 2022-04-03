@@ -7,7 +7,7 @@ type Props<T> = {
 
 export const Grid = <T,>(props: Props<T>): JSXElement => {
   return (
-    <div class='flex flex-wrap'>
+    <div class='grid grid-cols-3 gap-4 place-content-stretch'>
       <For each={props.items}>{props.children}</For>
     </div>
   );

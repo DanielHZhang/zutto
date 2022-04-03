@@ -11,7 +11,7 @@ export const Tables = (): JSXElement => {
       Tables
       <Grid items={tableData}>
         {(item) => (
-          <div class='p-2 sm:w-1/3'>
+          <div>
             <div class='bg-slate-700 rounded-md p-4'>{item.name}</div>
           </div>
         )}
