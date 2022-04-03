@@ -1,4 +1,4 @@
-// import DatabaseIcon from 'iconoir/icons/db.svg';
+import DatabaseIcon from 'iconoir/icons/db.svg';
 import {createSignal, JSXElement} from 'solid-js';
 import {Button} from 'src/components/base';
 
@@ -10,10 +10,9 @@ type Props = {
 };
 
 export const DatabaseCard = (props: Props): JSXElement => {
-  // const [] = createSignal();
   return (
     <div class='flex flex-col bg-slate-600 rounded-lg p-8 min-w-60'>
-      {/* <DatabaseIcon /> */}
+      <DatabaseIcon width='32' height='32' />
       <h1 class='text-lg font-medium'>{props.name}</h1>
       <div>{props.host}</div>
       <div>{props.port}</div>

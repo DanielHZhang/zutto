@@ -6,6 +6,10 @@
 		"isolatedModules": true,
 		"jsx": "preserve",
 		"jsxImportSource": "solid-js",
+		"lib": [
+			"DOM",
+			"ESNext"
+		],
 		"module": "ESNext",
 		"moduleResolution": "node",
 		"noEmit": true,
@@ -15,8 +19,5 @@
 			]
 		},
 		"target": "ESNext",
-		"types": [
-			"vite/client"
-		],
 	}
 }
