@@ -1,9 +1,12 @@
 mod enums;
 mod structs;
 
-use std::{error::Error, fs::OpenOptions, io::BufReader};
+use std::{
+  error::Error,
+  fs::OpenOptions,
+  io::{BufReader, BufWriter},
+};
 
-use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
 use sqlx::postgres::{PgPool, PgPoolOptions};
 use tauri::async_runtime::Mutex;
@@ -11,6 +14,8 @@ use tokio::sync::MutexGuard;
 
 pub use enums::*;
 pub use structs::*;
+
+use crate::utils::get_state_file_path;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct State {
@@ -34,28 +39,13 @@ impl Store {
       e => panic!("Invalid environment: {e}"),
     };
 
-    let storage_directory = match environment {
-      Environment::Development => {
-        let mut directory = std::env::current_dir().unwrap();
-        directory.push("target");
-        directory
-      }
-      Environment::Production => ProjectDirs::from("com", "danielhzhang", "zutto")
-        .expect("Failed to open project directory path")
-        .data_dir()
-        .to_owned(),
-    };
-    let mut storage_file_path = storage_directory;
-    storage_file_path.push("store.json");
-
-    let mut open_options = OpenOptions::new();
-    let file = open_options
+    let file_path = get_state_file_path(&environment);
+    let file = OpenOptions::new()
       .read(true)
       .write(true)
       .create(true)
-      .open(storage_file_path)
-      .expect("Failed to open storage file for read/write");
-
+      .open(file_path)
+      .expect("Failed to open state file for reading");
     let reader = BufReader::new(file);
     let store = {
       let read_result = serde_json::from_reader::<_, State>(reader);
@@ -88,5 +78,25 @@ impl Store {
     let pool = PgPoolOptions::new().max_connections(5).connect(url).await?;
     let _ = guard.insert(pool);
     Ok(())
+  }
+
+  pub async fn close_pool<'a>(&'a self) {
+    let guard = self.active_pool().await;
+
+    if guard.is_some() {
+      let pool = guard.as_ref().unwrap();
+      pool.close().await;
+    }
+  }
+
+  pub fn save_state(&self) {
+    let file_path = get_state_file_path(&self.environment);
+    let file = OpenOptions::new()
+      .write(true)
+      .create(true)
+      .open(file_path)
+      .expect("Failed to open state file for writing");
+    let writer = BufWriter::new(file);
+    serde_json::to_writer::<_, State>(writer, &self.state).ok();
   }
 }

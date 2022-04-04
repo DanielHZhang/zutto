@@ -5,6 +5,7 @@
 
 mod commands;
 mod store;
+mod utils;
 
 use tauri::Manager;
 
@@ -25,11 +26,8 @@ async fn main() {
     ])
     .on_window_event(|event| match event.event() {
       tauri::WindowEvent::Destroyed => {
-				println!("window destroyed")
-        // hide window whenever it loses focus
-        // if !focused {
-        //   event.window().hide().unwrap();
-        // }
+        let store = event.window().state::<Store>();
+        store.save_state();
       }
       _ => (),
     })
