@@ -2,10 +2,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ConnectionData {
-  name: String,
-  host: String,
-  port: u32,
-  username: String,
-  password: String,
-  db: String,
+  pub name: String,
+  pub host: String,
+  pub port: u32,
+  pub username: String,
+  pub password: String,
+  pub db: String,
 }

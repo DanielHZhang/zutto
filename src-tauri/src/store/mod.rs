@@ -78,21 +78,15 @@ impl Store {
     self.active_pool.lock().await
   }
 
-  pub async fn set_active_pool<'a>(
-    &'a self,
-    url: &str,
-  ) -> Result<MutexGuard<'a, Option<PgPool>>, Box<dyn Error>> {
+  pub async fn set_active_pool<'a>(&'a self, url: &str) -> Result<(), Box<dyn Error>> {
     let mut guard = self.active_pool().await;
-
-    assert!(guard.is_none());
 
     if guard.is_some() {
       return Err("Client is already connected to database pool".into());
     }
 
     let pool = PgPoolOptions::new().max_connections(5).connect(url).await?;
-    guard.insert(pool);
-
-    Ok(guard)
+    let _ = guard.insert(pool);
+    Ok(())
   }
 }
