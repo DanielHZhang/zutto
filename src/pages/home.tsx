@@ -1,11 +1,9 @@
-import {invoke} from '@tauri-apps/api';
 import {useNavigate} from 'solid-app-router';
 import {createResource, createSignal, For, JSXElement} from 'solid-js';
 import {Button, Input, Modal} from 'src/components/base';
 import {ActionCard, DatabaseCard} from 'src/components/home';
-import {IS_TAURI_ENV} from 'src/config';
 import {createForm} from 'src/hooks';
-import {fetchRecentDatabases} from 'src/resources';
+import {actions, fetchRecentDatabases, invokeTauri} from 'src/resources';
 
 const data = [
   {
@@ -13,12 +11,14 @@ const data = [
     host: 'localhost',
     port: 5432,
     username: 'admin',
+    databaseName: 'database',
   },
   {
     name: 'Testing db',
     host: 'localhost',
     port: 5432,
     username: 'admin',
+    databaseName: 'database',
   },
 ];
 
@@ -28,19 +28,18 @@ export default function Home(): JSXElement {
   const navigate = useNavigate();
   const form = createForm({
     initialValues: {
-      nickname: '',
+      name: '',
       host: 'localhost',
       port: 5432,
       username: '',
       password: '',
+      databaseName: '',
     },
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
-    if (IS_TAURI_ENV) {
-      await invoke('database:connect', values);
-    }
-    console.log('navigating');
+    console.log('receiving values:', values);
+    await invokeTauri(actions.connectToDatabase, values);
     navigate('/tables');
   });
 
@@ -66,9 +65,10 @@ export default function Home(): JSXElement {
         <h1 class='font-semibold text-lg'>New Connection</h1>
         <form onSubmit={onSubmit}>
           <div class='flex flex-col space-y-2'>
-            <Input placeholder='Nickname' {...form.register('nickname')} />
+            <Input placeholder='Nickname' {...form.register('name')} />
             <Input placeholder='Host' {...form.register('host')} />
             <Input placeholder='Port' {...form.register('port')} />
+            <Input placeholder='Database name' {...form.register('databaseName')} />
             <Input placeholder='Username' {...form.register('username')} />
             <Input placeholder='Password' type='password' {...form.register('password')} />
             <Button type='submit' onClick={() => console.log('clicking')}>

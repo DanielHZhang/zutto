@@ -7,5 +7,5 @@ pub struct ConnectionData {
   pub port: u32,
   pub username: String,
   pub password: String,
-  pub db: String,
+  pub databaseName: String,
 }
