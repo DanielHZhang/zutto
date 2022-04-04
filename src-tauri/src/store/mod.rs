@@ -1,39 +1,26 @@
-use std::{
-  fs::{File, OpenOptions},
-  io::BufReader,
-};
+mod enums;
+mod structs;
+
+use std::{error::Error, fs::OpenOptions, io::BufReader};
 
 use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
-use sqlx::postgres::PgPool;
+use sqlx::postgres::{PgPool, PgPoolOptions};
 use tauri::async_runtime::Mutex;
 use tokio::sync::MutexGuard;
 
-#[derive(Debug, Deserialize, Serialize)]
-pub enum Environment {
-  Development,
-  Production,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-pub struct DatabaseEntry {
-  name: String,
-  host: String,
-  port: u32,
-  username: String,
-  password: String,
-  db: String,
-}
+pub use enums::*;
+pub use structs::*;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct State {
-  recent_databases: Vec<DatabaseEntry>,
+  recent_databases: Vec<ConnectionData>,
 }
 
 #[derive(Debug)]
 pub struct Store {
   environment: Environment,
-  active_pool: Option<Mutex<PgPool>>,
+  active_pool: Mutex<Option<PgPool>>,
   state: State,
 }
 
@@ -80,17 +67,32 @@ impl Store {
 
     Self {
       environment,
-      active_pool: None,
+      active_pool: Mutex::new(None),
       state: State {
         recent_databases: Vec::new(),
       },
     }
   }
 
-  pub async fn active_pool<'a>(&'a self) -> Option<MutexGuard<'a, PgPool>> {
-    match self.active_pool.as_ref() {
-      Some(pool) => Some(pool.lock().await),
-      None => None,
+  pub async fn active_pool<'a>(&'a self) -> MutexGuard<'a, Option<PgPool>> {
+    self.active_pool.lock().await
+  }
+
+  pub async fn set_active_pool<'a>(
+    &'a self,
+    url: &str,
+  ) -> Result<MutexGuard<'a, Option<PgPool>>, Box<dyn Error>> {
+    let mut guard = self.active_pool().await;
+
+    assert!(guard.is_none());
+
+    if guard.is_some() {
+      return Err("Client is already connected to database pool".into());
     }
+
+    let pool = PgPoolOptions::new().max_connections(5).connect(url).await?;
+    guard.insert(pool);
+
+    Ok(guard)
   }
 }

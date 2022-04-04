@@ -8,13 +8,12 @@ use super::result::{CommandError, CommandResult};
 pub async fn connect_to_database(store: State<'_, Store>) -> CommandResult<()> {
   let pool = store.active_pool().await;
   match pool {
-    Some(p) => {
-      //
+    Some(_) => ,
+    None => {
+      let url = "";
+      store.set_active_pool(url).await.unwrap();
       Ok(())
     }
-    None => Err(CommandError::new(
-      "Client is already connected to database pool",
-    )),
   }
 }
 
