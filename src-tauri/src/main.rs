@@ -9,7 +9,7 @@ mod utils;
 
 use tauri::Manager;
 
-use commands::{connect_to_database, fetch_recent_databases};
+use commands::{connect_to_database, fetch_all_tables, fetch_recent_databases};
 use store::Store;
 
 #[tokio::main]
@@ -22,7 +22,8 @@ async fn main() {
     .manage::<Store>(store)
     .invoke_handler(tauri::generate_handler![
       connect_to_database,
-      fetch_recent_databases
+      fetch_all_tables,
+      fetch_recent_databases,
     ])
     .on_window_event(|event| match event.event() {
       tauri::WindowEvent::Destroyed => {
