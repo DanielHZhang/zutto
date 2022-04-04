@@ -36,6 +36,14 @@ impl From<tauri::api::Error> for CommandError {
   }
 }
 
+impl From<sqlx::error::Error> for CommandError {
+  fn from(err: sqlx::error::Error) -> Self {
+    Self {
+      message: err.to_string(),
+    }
+  }
+}
+
 impl fmt::Display for CommandError {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     write!(f, "Executing Tauri command failed")

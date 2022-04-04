@@ -7,7 +7,7 @@ license = ""
 repository = ""
 default-run = "app"
 edition = "2021"
-rust-version = "1.57"
+rust-version = "1.59"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -23,7 +23,8 @@ sqlx = { version = "0.5.11", features = [
 	"postgres",
 	"uuid",
 ] }
-tauri = { version = "1.0.0-rc.5", features = ["api-all"] }
+tauri = { version = "1.0.0-rc.6", features = ["api-all"] }
+tauri-plugin-window-state = { git = "https://github.com/tauri-apps/tauri-plugin-window-state", branch = "dev" }
 tokio = { version = "1.17.0", features = ["full"] }
 
 [features]

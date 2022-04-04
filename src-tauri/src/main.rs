@@ -6,6 +6,8 @@
 mod commands;
 mod store;
 
+use tauri::Manager;
+
 use commands::{connect_to_database, fetch_recent_databases};
 use store::Store;
 
@@ -21,6 +23,17 @@ async fn main() {
       connect_to_database,
       fetch_recent_databases
     ])
+    .on_window_event(|event| match event.event() {
+      tauri::WindowEvent::Destroyed => {
+				println!("window destroyed")
+        // hide window whenever it loses focus
+        // if !focused {
+        //   event.window().hide().unwrap();
+        // }
+      }
+      _ => (),
+    })
+    .plugin(tauri_plugin_window_state::WindowState::default())
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
