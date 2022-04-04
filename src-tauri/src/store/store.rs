@@ -3,6 +3,7 @@ use std::{
   fs::OpenOptions,
   io::{BufReader, BufWriter},
   sync::Arc,
+  time::Duration,
 };
 
 use sqlx::postgres::{PgPool, PgPoolOptions};
@@ -67,8 +68,13 @@ impl Store {
       return Err("Client is already connected to database pool".into());
     }
 
-    let pool = PgPoolOptions::new().max_connections(5).connect(url).await?;
+    let pool = PgPoolOptions::new()
+      .max_connections(5)
+      .connect_timeout(Duration::from_secs(10))
+      .connect(url)
+      .await?;
     let _ = guard.insert(pool);
+
     Ok(())
   }
 
