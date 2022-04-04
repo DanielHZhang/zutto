@@ -17,10 +17,13 @@ pub async fn connect_to_database(
     password,
     database_name,
     ..
-  } = data;
+  } = &data;
   let url = format!("postgres://{username}:{password}@{host}:{port}/{database_name}");
   store.set_active_pool(&url).await.ok();
-  println!("Successfully connected");
+
+  let mut state = store.state();
+  state.recent_databases.push(data);
+
   Ok(())
 }
 
