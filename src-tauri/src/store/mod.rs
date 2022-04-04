@@ -5,6 +5,9 @@ use std::{
 
 use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
+use sqlx::postgres::PgPool;
+use tauri::async_runtime::Mutex;
+use tokio::sync::MutexGuard;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub enum Environment {
@@ -13,8 +16,25 @@ pub enum Environment {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub struct DatabaseEntry {
+  name: String,
+  host: String,
+  port: u32,
+  username: String,
+  password: String,
+  db: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct State {
+  recent_databases: Vec<DatabaseEntry>,
+}
+
+#[derive(Debug)]
 pub struct Store {
   environment: Environment,
+  active_pool: Option<Mutex<PgPool>>,
+  state: State,
 }
 
 impl Store {
@@ -51,13 +71,26 @@ impl Store {
 
     let reader = BufReader::new(file);
     let store = {
-      let read_result = serde_json::from_reader::<_, Store>(reader);
+      let read_result = serde_json::from_reader::<_, State>(reader);
       // if read_result.is_err() {
       // 	let new_store =
       // 	serde_json::to_writer(&file, )
       // }
     };
 
-    Self { environment }
+    Self {
+      environment,
+      active_pool: None,
+      state: State {
+        recent_databases: Vec::new(),
+      },
+    }
+  }
+
+  pub async fn active_pool<'a>(&'a self) -> Option<MutexGuard<'a, PgPool>> {
+    match self.active_pool.as_ref() {
+      Some(pool) => Some(pool.lock().await),
+      None => None,
+    }
   }
 }

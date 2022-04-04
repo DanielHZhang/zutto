@@ -1,9 +1,4 @@
-use tauri::State;
+mod connection;
+mod result;
 
-use crate::store::Store;
-
-#[tauri::command]
-pub async fn fetch_recent_databases(store: State<'_, Store>) -> Result<(), ()> {
-  //
-  Ok(())
-}
+pub use connection::*;
