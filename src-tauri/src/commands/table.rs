@@ -26,3 +26,22 @@ pub async fn fetch_all_tables(store: State<'_, Store>) -> CommandResult<Vec<Stri
     None => Err(CommandError::new("Client is not connected to a database")),
   }
 }
+
+#[tauri::command]
+#[instrument(skip(store), ret, err)]
+pub async fn fetch_table_data(store: State<'_, Store>, table_name: String) -> CommandResult<()> {
+  match store.active_pool().await.as_ref() {
+    Some(pool) => {
+      let query = format!("SELECT * FROM {table_name}");
+      let mut rows = sqlx::query(&query).fetch(pool);
+
+      while let Some(row) = rows.try_next().await? {
+        let test: &str = row.try_get(0)?;
+        println!("{test}");
+      }
+
+      Ok(())
+    }
+    None => Err(CommandError::new("Client is not connected to a database")),
+  }
+}

@@ -1,4 +1,4 @@
-export type ConnectionData = {
+export type ConnectionConfig = {
   name: string;
   host: string;
   port: number;

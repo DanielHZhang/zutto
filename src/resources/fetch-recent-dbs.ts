@@ -1,9 +1,9 @@
 import {invoke} from '@tauri-apps/api';
 import {actions} from 'src/components/actions';
 import {IS_TAURI_ENV} from 'src/config';
-import {ConnectionData} from 'src/types';
+import {ConnectionConfig} from 'src/types';
 
-export async function fetchRecentDatabases(): Promise<ConnectionData[]> {
+export async function fetchRecentDatabases(): Promise<ConnectionConfig[]> {
   if (!IS_TAURI_ENV) {
     return [
       {

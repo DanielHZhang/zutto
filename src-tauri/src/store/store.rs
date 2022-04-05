@@ -9,7 +9,7 @@ use std::{
 use sqlx::postgres::{PgPool, PgPoolOptions};
 use tokio::sync::{Mutex, MutexGuard};
 
-use crate::utils::get_state_file_path;
+use crate::{commands::CommandError, utils::get_state_file_path};
 
 use super::{Environment, State};
 

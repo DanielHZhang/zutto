@@ -1,16 +1,16 @@
 use serde::{Deserialize, Serialize};
 
-use super::ConnectionData;
+use super::ConnectionConfig;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct State {
-  pub recent_databases: Vec<ConnectionData>,
+  pub databases: Vec<ConnectionConfig>,
 }
 
 impl State {
   pub fn new() -> Self {
     Self {
-      recent_databases: Vec::new(),
+      databases: Vec::new(),
     }
   }
 }

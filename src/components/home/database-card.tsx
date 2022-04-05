@@ -2,10 +2,10 @@ import RightArrowIcon from 'iconoir/icons/arrow-right.svg';
 import DatabaseIcon from 'iconoir/icons/db.svg';
 import {JSX, JSXElement} from 'solid-js';
 import {Button} from 'src/components/base';
-import {ConnectionData} from 'src/types';
+import {ConnectionConfig} from 'src/types';
 
 type Props = {
-  data: ConnectionData;
+  data: ConnectionConfig;
   onClick: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent>;
 };
 
