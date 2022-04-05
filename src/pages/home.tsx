@@ -1,30 +1,15 @@
 import {useNavigate} from 'solid-app-router';
-import {createResource, createSignal, For, JSXElement} from 'solid-js';
+import {createResource, createSignal, For, JSXElement, onMount} from 'solid-js';
+import {actions} from 'src/components/actions';
 import {Button, Input, Modal} from 'src/components/base';
 import {ActionCard, DatabaseCard} from 'src/components/home';
 import {createForm} from 'src/hooks';
-import {actions, fetchRecentDatabases, invokeTauri} from 'src/resources';
-
-const data = [
-  {
-    name: 'Testing db',
-    host: 'localhost',
-    port: 5432,
-    username: 'admin',
-    databaseName: 'database',
-  },
-  {
-    name: 'Testing db',
-    host: 'localhost',
-    port: 5432,
-    username: 'admin',
-    databaseName: 'database',
-  },
-];
+import {fetchRecentDatabases} from 'src/resources';
+import {invokeTauri} from 'src/utils/tauri';
 
 export default function Home(): JSXElement {
   const [isModalOpen, setIsModalOpen] = createSignal(false);
-  const [recentDatabases] = createResource(fetchRecentDatabases);
+  const [recentDatabases] = createResource(fetchRecentDatabases, {initialValue: []});
   const navigate = useNavigate();
   const form = createForm({
     initialValues: {
@@ -43,6 +28,11 @@ export default function Home(): JSXElement {
     navigate('/tables');
   });
 
+  console.log('recentDatabases:', recentDatabases());
+  // onMount(() => {
+
+  // });
+
   return (
     <section class='flex flex-grow-1 flex-col space-y-10 text-gray-200 p-8'>
       <h1 class='text-3xl font-bold'>Databases</h1>
@@ -58,7 +48,7 @@ export default function Home(): JSXElement {
       <div>
         <h1>Recently Opened</h1>
         <div class='flex space-x-4'>
-          <For each={data}>{(item) => <DatabaseCard {...item} />}</For>
+          <For each={recentDatabases()}>{(item) => <DatabaseCard {...item} />}</For>
         </div>
       </div>
       <Modal isOpen={isModalOpen()} onClose={() => setIsModalOpen(false)}>

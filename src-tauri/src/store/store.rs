@@ -38,18 +38,12 @@ impl Store {
       .open(file_path)
       .expect("Failed to open state file for reading");
     let reader = BufReader::new(file);
-    let store = {
-      let read_result = serde_json::from_reader::<_, State>(reader);
-      // if read_result.is_err() {
-      // 	let new_store =
-      // 	serde_json::to_writer(&file, )
-      // }
-    };
+    let state = serde_json::from_reader::<_, State>(reader).unwrap_or_else(|_| State::new());
 
     Self {
       environment,
       active_pool: Mutex::new(None),
-      state: Arc::new(std::sync::Mutex::new(State::new())),
+      state: Arc::new(std::sync::Mutex::new(state)),
     }
   }
 

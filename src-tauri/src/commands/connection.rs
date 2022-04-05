@@ -1,4 +1,5 @@
 use tauri::State;
+use tracing::{debug, instrument};
 
 use crate::store::{ConnectionData, Store};
 
@@ -9,6 +10,8 @@ pub async fn connect_to_database(
   store: State<'_, Store>,
   data: ConnectionData,
 ) -> CommandResult<()> {
+  debug!("[tauri command] connect_to_database");
+
   let ConnectionData {
     host,
     port,
@@ -27,6 +30,7 @@ pub async fn connect_to_database(
 }
 
 #[tauri::command]
+#[instrument(name = "[command]", skip(store), ret, err)]
 pub fn fetch_recent_databases(store: State<Store>) -> CommandResult<Vec<ConnectionData>> {
   let state = store.state();
   Ok(state.recent_databases.clone())

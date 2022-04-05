@@ -14,6 +14,8 @@ use store::Store;
 
 #[tokio::main]
 async fn main() {
+	tracing_subscriber::fmt::init();
+
   let store = Store::new().await;
 
   tauri::async_runtime::set(tokio::runtime::Handle::current());
