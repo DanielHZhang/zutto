@@ -22,11 +22,5 @@ export async function fetchRecentDatabases(): Promise<ConnectionData[]> {
       },
     ];
   }
-  try {
-    const data = await invoke(actions.fetchRecentDatabases);
-    console.log('returned data', data);
-    return data;
-  } catch (error) {
-    console.log('ERROR:', error);
-  }
+  return invoke(actions.fetchRecentDatabases);
 }
