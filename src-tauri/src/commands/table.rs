@@ -1,4 +1,5 @@
-use sqlx::{postgres::PgRow, Row};
+use futures::TryStreamExt;
+use sqlx::Row;
 use tauri::State;
 use tracing::instrument;
 
@@ -12,18 +13,14 @@ pub async fn fetch_all_tables(store: State<'_, Store>) -> CommandResult<Vec<Stri
   match store.active_pool().await.as_ref() {
     Some(pool) => {
       let query = "SELECT table_name FROM information_schema.tables WHERE table_schema='public'";
-      let rows = sqlx::query(query).fetch_all(pool).await.unwrap();
-      let mut table_names = Vec::with_capacity(rows.len());
+      let mut rows = sqlx::query(query).fetch(pool);
+      let mut table_names = Vec::new();
 
-      for (index, row) in rows.iter().enumerate() {
+      while let Some(row) = rows.try_next().await? {
         let name: String = row.get(0);
         table_names.push(name);
       }
-      // println!("start");
-      // for row in rows.iter() {
-      //   let a: &str = row.try_get(0)?;
-      //   println!("{a}");
-      // }
+
       Ok(table_names)
     }
     None => Err(CommandError::new("Client is not connected to a database")),
