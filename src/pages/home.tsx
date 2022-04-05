@@ -23,10 +23,19 @@ export default function Home(): JSXElement {
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
-    console.log('receiving values:', values);
     await invokeTauri(actions.connectToDatabase, values);
     navigate('/tables');
   });
+
+  const onCardClick = (index: number) => async () => {
+    try {
+      const connectionData = recentDatabases()![index];
+      await invokeTauri(actions.connectToDatabase, connectionData);
+      navigate('/tables');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <section class='flex flex-grow-1 flex-col space-y-10 text-gray-200 p-8'>
@@ -44,7 +53,9 @@ export default function Home(): JSXElement {
         <h1>Recently Opened</h1>
         <div class='flex space-x-4'>
           <Show when={recentDatabases()} fallback={<div>Loading...</div>}>
-            <For each={recentDatabases()}>{(item) => <DatabaseCard {...item} />}</For>
+            <For each={recentDatabases()}>
+              {(item, index) => <DatabaseCard data={item} onClick={onCardClick(index())} />}
+            </For>
           </Show>
         </div>
       </div>
