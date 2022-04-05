@@ -20,6 +20,8 @@
 		"src-tauri/target/**": true,
 	},
 	"javascript.format.enable": false,
+	// Disable due to: https://github.com/tokio-rs/tracing/issues/1633 and https://github.com/rust-analyzer/rust-analyzer/issues/11014
+	"rust-analyzer.experimental.procAttrMacros": false,
 	"typescript.format.enable": false,
 	"typescript.preferences.importModuleSpecifier": "non-relative",
 	"typescript.tsdk": "node_modules/typescript/lib",
