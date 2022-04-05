@@ -1,11 +1,14 @@
-import {JSXElement} from 'solid-js';
+import {createResource, JSXElement} from 'solid-js';
 import {Grid} from 'src/components/base';
+import {fetchAllTables} from 'src/resources';
 
 const tableData = Array.from({length: 100}, (_, index) => ({
   name: `Table name ${index}`,
 }));
 
 export const Tables = (): JSXElement => {
+  const [table] = createResource(fetchAllTables);
+
   return (
     <div>
       Tables

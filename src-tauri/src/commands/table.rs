@@ -1,11 +1,13 @@
 use sqlx::Row;
 use tauri::State;
+use tracing::instrument;
 
 use crate::store::Store;
 
 use super::{CommandError, CommandResult};
 
 #[tauri::command]
+#[instrument(skip(store), ret, err)]
 pub async fn fetch_all_tables(store: State<'_, Store>) -> CommandResult<()> {
   let pool = store.active_pool().await;
   match pool.as_ref() {

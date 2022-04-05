@@ -6,7 +6,7 @@ use crate::store::{ConnectionData, Store};
 use super::result::{CommandError, CommandResult};
 
 #[tauri::command]
-#[instrument(name = "command", skip(store), ret, err)]
+#[instrument(skip(store), ret, err)]
 pub async fn connect_to_database(
   store: State<'_, Store>,
   data: ConnectionData,
@@ -29,7 +29,7 @@ pub async fn connect_to_database(
 }
 
 #[tauri::command]
-#[instrument(name = "command", skip(store), ret, err)]
+#[instrument(skip(store), ret, err)]
 pub fn fetch_recent_databases(store: State<Store>) -> CommandResult<Vec<ConnectionData>> {
   let state = store.state();
   Ok(state.recent_databases.clone())
