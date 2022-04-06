@@ -1,6 +1,8 @@
 import {JSXElement} from 'solid-js';
 import {Button} from 'src/components/base';
-import {Tabs} from 'src/components/explorer';
+import {Table, Tabs} from 'src/components/explorer';
+
+const data = [[{id: 123, content: 'some string'}], [{id: 234, content: 'more string'}]];
 
 export default function Explorer(): JSXElement {
   return (
@@ -18,6 +20,7 @@ export default function Explorer(): JSXElement {
       </section>
       <main>
         <div>Table here</div>
+        <Table data={data} />
       </main>
     </div>
   );
