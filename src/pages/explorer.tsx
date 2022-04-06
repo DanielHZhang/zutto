@@ -2,7 +2,18 @@ import {JSXElement} from 'solid-js';
 import {Button} from 'src/components/base';
 import {Table, Tabs} from 'src/components/explorer';
 
-const data = [[{id: 123, content: 'some string'}], [{id: 234, content: 'more string'}]];
+const data = [
+  [
+    {id: 123, content: 'some string'},
+    {id: 123, content: 'some string really really long content'},
+    {id: 123, content: 'some string'},
+  ],
+  [
+    {id: 234, content: 'more string'},
+    {id: 234, content: 'more string'},
+    {id: 234, content: 'more string'},
+  ],
+];
 
 export default function Explorer(): JSXElement {
   return (
