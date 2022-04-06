@@ -2,6 +2,8 @@ import {JSXElement} from 'solid-js';
 import {Button} from 'src/components/base';
 import {Table, Tabs} from 'src/components/explorer';
 
+const headers = ['Name', 'Date', 'Description'];
+
 const data = [
   [
     {id: 123, content: 'some string'},
@@ -30,8 +32,7 @@ export default function Explorer(): JSXElement {
         <Button>Save Changes</Button>
       </section>
       <main>
-        <div>Table here</div>
-        <Table data={data} />
+        <Table data={data} headers={headers} />
       </main>
     </div>
   );
