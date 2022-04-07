@@ -3,5 +3,6 @@ export type ConnectionConfig = {
   host: string;
   port: number;
   username: string;
+  password: string;
   databaseName: string;
 };

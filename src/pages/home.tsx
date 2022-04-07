@@ -1,17 +1,16 @@
 import {useNavigate} from 'solid-app-router';
 import {createResource, createSignal, For, JSXElement, Show} from 'solid-js';
-import {actions} from 'src/components/actions';
+import {connectToDatabase, fetchRecentDatabases} from 'src/actions';
 import {Button, Input, Modal} from 'src/components/base';
 import {ActionCard, DatabaseCard} from 'src/components/home';
 import {createForm} from 'src/hooks';
-import {fetchRecentDatabases} from 'src/resources';
-import {invokeTauri} from 'src/utils/tauri';
+import type {ConnectionConfig} from 'src/types';
 
 export default function Home(): JSXElement {
   const [isModalOpen, setIsModalOpen] = createSignal(false);
   const [recentDatabases] = createResource(fetchRecentDatabases);
   const navigate = useNavigate();
-  const form = createForm({
+  const form = createForm<ConnectionConfig>({
     initialValues: {
       name: '',
       host: 'localhost',
@@ -22,16 +21,19 @@ export default function Home(): JSXElement {
     },
   });
 
-  const onSubmit = form.handleSubmit(async (values) => {
-    await invokeTauri(actions.connectToDatabase, values);
+  const connectAndNavigate = async (config: ConnectionConfig) => {
+    await connectToDatabase(config);
     navigate('/tables');
+  };
+
+  const onSubmit = form.handleSubmit(async (values) => {
+    await connectAndNavigate(values);
   });
 
   const onCardClick = (index: number) => async () => {
     try {
-      const connectionData = recentDatabases()![index];
-      await invokeTauri(actions.connectToDatabase, connectionData);
-      navigate('/tables');
+      const connectionConfig = recentDatabases()![index];
+      await connectAndNavigate(connectionConfig);
     } catch (error) {
       console.error(error);
     }

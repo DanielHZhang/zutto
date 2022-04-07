@@ -1,6 +1,7 @@
+import {Link} from 'solid-app-router';
 import {createResource, ErrorBoundary, JSXElement, Show} from 'solid-js';
+import {fetchAllTables} from 'src/actions';
 import {Grid} from 'src/components/base';
-import {fetchAllTables} from 'src/resources';
 
 export const Tables = (): JSXElement => {
   const [table] = createResource(fetchAllTables);
@@ -12,9 +13,11 @@ export const Tables = (): JSXElement => {
         <Show when={table()} fallback={<div>Loading...</div>}>
           <Grid items={table()}>
             {(item) => (
-              <div>
-                <div class='bg-slate-700 rounded-md p-4'>{item}</div>
-              </div>
+              <Link href={`/explorer/${item}`}>
+                <div>
+                  <div class='bg-slate-700 rounded-md p-4'>{item}</div>
+                </div>
+              </Link>
             )}
           </Grid>
         </Show>

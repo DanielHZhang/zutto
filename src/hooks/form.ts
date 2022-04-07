@@ -1,7 +1,7 @@
-import {createStore} from 'solid-js/store';
+import {createStore, DeepReadonly} from 'solid-js/store';
 
-type FormHook<V> = {
-  handleSubmit: (func: (values: V) => any) => (event: SubmitEvent) => void;
+type FormHook<V extends object> = {
+  handleSubmit: (func: (values: DeepReadonly<V>) => any) => (event: SubmitEvent) => void;
   register: (key: keyof V) => {
     onInput: (event: InputEvent & {currentTarget: HTMLInputElement}) => void;
   };

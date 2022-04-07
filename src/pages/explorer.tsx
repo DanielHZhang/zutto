@@ -1,4 +1,6 @@
-import {JSXElement} from 'solid-js';
+import {useParams} from 'solid-app-router';
+import {createResource, createSignal, JSXElement} from 'solid-js';
+import {fetchTableData} from 'src/actions';
 import {Button} from 'src/components/base';
 import {Table, Tabs} from 'src/components/explorer';
 
@@ -18,6 +20,12 @@ const data = [
 ];
 
 export default function Explorer(): JSXElement {
+  const params = useParams();
+  console.log('got params:', {...params});
+  const [tableName, setTableName] = createSignal(params.tableName);
+  const [tableData] = createResource(tableName, fetchTableData);
+
+  console.log('table data:', tableData());
   return (
     <div class='flex flex-col'>
       <div class='flex'>

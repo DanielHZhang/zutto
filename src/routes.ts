@@ -11,6 +11,10 @@ export const routes: RouteDefinition[] = [
     component: lazy(async () => import('src/pages/tables')),
   },
   {
+    path: '/explorer/:tableName',
+    component: lazy(async () => import('src/pages/explorer')),
+  },
+  {
     path: '/explorer',
     component: lazy(async () => import('src/pages/explorer')),
   },
