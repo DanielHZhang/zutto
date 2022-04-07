@@ -9,12 +9,12 @@ mod utils;
 
 use tauri::Manager;
 
-use commands::{connect_to_database, fetch_all_tables, fetch_recent_databases};
+use commands::{connect_to_database, fetch_all_tables, fetch_recent_databases, fetch_table_data};
 use store::Store;
 
 #[tokio::main]
 async fn main() {
-	tracing_subscriber::fmt::init();
+  tracing_subscriber::fmt::init();
 
   let store = Store::new().await;
 
@@ -26,7 +26,13 @@ async fn main() {
       connect_to_database,
       fetch_all_tables,
       fetch_recent_databases,
+      fetch_table_data,
     ])
+    .setup(|app| {
+      #[cfg(debug_assertions)]
+      app.get_window("main").unwrap().open_devtools();
+      Ok(())
+    })
     .on_window_event(|event| match event.event() {
       tauri::WindowEvent::Destroyed => {
         let store = event.window().state::<Store>();
