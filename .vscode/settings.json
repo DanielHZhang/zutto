@@ -3,6 +3,9 @@
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"[rust]": {
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": false,
+		},
 		"editor.defaultFormatter": "matklad.rust-analyzer",
 		"editor.snippetSuggestions": "bottom",
 		"editor.wordBasedSuggestions": false,

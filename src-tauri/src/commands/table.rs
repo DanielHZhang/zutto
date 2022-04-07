@@ -35,9 +35,12 @@ pub async fn fetch_table_data(store: State<'_, Store>, table_name: String) -> Co
       let query = format!("SELECT * FROM {table_name}");
       let mut rows = sqlx::query(&query).fetch(pool);
 
+      println!("gets here");
       while let Some(row) = rows.try_next().await? {
-        let test: &str = row.try_get(0)?;
-        println!("{test}");
+        println!("inside while let");
+        let test: i32  = row.try_get(0).unwrap();
+				let col2: &str = row.try_get(1).unwrap();
+        println!("{test} ${col2}");
       }
 
       Ok(())

@@ -22,13 +22,11 @@ export async function fetchRecentDatabases(): Promise<ConnectionConfig[] | null>
   return invokeTauri<ConnectionConfig[]>('fetch_recent_databases');
 }
 
-type TableData = {name: string}[];
+type TableData = string[];
 
 export async function fetchAllTables(): Promise<TableData | null> {
   if (!IS_TAURI_ENV) {
-    return Array.from({length: 10}, (_, index) => ({
-      name: `Table ${index}`,
-    }));
+    return Array.from({length: 10}, (_, index) => `Table ${index}`);
   }
   return invokeTauri<TableData | null>('fetch_all_tables');
 }
