@@ -1,7 +1,7 @@
 import {useNavigate} from 'solid-app-router';
 import {createResource, createSignal, For, JSXElement, Show} from 'solid-js';
 import {connectToDatabase, fetchRecentDatabases} from 'src/actions';
-import {Button, Input, Modal} from 'src/components/base';
+import {Button, Heading, Input, Modal, Subheading} from 'src/components/base';
 import {ActionCard, DatabaseCard} from 'src/components/home';
 import {createForm} from 'src/hooks';
 import type {ConnectionConfig} from 'src/types';
@@ -41,7 +41,7 @@ export default function Home(): JSXElement {
 
   return (
     <section class='flex flex-grow-1 flex-col space-y-10 text-gray-200 p-8'>
-      <h1 class='text-3xl font-bold'>Databases</h1>
+      <Heading>Databases</Heading>
       <div>
         <ActionCard
           title='Open Database'
@@ -52,8 +52,8 @@ export default function Home(): JSXElement {
         />
       </div>
       <div>
-        <h1>Recently Opened</h1>
-        <div class='flex space-x-4'>
+        <Subheading>Recently Opened</Subheading>
+        <div class='flex space-x-4 mt-4'>
           <Show when={recentDatabases()} fallback={<div>Loading...</div>}>
             <For each={recentDatabases()}>
               {(item, index) => <DatabaseCard data={item} onClick={onCardClick(index())} />}
