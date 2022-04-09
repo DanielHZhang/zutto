@@ -1,8 +1,8 @@
 #![cfg_attr(all(not(debug_assertions), target_os = "windows"), windows_subsystem = "windows")]
 
 mod commands;
+mod data;
 mod store;
-mod utils;
 
 use tauri::{Manager, RunEvent};
 

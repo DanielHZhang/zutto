@@ -21,19 +21,15 @@ export default function Home(): JSXElement {
     },
   });
 
-  const connectAndNavigate = async (config: ConnectionConfig) => {
-    await connectToDatabase({config});
-    navigate('/tables');
-  };
-
   const onSubmit = form.handleSubmit(async (values) => {
-    await connectAndNavigate(values);
+    await connectToDatabase({config: values});
+    navigate('/tables');
   });
 
   const onCardClick = (index: number) => async () => {
     try {
-      const connectionConfig = recentDatabases()![index];
-      await connectAndNavigate(connectionConfig);
+      const config = recentDatabases()![index];
+      await connectToDatabase({id: config.id});
     } catch (error) {
       console.error(error);
     }

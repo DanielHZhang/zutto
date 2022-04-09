@@ -8,7 +8,7 @@ use std::{
 use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
 
-use super::{ConnectionConfig, Environment};
+use crate::data::{ConnectionConfig, Environment};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct State {
