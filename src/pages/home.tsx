@@ -49,7 +49,7 @@ export default function Home(): JSXElement {
       </div>
       <div>
         <Subheading>Recently Opened</Subheading>
-        <div class='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 gap-4 mt-4'>
+        <div class='grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4'>
           <Show when={recentDatabases()} fallback={<div>Loading...</div>}>
             <For each={recentDatabases()}>
               {(item, index) => <DatabaseCard data={item} onClick={onCardClick(index())} />}

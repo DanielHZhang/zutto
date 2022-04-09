@@ -1,4 +1,5 @@
 const {defineConfig} = require('vite-plugin-windicss');
+const defaultTheme = require('windicss/defaultTheme');
 
 /** @type {import('windicss/types/interfaces').PluginBuilder} */
 const plugin = require('windicss/plugin');
@@ -8,8 +9,8 @@ module.exports = defineConfig({
   theme: {
     screens: {
       xs: '360px',
+      ...defaultTheme.screens,
     },
-    extend: {},
   },
   plugins: [
     plugin(({addUtilities, addComponents}) => {
