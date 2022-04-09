@@ -2,7 +2,9 @@ import {invoke} from '@tauri-apps/api';
 import {IS_TAURI_ENV} from 'src/config';
 import {ConnectionConfig} from 'src/types';
 
-export async function connectToDatabase(data: ConnectionConfig): Promise<void> {
+type ConnectData = {id: string} | {config: ConnectionConfig};
+
+export async function connectToDatabase(data: ConnectData): Promise<void> {
   if (!IS_TAURI_ENV) {
     return;
   }

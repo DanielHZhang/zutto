@@ -3,19 +3,15 @@ use std::{error::Error, time::Duration};
 use sqlx::postgres::{PgPool, PgPoolOptions};
 use tokio::sync::{Mutex, MutexGuard};
 
-use super::State;
-
 #[derive(Debug)]
-pub struct Store {
+pub struct Client {
   active_pool: Mutex<Option<PgPool>>,
-  state: Mutex<State>,
 }
 
-impl Store {
-  pub fn new() -> Self {
+impl Client {
+  pub async fn new() -> Self {
     Self {
       active_pool: Mutex::new(None),
-      state: Mutex::new(State::new()),
     }
   }
 
@@ -47,9 +43,5 @@ impl Store {
       let pool = guard.as_ref().unwrap();
       pool.close().await;
     }
-  }
-
-  pub async fn state<'a>(&'a self) -> MutexGuard<'a, State> {
-    self.state.lock().await
   }
 }

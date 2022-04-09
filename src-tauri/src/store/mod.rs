@@ -4,6 +4,6 @@ mod store;
 mod structs;
 
 pub use enums::*;
-pub use state::*;
-pub use store::*;
+pub use state::State;
+pub use store::Store;
 pub use structs::*;

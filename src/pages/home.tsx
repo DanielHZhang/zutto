@@ -22,7 +22,7 @@ export default function Home(): JSXElement {
   });
 
   const connectAndNavigate = async (config: ConnectionConfig) => {
-    await connectToDatabase(config);
+    await connectToDatabase({config});
     navigate('/tables');
   };
 

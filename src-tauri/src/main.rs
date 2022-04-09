@@ -1,13 +1,10 @@
-#![cfg_attr(
-  all(not(debug_assertions), target_os = "windows"),
-  windows_subsystem = "windows"
-)]
+#![cfg_attr(all(not(debug_assertions), target_os = "windows"), windows_subsystem = "windows")]
 
 mod commands;
 mod store;
 mod utils;
 
-use tauri::Manager;
+use tauri::{Manager, RunEvent};
 
 use commands::{connect_to_database, fetch_all_tables, fetch_recent_databases, fetch_table_data};
 use store::Store;
@@ -15,12 +12,10 @@ use store::Store;
 #[tokio::main]
 async fn main() {
   tracing_subscriber::fmt::init();
-
-  let store = Store::new().await;
-
   tauri::async_runtime::set(tokio::runtime::Handle::current());
 
-  tauri::Builder::default()
+  let store = Store::new();
+  let app = tauri::Builder::default()
     .manage::<Store>(store)
     .invoke_handler(tauri::generate_handler![
       connect_to_database,
@@ -33,14 +28,19 @@ async fn main() {
       app.get_window("main").unwrap().open_devtools();
       Ok(())
     })
-    .on_window_event(|event| match event.event() {
-      tauri::WindowEvent::Destroyed => {
-        let store = event.window().state::<Store>();
-        store.save_state();
-      }
-      _ => (),
-    })
     .plugin(tauri_plugin_window_state::WindowState::default())
-    .run(tauri::generate_context!())
-    .expect("error while running tauri application");
+    .build(tauri::generate_context!())
+    .expect("Error while running Tauri application");
+
+  app.run(|app_handle, event| match event {
+    RunEvent::ExitRequested { .. } => {
+      let handle = app_handle.clone();
+      tauri::async_runtime::spawn(async move {
+        let store = handle.state::<Store>();
+        let state = store.state().await;
+        state.save_to_file();
+      });
+    }
+    _ => (),
+  });
 }

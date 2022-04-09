@@ -38,8 +38,8 @@ pub async fn fetch_table_data(store: State<'_, Store>, table_name: String) -> Co
       println!("gets here");
       while let Some(row) = rows.try_next().await? {
         println!("inside while let");
-        let test: i32  = row.try_get(0).unwrap();
-				let col2: &str = row.try_get(1).unwrap();
+        let test: i32 = row.try_get(0).unwrap();
+        let col2: &str = row.try_get(1).unwrap();
         println!("{test} ${col2}");
       }
 
