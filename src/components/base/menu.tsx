@@ -29,6 +29,8 @@ export const Menu = (props: MenuProps): JSXElement => {
     // selectedKey: '',
   });
 
+  console.log('how many times doe sthis render');
+
   // createEffect(() => {
   //   console.log('when is effect run');
   //   props.onSelect?.(state.selectedKey);

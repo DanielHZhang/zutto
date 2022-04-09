@@ -25,23 +25,23 @@ export const TableCard = (props: Props): JSXElement => {
           <span class='ml-2 font-medium'>{props.title}</span>
         </div>
       </Link>
-      <Show when={isEditVisible()}>
-        <Menu
-          onSelect={(key) => {
-            props.onAction(key);
-            setEditVisible(false);
-            setMenuVisible(false);
-          }}
-        >
+      <Menu
+        onSelect={(key) => {
+          props.onAction(key);
+          setEditVisible(false);
+          setMenuVisible(false);
+        }}
+      >
+        <Show when={isEditVisible()}>
           <MenuButton onClick={() => setMenuVisible(!isMenuVisible())}>
             <EditIcon />
           </MenuButton>
-          <MenuList>
-            <MenuItem key='rename'>Rename</MenuItem>
-            <MenuItem key='drop'>Drop</MenuItem>
-          </MenuList>
-        </Menu>
-      </Show>
+        </Show>
+        <MenuList>
+          <MenuItem key='rename'>Rename</MenuItem>
+          <MenuItem key='drop'>Drop</MenuItem>
+        </MenuList>
+      </Menu>
     </div>
   );
 };
