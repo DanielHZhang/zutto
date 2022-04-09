@@ -30,6 +30,7 @@ export default function Home(): JSXElement {
     try {
       const config = recentDatabases()![index];
       await connectToDatabase({id: config.id});
+      navigate('/tables');
     } catch (error) {
       console.error(error);
     }

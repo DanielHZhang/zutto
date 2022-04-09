@@ -3,7 +3,7 @@ use sqlx::Row;
 use tauri::State;
 use tracing::instrument;
 
-use crate::store::Store;
+use crate::{data::RenameTableData, store::Store};
 
 use super::{CommandError, CommandResult};
 
@@ -43,6 +43,23 @@ pub async fn query_table_data(store: State<'_, Store>, table_name: String) -> Co
         println!("{test} ${col2}");
       }
 
+      Ok(())
+    }
+    None => Err(CommandError::new("Client is not connected to a database")),
+  }
+}
+
+#[tauri::command]
+#[instrument(skip(store), ret, err)]
+pub async fn rename_table(store: State<'_, Store>, rename: RenameTableData) -> CommandResult<()> {
+  match store.active_pool().await.as_ref() {
+    Some(pool) => {
+      let RenameTableData {
+        original_name,
+        new_name,
+      } = &rename;
+      let query = format!("ALTER TABLE {original_name} RENAME TO {new_name}");
+      sqlx::query(&query).execute(pool).await?;
       Ok(())
     }
     None => Err(CommandError::new("Client is not connected to a database")),

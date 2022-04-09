@@ -27,7 +27,7 @@ export const Tables = (): JSXElement => {
       <ErrorBoundary fallback={(error) => <div>Error fetching tables: {error.message}</div>}>
         <Show when={tables()} fallback={<div>Loading...</div>}>
           <div class='flex space-x-4'>
-            <Button variant='primary'>New Table</Button>{' '}
+            <Button variant='primary'>New Table</Button>
             <Input
               class='flex-grow'
               placeholder='Search for table...'

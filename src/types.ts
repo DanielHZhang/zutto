@@ -15,3 +15,8 @@ export type PublicConnectionConfig = {
   username: string;
   databaseName: string;
 };
+
+export type RenamePayload = {
+  originalName: string;
+  newName: string;
+};

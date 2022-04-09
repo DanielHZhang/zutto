@@ -2,7 +2,7 @@ import EditIcon from 'iconoir/icons/edit-pencil.svg';
 import TableIcon from 'iconoir/icons/table-2-columns.svg';
 import {Link} from 'solid-app-router';
 import {createSignal, JSXElement, Show} from 'solid-js';
-import {Button} from 'src/components/base';
+import {Button, Menu, MenuButton, MenuList} from 'src/components/base';
 
 type Props = {
   title: string;
@@ -10,6 +10,7 @@ type Props = {
 
 export const TableCard = (props: Props): JSXElement => {
   const [isEditVisible, setIsEditVisible] = createSignal(false);
+  const [isMenuVisible, setIsMenuVisible] = createSignal(false);
 
   return (
     <div
@@ -24,9 +25,15 @@ export const TableCard = (props: Props): JSXElement => {
         </div>
       </Link>
       <Show when={isEditVisible()}>
-        <Button>
-          <EditIcon />
-        </Button>
+        <Menu>
+          <MenuButton>
+            <EditIcon />
+          </MenuButton>
+          <MenuList>
+            <div>what is this list</div>
+            <div>cool list</div>
+          </MenuList>
+        </Menu>
       </Show>
     </div>
   );

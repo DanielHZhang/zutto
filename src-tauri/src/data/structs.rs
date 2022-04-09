@@ -40,3 +40,10 @@ pub struct PublicConnectionConfig {
   pub username: String,
   pub database_name: String,
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RenameTableData {
+  pub original_name: String,
+  pub new_name: String,
+}
