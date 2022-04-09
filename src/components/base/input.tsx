@@ -1,7 +1,17 @@
-import {JSX, JSXElement} from 'solid-js';
+import {JSX, JSXElement, splitProps} from 'solid-js';
+import {mergeCss} from 'src/utils';
 
 type Props = JSX.InputHTMLAttributes<HTMLInputElement>;
 
 export const Input = (props: Props): JSXElement => {
-  return <input class='rounded-md p-2 bg-slate-500 outline-none' {...props} />;
+  const [own, rest] = splitProps(props, ['class']);
+  return (
+    <input
+      class={mergeCss(
+        'input-focus rounded-md px-3 p-1 bg-slate-700 outline-none focus:border-blue-400',
+        own.class
+      )}
+      {...rest}
+    />
+  );
 };
