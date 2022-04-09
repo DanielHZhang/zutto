@@ -11,7 +11,7 @@ export async function connectToDatabase(data: ConnectData): Promise<void> {
   return invoke('connect_to_database', {data});
 }
 
-export async function fetchRecentDatabases(): Promise<PublicConnectionConfig[] | null> {
+export async function queryRecentDatabases(): Promise<PublicConnectionConfig[] | null> {
   if (!IS_TAURI_ENV) {
     return [
       {
@@ -24,23 +24,23 @@ export async function fetchRecentDatabases(): Promise<PublicConnectionConfig[] |
       },
     ];
   }
-  return invoke('fetch_recent_databases');
+  return invoke('query_recent_databases');
 }
 
 type TableData = string[];
 
-export async function fetchAllTables(): Promise<TableData> {
+export async function queryAllTables(): Promise<TableData> {
   if (!IS_TAURI_ENV) {
     return Array.from({length: 10}, (_, index) => `Table ${index}`);
   }
-  return invoke<TableData>('fetch_all_tables');
+  return invoke<TableData>('query_all_tables');
 }
 
-export async function fetchTableData(tableName: string): Promise<any> {
+export async function queryTableData(tableName: string): Promise<any> {
   if (!IS_TAURI_ENV) {
     return Array.from({length: 10}, (_, index) => ({
       name: `Table ${index}`,
     }));
   }
-  return invoke('fetch_table_data', {tableName});
+  return invoke('query_table_data', {tableName});
 }

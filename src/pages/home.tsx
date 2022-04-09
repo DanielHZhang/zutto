@@ -1,6 +1,6 @@
 import {useNavigate} from 'solid-app-router';
 import {createResource, createSignal, For, JSXElement, Show} from 'solid-js';
-import {connectToDatabase, fetchRecentDatabases} from 'src/actions';
+import {connectToDatabase, queryRecentDatabases} from 'src/actions';
 import {Button, Heading, Input, Modal, Subheading} from 'src/components/base';
 import {ActionCard, DatabaseCard} from 'src/components/cards';
 import {createForm} from 'src/hooks';
@@ -8,7 +8,7 @@ import type {ConnectionConfig} from 'src/types';
 
 export default function Home(): JSXElement {
   const [isModalOpen, setIsModalOpen] = createSignal(false);
-  const [recentDatabases] = createResource(fetchRecentDatabases);
+  const [recentDatabases] = createResource(queryRecentDatabases);
   const navigate = useNavigate();
   const form = createForm<ConnectionConfig>({
     initialValues: {

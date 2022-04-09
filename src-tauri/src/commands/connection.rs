@@ -1,8 +1,8 @@
 use tauri::State;
-use tracing::{debug, instrument};
+use tracing::instrument;
 
 use crate::{
-  data::{ConnectData, ConnectionConfig, PublicConnectionConfig},
+  data::{ConnectData, PublicConnectionConfig},
   store::Store,
 };
 
@@ -40,7 +40,7 @@ pub async fn connect_to_database(store: State<'_, Store>, data: ConnectData) -> 
 
 #[tauri::command]
 #[instrument(skip(store), ret, err)]
-pub async fn fetch_recent_databases(store: State<'_, Store>) -> CommandResult<Vec<PublicConnectionConfig>> {
+pub async fn query_recent_databases(store: State<'_, Store>) -> CommandResult<Vec<PublicConnectionConfig>> {
   let state = store.state().await;
   let public_connection_configs = state
     .databases

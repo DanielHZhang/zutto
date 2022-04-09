@@ -6,7 +6,7 @@ mod store;
 
 use tauri::{Manager, RunEvent};
 
-use commands::{connect_to_database, fetch_all_tables, fetch_recent_databases, fetch_table_data};
+use commands::{connect_to_database, query_all_tables, query_recent_databases, query_table_data};
 use store::Store;
 
 #[tokio::main]
@@ -19,9 +19,9 @@ async fn main() {
     .manage::<Store>(store)
     .invoke_handler(tauri::generate_handler![
       connect_to_database,
-      fetch_all_tables,
-      fetch_recent_databases,
-      fetch_table_data,
+      query_all_tables,
+      query_recent_databases,
+      query_table_data,
     ])
     .setup(|app| {
       #[cfg(debug_assertions)]

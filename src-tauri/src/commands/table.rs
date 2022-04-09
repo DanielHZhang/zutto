@@ -9,7 +9,7 @@ use super::{CommandError, CommandResult};
 
 #[tauri::command]
 #[instrument(skip(store), ret, err)]
-pub async fn fetch_all_tables(store: State<'_, Store>) -> CommandResult<Vec<String>> {
+pub async fn query_all_tables(store: State<'_, Store>) -> CommandResult<Vec<String>> {
   match store.active_pool().await.as_ref() {
     Some(pool) => {
       let query = "SELECT table_name FROM information_schema.tables WHERE table_schema='public'";
@@ -29,7 +29,7 @@ pub async fn fetch_all_tables(store: State<'_, Store>) -> CommandResult<Vec<Stri
 
 #[tauri::command]
 #[instrument(skip(store), ret, err)]
-pub async fn fetch_table_data(store: State<'_, Store>, table_name: String) -> CommandResult<()> {
+pub async fn query_table_data(store: State<'_, Store>, table_name: String) -> CommandResult<()> {
   match store.active_pool().await.as_ref() {
     Some(pool) => {
       let query = format!("SELECT * FROM {table_name}");

@@ -1,12 +1,12 @@
 import Fuse from 'fuse.js';
 import {createResource, createSignal, ErrorBoundary, JSXElement, Show} from 'solid-js';
-import {fetchAllTables} from 'src/actions';
+import {queryAllTables} from 'src/actions';
 import {Button, Grid, Input} from 'src/components/base';
 import {TableCard} from 'src/components/cards';
 
 export const Tables = (): JSXElement => {
   const [searchFilter, setSearchFilter] = createSignal('');
-  const [tables] = createResource(fetchAllTables);
+  const [tables] = createResource(queryAllTables);
 
   const filterTables = () => {
     const tableNames = tables();
