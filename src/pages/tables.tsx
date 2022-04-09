@@ -21,6 +21,10 @@ export const Tables = (): JSXElement => {
     return searchResults.map((result) => result.item);
   };
 
+  const onTableCardAction = (name: string) => (key: string) => {
+    console.log('got table card action:', key);
+  };
+
   return (
     <section class='flex flex-grow-1 flex-col space-y-10 text-gray-200 p-8'>
       <h1 class='text-3xl font-bold'>Tables</h1>
@@ -34,7 +38,9 @@ export const Tables = (): JSXElement => {
               onInput={(event) => setSearchFilter(event.currentTarget.value)}
             />
           </div>
-          <Grid items={filterTables()}>{(item) => <TableCard title={item} />}</Grid>
+          <Grid items={filterTables()}>
+            {(item) => <TableCard title={item.name} onAction={onTableCardAction(item.name)} />}
+          </Grid>
         </Show>
       </ErrorBoundary>
     </section>

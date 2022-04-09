@@ -20,3 +20,9 @@ export type RenamePayload = {
   originalName: string;
   newName: string;
 };
+
+export type TableOverview = {
+  name: string;
+  numRecords: number;
+  numColumns: number;
+};

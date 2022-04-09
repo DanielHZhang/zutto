@@ -1,6 +1,6 @@
 import {invoke} from '@tauri-apps/api';
 import {IS_TAURI_ENV} from 'src/config';
-import {ConnectionConfig, PublicConnectionConfig, RenamePayload} from 'src/types';
+import {ConnectionConfig, PublicConnectionConfig, RenamePayload, TableOverview} from 'src/types';
 
 type ConnectData = {id: string} | {config: ConnectionConfig};
 
@@ -42,13 +42,15 @@ export async function queryRecentDatabases(): Promise<PublicConnectionConfig[] |
   return invoke('query_recent_databases');
 }
 
-type TableData = string[];
-
-export async function queryAllTables(): Promise<TableData> {
+export async function queryAllTables(): Promise<TableOverview[]> {
   if (!IS_TAURI_ENV) {
-    return Array.from({length: 10}, (_, index) => `Table ${index}`);
+    return Array.from({length: 10}, (_, index) => ({
+      name: `Table ${index}`,
+      numRecords: index,
+      numColumns: index,
+    }));
   }
-  return invoke<TableData>('query_all_tables');
+  return invoke('query_all_tables');
 }
 
 export async function queryTableData(tableName: string): Promise<any> {
