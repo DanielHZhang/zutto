@@ -30,7 +30,7 @@ pub async fn query_all_tables(store: State<'_, Store>) -> CommandResult<Vec<Tabl
         .try_get("estimate")?;
 
         let num_columns: u32 = sqlx::query(&format!(
-          "SELECT count(*) FROM information_schema.columns WHERE table_name='{name}'"
+          "SELECT count(*) FROM information_schema.columns WHERE table_name = '{name}'"
         ))
         .fetch_one(pool)
         .await?

@@ -1,12 +1,15 @@
 import EditIcon from 'iconoir/icons/edit-pencil.svg';
-import TableIcon from 'iconoir/icons/table-2-columns.svg';
+import TableRowsIcon from 'iconoir/icons/table-rows.svg';
+import TableIcon from 'iconoir/icons/table.svg';
+import TableColumnsIcon from 'iconoir/icons/view-columns-2.svg';
 import {Link} from 'solid-app-router';
 import type {JSXElement} from 'solid-js';
-import {createEffect, createSignal, onCleanup, Show} from 'solid-js';
-import {Button, Menu, MenuButton, MenuItem, MenuList} from 'src/components/base';
+import {createSignal, Show} from 'solid-js';
+import {Menu, MenuButton, MenuItem, MenuList} from 'src/components/base';
+import type {TableOverview} from 'src/types';
 
 type Props = {
-  title: string;
+  data: TableOverview;
   onAction: (key: string) => void;
 };
 
@@ -20,10 +23,22 @@ export const TableCard = (props: Props): JSXElement => {
       onMouseOver={() => setEditVisible(true)}
       onMouseLeave={() => !isMenuVisible() && setEditVisible(false)}
     >
-      <Link href={`/explorer/${props.title}`}>
+      <Link href={`/explorer/${props.data.name}`}>
         <div class='flex items-center'>
           <TableIcon />
-          <span class='ml-2 font-medium'>{props.title}</span>
+          <div class='ml-4 flex flex-col space-y-1'>
+            <div class='text-lg font-medium'>{props.data.name}</div>
+            <div class='text-gray-300 flex space-x-2'>
+              <div class='flex items-center bg-cyan-700 border-b-2 border-b-cyan-400 rounded-md px-1'>
+                <TableRowsIcon width='16px' height='16px' />
+                <span class='ml-1'>{props.data.numRecords}</span>
+              </div>
+              <div class='flex items-center bg-cyan-700 border-b-2 border-b-cyan-400 rounded-md px-1'>
+                <TableColumnsIcon width='16px' height='16px' />
+                <span class='ml-1'>{props.data.numColumns}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </Link>
       <Menu

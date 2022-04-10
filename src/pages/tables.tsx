@@ -73,7 +73,7 @@ export const Tables = (): JSXElement => {
             />
           </div>
           <Grid items={filterTables()} fallback={<div>No tables found...</div>}>
-            {(item) => <TableCard title={item.name} onAction={onTableCardAction(item.name)} />}
+            {(item) => <TableCard data={item} onAction={onTableCardAction(item.name)} />}
           </Grid>
         </Show>
       </ErrorBoundary>
