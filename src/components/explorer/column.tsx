@@ -12,15 +12,21 @@ type Props = {
 };
 
 export const Column = (props: Props): JSXElement => {
+  const isEmpty = () => props.data.content === '' && props.data.id === -1;
+
   /** @tw */
-  const borders = 'border-l-2 border-b-2 border-gray-600 last-of-type:border-r-2';
+  const borders = 'border-l-2 border-b-2 border-slate-700 last:border-r-2';
+
+  /** @tw */
+  // const empty = 'border-gray-800  first-of-type:border-l-gray-600';
 
   return (
     <div
       classList={{
+        // [empty]: isEmpty(),
         'bg-blue-500 bg-opacity-20': props.isRowHovered,
       }}
-      class={`flex items-center h-10 first:border-l-transparent last:border-r-transparent ${borders}`}
+      class={`flex items-center h-10 first:border-l-transparent ${borders}`}
       onMouseOver={() => props.onHover(props.rowIndex, props.colIndex)}
       onClick={(event) => {
         console.log('click event');

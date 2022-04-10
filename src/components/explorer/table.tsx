@@ -28,43 +28,43 @@ export const Table = (props: Props): JSXElement => {
   const minColumns = 6;
   const minRows = 10;
 
-  const normalizeData = () => {
-    const numRows = props.data.length;
+  // const normalizeData = () => {
+  //   const numRows = props.data.length;
 
-    const missingRows = minRows - numRows;
-    if (missingRows > 0) {
-      const fillData = Array.from({length: missingRows}, () => []);
-      props.data.push(...fillData);
-    }
+  //   const missingRows = minRows - numRows;
+  //   if (missingRows > 0) {
+  //     const fillData = Array.from({length: missingRows}, () => []);
+  //     props.data.push(...fillData);
+  //   }
 
-    props.data.forEach((row) => {
-      const numCols = row.length;
-      const missingCols = minColumns - numCols;
-      const fillData = Array.from({length: missingCols}, () => ({
-        id: -1,
-        content: '',
-      }));
-      row.push(...fillData);
-    });
+  //   props.data.forEach((row) => {
+  //     const numCols = row.length;
+  //     const missingCols = minColumns - numCols;
+  //     const fillData = Array.from({length: missingCols}, () => ({
+  //       id: -1,
+  //       content: '',
+  //     }));
+  //     row.push(...fillData);
+  //   });
 
-    return props.data;
-  };
+  //   return props.data;
+  // };
 
-  const normalizeHeaders = () => {
-    const missingCols = minColumns - props.headers.length;
-    if (missingCols > 0) {
-      props.headers.push(...Array.from({length: missingCols}, () => ''));
-    }
-    return props.headers;
-  };
+  // const normalizeHeaders = () => {
+  //   const missingCols = minColumns - props.headers.length;
+  //   if (missingCols > 0) {
+  //     props.headers.push(...Array.from({length: missingCols}, () => ''));
+  //   }
+  //   return props.headers;
+  // };
 
   return (
     <div class='overflow-x-auto relative'>
       <div class='flex flex-col' onMouseLeave={() => setState('hover', {row: -1, col: -1})}>
         <div class='flex'>
-          <For each={normalizeHeaders()}>
+          <For each={props.headers}>
             {(header) => (
-              <div class='flex items-center border-l-2 border-b-4 border-t-2 border-gray-600 h-10 last-of-type:border-r-2'>
+              <div class='flex items-center border-l-2 border-b-2 border-t-2 border-gray-600 h-10 last:border-r-2'>
                 <div class='w-40 overflow-hidden whitespace-nowrap overflow-ellipsis'>
                   <span class='px-2 font-semibold'>{header}</span>
                 </div>
@@ -72,7 +72,7 @@ export const Table = (props: Props): JSXElement => {
             )}
           </For>
         </div>
-        <For each={normalizeData()}>
+        <For each={props.data}>
           {(row, rowIndex) => (
             <div class='flex'>
               <For each={row}>
@@ -105,7 +105,11 @@ export const Table = (props: Props): JSXElement => {
       </div>
       <div
         class='z-10 absolute h-10 w-41 border-3 border-blue-400 rounded-lg pointer-events-none'
-        style={{left: `${state.selection.left}px`, top: `${state.selection.top}px`}}
+        style={{
+          left: `${state.selection.left}px`,
+          top: `${state.selection.top}px`,
+          visibility: state.selection.row >= 0 ? 'visible' : 'hidden',
+        }}
       />
     </div>
   );

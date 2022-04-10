@@ -15,6 +15,9 @@ module.exports = defineConfig({
   plugins: [
     plugin(({addUtilities, addComponents}) => {
       addComponents({
+        '.bg-app': {
+          backgroundColor: '#1a212e',
+        },
         '.input-focus': {
           // color: '#000',
           // '&:focus': {
