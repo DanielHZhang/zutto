@@ -1,7 +1,7 @@
 import type {JSXElement} from 'solid-js';
-import {createSelector, createSignal, For} from 'solid-js';
-import {createStore} from 'solid-js/store';
-import type {CheckboxState} from 'src/components/base';
+import {createEffect, createSelector, createSignal, For} from 'solid-js';
+import {createStore, produce} from 'solid-js/store';
+import {CheckboxState} from 'src/components/base';
 import {CheckboxColumn} from 'src/components/explorer/checkbox-column';
 import {DataCell} from 'src/components/explorer/data-cell';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15,6 +15,7 @@ type Data = {
 type Props = {
   headers: string[];
   data: Data[][];
+  onCellEdit: () => void;
 };
 
 export const Table = (props: Props): JSXElement => {
@@ -22,11 +23,16 @@ export const Table = (props: Props): JSXElement => {
     hover: {row: -1, col: -1},
     active: {x: -1, y: -1},
     selected: {row: -1, col: -1},
+    selectedRows: {} as Record<number, boolean>,
   });
 
   const resetHover = () => setState('hover', {row: -1, col: -1});
   const resetActiveCell = () => setState('active', {x: -1, y: -1});
   const resetSelectedCell = () => setState('selected', {row: -1, col: -1});
+
+  createEffect(() => {
+    console.log('running when selected cellc hagnes', state.selected.row);
+  });
 
   return (
     <div
@@ -51,10 +57,18 @@ export const Table = (props: Props): JSXElement => {
         </div>
         <For each={props.data}>
           {(row, rowIndex) => (
-            <div class='flex'>
+            <div class='flex' onMouseOver={() => setState('hover', 'row', rowIndex())}>
               <CheckboxColumn
-                onCheck={(checked: CheckboxState) => {
-                  console.log('new state:', checked);
+                onCheck={(checked) => {
+                  setState(
+                    produce((state) => {
+                      if (checked === CheckboxState.Checked) {
+                        state.selectedRows[rowIndex()] = true;
+                      } else {
+                        delete state.selectedRows[rowIndex()];
+                      }
+                    })
+                  );
                 }}
               />
               <For each={row}>
@@ -67,6 +81,7 @@ export const Table = (props: Props): JSXElement => {
                       state.selected.row === rowIndex() && state.selected.col === colIndex()
                     }
                     isHovered={state.hover.row === rowIndex()}
+                    isRowSelected={state.selectedRows[rowIndex()]}
                     onHover={(row, col) => setState('hover', {row, col})}
                     onClick={(event) => {
                       const target = event.currentTarget;
@@ -79,6 +94,9 @@ export const Table = (props: Props): JSXElement => {
                     }}
                     onDoubleClick={() => {
                       setState('selected', {row: rowIndex(), col: colIndex()});
+                    }}
+                    onEditInput={(event) => {
+                      props.onCellEdit(rowIndex(), colIndex(), event.currentTarget.value);
                     }}
                   />
                 )}

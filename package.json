@@ -9,30 +9,6 @@
 		"tauri": "tauri"
 	},
 	"license": "(MIT OR Apache-2.0)",
-	"eslintConfig": {
-		"extends": "@supersede",
-		"rules": {
-			"@typescript-eslint/consistent-type-imports": [
-				"error",
-				{
-					"prefer": "type-imports"
-				}
-			],
-			"@typescript-eslint/no-unused-vars": [
-				"warn"
-			],
-			"max-len": [
-				"error",
-				{
-					"code": 100,
-					"tabWidth": 2,
-					"ignorePattern": "class=('|\\{`).+"
-				}
-			],
-			"no-unused-vars": "off"
-		}
-	},
-	"prettier": "@supersede/prettier-config",
 	"dependencies": {
 		"@tauri-apps/api": "^1.0.0-rc.3",
 		"fuse.js": "^6.5.3",
@@ -55,5 +31,35 @@
 		"vite-plugin-solid": "^2.2.6",
 		"vite-plugin-windicss": "^1.8.3",
 		"windicss": "^3.5.1"
-	}
+	},
+	"eslintConfig": {
+		"extends": "@supersede",
+		"rules": {
+			"@typescript-eslint/consistent-type-assertions": [
+				"off"
+			],
+			"@typescript-eslint/no-dynamic-delete": [
+				"off"
+			],
+			"@typescript-eslint/consistent-type-imports": [
+				"error",
+				{
+					"prefer": "type-imports"
+				}
+			],
+			"@typescript-eslint/no-unused-vars": [
+				"warn"
+			],
+			"max-len": [
+				"error",
+				{
+					"code": 100,
+					"tabWidth": 2,
+					"ignorePattern": "class=('|\\{`).+"
+				}
+			],
+			"no-unused-vars": "off"
+		}
+	},
+	"prettier": "@supersede/prettier-config"
 }

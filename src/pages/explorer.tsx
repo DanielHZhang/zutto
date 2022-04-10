@@ -23,6 +23,18 @@ const data = [
   ],
 ];
 
+type Modification = {
+	originalValue: any;
+	newValue: any;
+};
+
+type RowModification = {
+	deleted: boolean;
+	changes: Record<number, Modification>;
+};
+
+type ModificationMap = Record<number, RowModification>;
+
 export default function Explorer(): JSXElement {
   const params = useParams();
   console.log('got params:', {...params});
@@ -30,7 +42,6 @@ export default function Explorer(): JSXElement {
   const [modifications, setModifications] = createSignal([]);
   const [tableName, setTableName] = createSignal(params.tableName);
   const [tableData] = createResource(tableName, queryTableData);
-  const [tables] = createResource(queryAllTables);
 
   console.log('table data:', tableData());
   return (

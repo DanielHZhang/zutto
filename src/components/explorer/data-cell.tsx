@@ -9,38 +9,42 @@ type Props = {
   rowIndex: number;
   colIndex: number;
   isSelected: boolean;
+  isRowSelected: boolean;
   isHovered: boolean;
   onHover: (rowIndex: number, colIndex: number) => void;
   onClick: JSX.EventHandler<HTMLDivElement, MouseEvent>;
   onDoubleClick: JSX.EventHandler<HTMLDivElement, MouseEvent>;
+  onEditInput: JSX.EventHandler<HTMLInputElement, InputEvent>;
 };
 
 export const DataCell = (props: Props): JSXElement => {
   let editInput: HTMLInputElement;
   createEffect(() => {
     if (props.isSelected) {
-      editInput.focus();
+      editInput.focus(); // Focus the edit input when the cell is selected
     }
   });
 
   /** @tw */
   const borders = 'border-l-2 border-b-2 border-slate-700 last:border-r-2';
-
   /** @tw */
   const height = 'h-10';
   /** @tw */
   const width = 'w-50';
+  /** @tw */
+  const hovered = 'bg-blue-500 bg-opacity-20';
+  /** @tw */
+  const rowSelected = 'bg-blue-300 bg-opacity-30';
 
   return (
     <div
       classList={{
-        'bg-blue-500 bg-opacity-20': props.isHovered,
+        [hovered]: props.isHovered && !props.isRowSelected,
+        [rowSelected]: props.isRowSelected,
       }}
       class={`flex items-center ${height} ${borders}`}
       onMouseOver={() => props.onHover(props.rowIndex, props.colIndex)}
-      onClick={(event) => {
-        props.onClick(event);
-      }}
+      onClick={props.onClick}
       onDblClick={props.onDoubleClick}
     >
       <div
@@ -54,6 +58,7 @@ export const DataCell = (props: Props): JSXElement => {
             ref={(element) => (editInput = element)}
             class={`${height} ${width} pr-8 py-0 rounded-none`}
             value={props.data.content}
+            onInput={props.onEditInput}
           />
           <div class='absolute right-1 top-2'>
             <Button size='xs'>
