@@ -1,17 +1,34 @@
 import CheckIcon from 'iconoir/icons/check.svg';
+import MinusIcon from 'iconoir/icons/minus.svg';
 import type {JSXElement} from 'solid-js';
-import {createSignal, Show} from 'solid-js';
+import {createEffect, createSignal, Match, Switch} from 'solid-js';
 
-type Props = {
-  defaultChecked?: boolean;
+export enum CheckboxState {
+  Unchecked,
+  Checked,
+  Partial,
+}
+
+export type CheckboxProps = {
+  defaultChecked?: CheckboxState;
+  checked?: CheckboxState;
+  onCheck?: (checked: CheckboxState) => void;
 };
 
-export const Checkbox = (props: Props): JSXElement => {
-  const [checked, setChecked] = createSignal(props.defaultChecked || false);
+export const Checkbox = (props: CheckboxProps): JSXElement => {
+  const [checked, setChecked] = createSignal<CheckboxState>(
+    props.defaultChecked || CheckboxState.Unchecked
+  );
   let inputCheckbox: HTMLInputElement;
 
+  createEffect(() => {
+    if (props.checked !== undefined) {
+      setChecked(props.checked);
+    }
+  });
+
   /** @tw */
-  const checkedClass = 'bg-blue-600';
+  const checkedClass = 'bg-blue-400';
 
   return (
     <label class='flex w-4 h-4 bg-slate-300 rounded-sm shadow-checkbox'>
@@ -24,17 +41,29 @@ export const Checkbox = (props: Props): JSXElement => {
       <span
         class='cursor-pointer rounded-sm shadow-checkbox'
         classList={{
-          [checkedClass]: checked(),
+          [checkedClass]: checked() !== CheckboxState.Unchecked,
         }}
-        onClick={() => {
+        onClick={(event) => {
+          event.preventDefault();
           inputCheckbox.click();
-          setChecked(!checked());
+          const result = setChecked((prev) => {
+            if (prev === CheckboxState.Checked) {
+              return CheckboxState.Unchecked;
+            }
+            return CheckboxState.Checked;
+          });
+          props.onCheck?.(result);
         }}
       >
         <div class='flex items-center justify-center w-4 h-4'>
-          <Show when={checked()}>
-            <CheckIcon width='16px' height='16px' />
-          </Show>
+          <Switch>
+            <Match when={checked() === CheckboxState.Checked}>
+              <CheckIcon width='16px' height='16px' color='#000' />
+            </Match>
+            <Match when={checked() === CheckboxState.Partial}>
+              <MinusIcon width='16px' height='16px' color='#000' />
+            </Match>
+          </Switch>
         </div>
       </span>
     </label>

@@ -29,12 +29,11 @@ export const Column = (props: Props): JSXElement => {
       class={`flex items-center h-10 ${borders}`}
       onMouseOver={() => props.onHover(props.rowIndex, props.colIndex)}
       onClick={(event) => {
-        console.log('click event');
         props.onClick(event);
       }}
       onDblClick={props.onDoubleClick}
     >
-      <div class='w-40 px-2 overflow-hidden whitespace-nowrap overflow-ellipsis'>
+      <div class='w-40 px-2 overflow-hidden whitespace-nowrap overflow-ellipsis select-none'>
         <span class='text-gray-300'>{props.data.content}</span>
       </div>
     </div>

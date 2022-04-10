@@ -1,7 +1,9 @@
 import type {JSXElement} from 'solid-js';
 import {createSignal, For} from 'solid-js';
 import {createStore} from 'solid-js/store';
+import type {CheckboxState} from 'src/components/base';
 import {Checkbox} from 'src/components/base';
+import {CheckboxColumn} from 'src/components/explorer/checkbox-column';
 import {Column} from 'src/components/explorer/column';
 
 type Data = {
@@ -24,6 +26,7 @@ export const Table = (props: Props): JSXElement => {
     <div class='overflow-x-auto relative'>
       <div class='flex flex-col' onMouseLeave={() => setState('hover', {row: -1, col: -1})}>
         <div class='flex'>
+          <CheckboxColumn isHeader={true} />
           <For each={props.headers}>
             {(header) => (
               <div class='flex items-center border-l-2 border-b-2 border-t-2 border-gray-600 h-10 last:border-r-2'>
@@ -37,9 +40,11 @@ export const Table = (props: Props): JSXElement => {
         <For each={props.data}>
           {(row, rowIndex) => (
             <div class='flex'>
-              <div class='flex items-center justify-center h-10 w-10 border-b-2 border-slate-700'>
-                <Checkbox />
-              </div>
+              <CheckboxColumn
+                onCheck={(checked: CheckboxState) => {
+                  console.log('new state:', checked);
+                }}
+              />
               <For each={row}>
                 {(data, columnIndex) => (
                   <Column
@@ -50,6 +55,12 @@ export const Table = (props: Props): JSXElement => {
                     isColHovered={columnIndex() === state.hover.col}
                     onHover={(row, col) => setState('hover', {row, col})}
                     onClick={(event) => {
+                      if (
+                        state.selection.row === rowIndex() &&
+                        state.selection.col === columnIndex()
+                      ) {
+                        return;
+                      }
                       const target = event.currentTarget;
                       setState('selection', {
                         row: rowIndex(),
