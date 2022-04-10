@@ -2,28 +2,36 @@ import {invoke} from '@tauri-apps/api';
 import {IS_TAURI_ENV} from 'src/config';
 import type {
   ConnectionConfig,
+  CreateTablePayload,
   PublicConnectionConfig,
-  RenamePayload,
+  RenameTablePayload,
   TableOverview,
 } from 'src/types';
 
-type ConnectData = {id: string} | {config: ConnectionConfig};
-
-export async function connectToDatabase(data: ConnectData): Promise<void> {
+export async function connectToDatabase(
+  data: {id: string} | {config: ConnectionConfig}
+): Promise<void> {
   if (!IS_TAURI_ENV) {
     return;
   }
   return invoke('connect_to_database', {data});
 }
 
-export async function renameTable(rename: RenamePayload): Promise<void> {
+export async function createTable(table: CreateTablePayload): Promise<void> {
+  if (!IS_TAURI_ENV) {
+    return;
+  }
+  return invoke('create_table', {table});
+}
+
+export async function renameTable(rename: RenameTablePayload): Promise<void> {
   if (!IS_TAURI_ENV) {
     return;
   }
   return invoke('rename_table', {rename});
 }
 
-export async function queryRecentDatabases(): Promise<PublicConnectionConfig[] | null> {
+export async function queryRecentDatabases(): Promise<PublicConnectionConfig[]> {
   if (!IS_TAURI_ENV) {
     return [
       {

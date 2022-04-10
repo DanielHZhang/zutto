@@ -16,9 +16,17 @@ export type PublicConnectionConfig = {
   databaseName: string;
 };
 
-export type RenamePayload = {
+export type RenameTablePayload = {
   originalName: string;
   newName: string;
+};
+
+export type CreateTablePayload = {
+  name: string;
+  primaryKey: string;
+  autoIncrement?: boolean;
+  columns: {name: string; type: string}[];
+  associations?: any[];
 };
 
 export type TableOverview = {
