@@ -16,11 +16,11 @@ export async function connectToDatabase(data: ConnectData): Promise<void> {
   return invoke('connect_to_database', {data});
 }
 
-export async function renameDatabase(rename: RenamePayload): Promise<void> {
+export async function renameTable(rename: RenamePayload): Promise<void> {
   if (!IS_TAURI_ENV) {
     return;
   }
-  return invoke('rename_database', {rename});
+  return invoke('rename_table', {rename});
 }
 
 export async function queryRecentDatabases(): Promise<PublicConnectionConfig[] | null> {

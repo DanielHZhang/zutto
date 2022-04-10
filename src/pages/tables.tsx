@@ -4,7 +4,7 @@ import PlusIcon from 'iconoir/icons/plus.svg';
 import type {JSXElement} from 'solid-js';
 import {createRenderEffect, createResource, ErrorBoundary, Match, Show, Switch} from 'solid-js';
 import {createStore} from 'solid-js/store';
-import {queryAllTables} from 'src/actions';
+import {queryAllTables, renameTable} from 'src/actions';
 import {Button, Grid, Heading, Input, Modal} from 'src/components/base';
 import {TableCard} from 'src/components/cards';
 
@@ -18,7 +18,7 @@ export const Tables = (): JSXElement => {
     selectedTable: '',
     newTableName: '',
   });
-  const [tables] = createResource(queryAllTables);
+  const [tables, {refetch}] = createResource(queryAllTables);
 
   const filterTables = () => {
     const tableNames = tables();
@@ -35,7 +35,17 @@ export const Tables = (): JSXElement => {
 
   const onTableCardAction = (name: string) => (key: string) => {
     if (key === 'rename') {
-      setState({modalOpen: RENAME_TABLE_MODAL, selectedTable: name});
+      setState({modalOpen: RENAME_TABLE_MODAL, selectedTable: name, newTableName: name});
+    }
+  };
+
+  const submitRenamedTable = async () => {
+    try {
+      await renameTable({originalName: state.selectedTable, newName: state.newTableName});
+      setState({modalOpen: '', selectedTable: '', newTableName: ''});
+      refetch();
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -95,7 +105,11 @@ export const Tables = (): JSXElement => {
                 <Button variant='ghost' onClick={() => setState('modalOpen', '')}>
                   Cancel
                 </Button>
-                <Button variant='primary'>
+                <Button
+                  variant='primary'
+                  disabled={state.selectedTable === state.newTableName}
+                  onClick={submitRenamedTable}
+                >
                   <span class='ml-2'>Continue</span>
                   <NavArrowRightIcon />
                 </Button>
