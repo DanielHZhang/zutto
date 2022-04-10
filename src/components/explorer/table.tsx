@@ -2,9 +2,10 @@ import type {JSXElement} from 'solid-js';
 import {createSignal, For} from 'solid-js';
 import {createStore} from 'solid-js/store';
 import type {CheckboxState} from 'src/components/base';
-import {Checkbox} from 'src/components/base';
 import {CheckboxColumn} from 'src/components/explorer/checkbox-column';
 import {Column} from 'src/components/explorer/column';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import {clickOutside} from 'src/directives';
 
 type Data = {
   id: number;
@@ -23,7 +24,10 @@ export const Table = (props: Props): JSXElement => {
   });
 
   return (
-    <div class='overflow-x-auto relative'>
+    <div
+      class='overflow-x-auto relative'
+      use:clickOutside={() => setState('selection', {row: -1, col: -1})}
+    >
       <div class='flex flex-col' onMouseLeave={() => setState('hover', {row: -1, col: -1})}>
         <div class='flex'>
           <CheckboxColumn isHeader={true} />
