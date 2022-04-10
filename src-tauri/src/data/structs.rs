@@ -15,7 +15,6 @@ impl ConnectionConfig {
   pub fn to_url(&self) -> String {
     let Self {
       host,
-      name,
       port,
       username,
       password,
@@ -46,4 +45,12 @@ pub struct PublicConnectionConfig {
 pub struct RenameTableData {
   pub original_name: String,
   pub new_name: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TableOverview {
+  pub name: String,
+  pub num_records: u32,
+  pub num_columns: u32,
 }

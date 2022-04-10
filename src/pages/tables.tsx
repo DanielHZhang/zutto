@@ -72,7 +72,7 @@ export const Tables = (): JSXElement => {
               onInput={(event) => setState('searchFilter', event.currentTarget.value)}
             />
           </div>
-          <Grid items={filterTables()}>
+          <Grid items={filterTables()} fallback={<div>No tables found...</div>}>
             {(item) => <TableCard title={item.name} onAction={onTableCardAction(item.name)} />}
           </Grid>
         </Show>
