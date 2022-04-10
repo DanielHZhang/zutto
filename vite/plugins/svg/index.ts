@@ -38,7 +38,7 @@ export default function svgLoader(options: Options = {}): Plugin {
         return;
       }
       const [importPath] = id.split('?', 1);
-      const [pathPrefix] = importPath.split('/', 1);
+      const [pathPrefix] = importPath.slice(1).split('/', 1);
       const fullPath = path.join(
         process.cwd(),
         aliases[pathPrefix] ? '' : 'node_modules',
