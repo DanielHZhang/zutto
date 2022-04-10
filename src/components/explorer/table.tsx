@@ -1,6 +1,7 @@
 import type {JSXElement} from 'solid-js';
 import {createSignal, For} from 'solid-js';
 import {createStore} from 'solid-js/store';
+import {Checkbox} from 'src/components/base';
 import {Column} from 'src/components/explorer/column';
 
 type Data = {
@@ -18,45 +19,6 @@ export const Table = (props: Props): JSXElement => {
     hover: {row: -1, col: -1},
     selection: {row: -1, col: -1, top: -1, left: -1},
   });
-  // const [hover, setHover] = createSignal({row: -1, col: -1});
-  // const [selection, setSelection] = createSignal({row: -1, col: -1, top: -1, left: -1});
-  // const [selection, setSelection] = createSignal({
-  //   start: {row: -1, col: -1},
-  //   end: {row: -1, col: -1},
-  // });
-
-  const minColumns = 6;
-  const minRows = 10;
-
-  // const normalizeData = () => {
-  //   const numRows = props.data.length;
-
-  //   const missingRows = minRows - numRows;
-  //   if (missingRows > 0) {
-  //     const fillData = Array.from({length: missingRows}, () => []);
-  //     props.data.push(...fillData);
-  //   }
-
-  //   props.data.forEach((row) => {
-  //     const numCols = row.length;
-  //     const missingCols = minColumns - numCols;
-  //     const fillData = Array.from({length: missingCols}, () => ({
-  //       id: -1,
-  //       content: '',
-  //     }));
-  //     row.push(...fillData);
-  //   });
-
-  //   return props.data;
-  // };
-
-  // const normalizeHeaders = () => {
-  //   const missingCols = minColumns - props.headers.length;
-  //   if (missingCols > 0) {
-  //     props.headers.push(...Array.from({length: missingCols}, () => ''));
-  //   }
-  //   return props.headers;
-  // };
 
   return (
     <div class='overflow-x-auto relative'>
@@ -75,6 +37,9 @@ export const Table = (props: Props): JSXElement => {
         <For each={props.data}>
           {(row, rowIndex) => (
             <div class='flex'>
+              <div class='flex items-center justify-center h-10 w-10 border-b-2 border-slate-700'>
+                <Checkbox />
+              </div>
               <For each={row}>
                 {(data, columnIndex) => (
                   <Column

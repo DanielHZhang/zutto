@@ -1,4 +1,5 @@
 export * from './button';
+export * from './checkbox';
 export * from './grid';
 export * from './heading';
 export * from './input';

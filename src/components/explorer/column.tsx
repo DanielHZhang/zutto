@@ -26,7 +26,7 @@ export const Column = (props: Props): JSXElement => {
         // [empty]: isEmpty(),
         'bg-blue-500 bg-opacity-20': props.isRowHovered,
       }}
-      class={`flex items-center h-10 first:border-l-transparent ${borders}`}
+      class={`flex items-center h-10 ${borders}`}
       onMouseOver={() => props.onHover(props.rowIndex, props.colIndex)}
       onClick={(event) => {
         console.log('click event');

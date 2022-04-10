@@ -27,6 +27,9 @@ module.exports = defineConfig({
         '.shadow-focus': {
           boxShadow: 'rgb(39 104 165) 0px 0px 0px 1px',
         },
+        '.shadow-checkbox': {
+          boxShadow: 'inset 0px 2px 3px rgba(0, 0, 0, 0.1)',
+        },
       });
       // const newUtilities = {
       //   '.fixed-center': {
