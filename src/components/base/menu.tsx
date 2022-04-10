@@ -5,18 +5,30 @@ import {createStore} from 'solid-js/store';
 import {css} from 'solid-styled-components';
 import type {ButtonProps} from 'src/components/base/button';
 import {Button} from 'src/components/base/button';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {clickOutside} from 'src/directives';
 
 type ContextState = {
   visible: boolean;
   x: number;
   y: number;
-  onSelect?: (key: string) => void;
 };
 
-type MenuContext = readonly [ContextState, SetStoreFunction<ContextState>];
+type MenuContext = readonly [
+  ContextState,
+  {
+    setMenu: SetStoreFunction<ContextState>;
+    onSelect?: (key: string) => void;
+    onClose?: () => void;
+  }
+];
 
-const MenuContext = createContext<MenuContext>([{visible: false, x: 0, y: 0}, () => null]);
+const MenuContext = createContext<MenuContext>([
+  {visible: false, x: 0, y: 0},
+  {
+    setMenu: () => undefined,
+  },
+]);
 
 type MenuProps = {
   children: JSXElement;
@@ -29,10 +41,17 @@ export const Menu = (props: MenuProps): JSXElement => {
     visible: false,
     x: 0,
     y: 0,
-    onSelect: props.onSelect,
   });
+  const store = [
+    state,
+    {
+      setMenu: setState,
+      onSelect: props.onSelect,
+      onClose: props.onClose,
+    },
+  ] as const;
 
-  return <MenuContext.Provider value={[state, setState]}>{props.children}</MenuContext.Provider>;
+  return <MenuContext.Provider value={store}>{props.children}</MenuContext.Provider>;
 };
 
 type MenuButtonProps = ButtonProps & {
@@ -41,7 +60,7 @@ type MenuButtonProps = ButtonProps & {
 
 export const MenuButton = (props: MenuButtonProps): JSXElement => {
   const [ownProps, htmlProps] = splitProps(props, ['onClick']);
-  const [menu, setMenu] = useContext(MenuContext);
+  const [menu, {setMenu}] = useContext(MenuContext);
   return (
     <Button
       onClick={(event) => {
@@ -65,28 +84,16 @@ type MenuListProps = {
 };
 
 export const MenuList = (props: MenuListProps): JSXElement => {
-  const [menu, setMenu] = useContext(MenuContext);
-
-  // const onBodyClick = () => {
-  //   setMenu('visible', false);
-  //   // props.onClose?.();
-  //   console.log('body clicked');
-  // };
-
-  // window.addEventListener('click', onBodyClick);
-
-  // onCleanup(() => {
-  //   window.removeEventListener('click', onBodyClick);
-  // });
+  const [menu, {setMenu, onClose}] = useContext(MenuContext);
 
   return (
     <Show when={menu.visible}>
       <div
-        use:clickOutside={() => setMenu('visible', false)}
-        // use:clickOutside={() => {
-        //   setMenu('visible', false);
-        //   console.log('setting');
-        // }}
+        use:clickOutside={(event) => {
+          event.stopPropagation();
+          setMenu('visible', false);
+          onClose?.();
+        }}
         class='min-w-max absolute z-20 '
         style={{left: `${menu.x}px`, top: `${menu.y}px`}}
       >
@@ -102,7 +109,7 @@ type MenuItemProps = {
 };
 
 export const MenuItem = (props: MenuItemProps): JSXElement => {
-  const [menu, setMenu] = useContext(MenuContext);
+  const [, {setMenu, onSelect}] = useContext(MenuContext);
   const styledCss = css({
     justifyContent: 'start',
   });
@@ -111,7 +118,7 @@ export const MenuItem = (props: MenuItemProps): JSXElement => {
     <Button
       class={`min-w-50 ${styledCss}`}
       onClick={() => {
-        menu.onSelect?.(props.key);
+        onSelect?.(props.key);
         setMenu('visible', false);
       }}
     >

@@ -1,7 +1,7 @@
 declare module 'solid-js' {
   namespace JSX {
     interface Directives {
-      clickOutside?: () => void;
+      clickOutside?: (event: MouseEvent) => void;
     }
   }
 }
