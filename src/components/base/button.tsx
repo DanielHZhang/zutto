@@ -6,7 +6,7 @@ import {mergeCss} from 'src/utils';
 export type ButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: JSXElement;
   variant?: 'primary' | 'secondary' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
 };
 
 export const Button = (props: ButtonProps): JSXElement => {
@@ -25,6 +25,8 @@ export const Button = (props: ButtonProps): JSXElement => {
   const disabled = 'opacity-40 cursor-not-allowed';
   /** @tw */
   const small = 'h-8';
+  /** @tw */
+  const extraSmall = 'h-6 px-1';
 
   return (
     <button
@@ -34,6 +36,7 @@ export const Button = (props: ButtonProps): JSXElement => {
         [primary]: ownProps.variant === 'primary',
         [secondary]: ownProps.variant === 'secondary',
         [small]: ownProps.size === 'sm',
+        [extraSmall]: ownProps.size === 'xs',
       }}
       {...htmlProps}
     >

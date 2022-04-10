@@ -1,9 +1,9 @@
 import type {JSXElement} from 'solid-js';
-import {createSignal, For} from 'solid-js';
+import {createSelector, createSignal, For} from 'solid-js';
 import {createStore} from 'solid-js/store';
 import type {CheckboxState} from 'src/components/base';
 import {CheckboxColumn} from 'src/components/explorer/checkbox-column';
-import {Column} from 'src/components/explorer/column';
+import {DataCell} from 'src/components/explorer/data-cell';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {clickOutside} from 'src/directives';
 
@@ -20,15 +20,16 @@ type Props = {
 export const Table = (props: Props): JSXElement => {
   const [state, setState] = createStore({
     hover: {row: -1, col: -1},
-    selection: {row: -1, col: -1, top: -1, left: -1},
+    active: {x: -1, y: -1},
+    selected: {row: -1, col: -1},
   });
 
+  const resetHover = () => setState('hover', {row: -1, col: -1});
+  const resetActiveCell = () => setState('active', {x: -1, y: -1});
+
   return (
-    <div
-      class='overflow-x-auto relative'
-      use:clickOutside={() => setState('selection', {row: -1, col: -1})}
-    >
-      <div class='flex flex-col' onMouseLeave={() => setState('hover', {row: -1, col: -1})}>
+    <div class='overflow-x-auto relative pb-2' use:clickOutside={resetActiveCell}>
+      <div class='flex flex-col' onMouseLeave={resetHover}>
         <div class='flex'>
           <CheckboxColumn isHeader={true} />
           <For each={props.headers}>
@@ -50,45 +51,40 @@ export const Table = (props: Props): JSXElement => {
                 }}
               />
               <For each={row}>
-                {(data, columnIndex) => (
-                  <Column
-                    data={data}
-                    rowIndex={rowIndex()}
-                    colIndex={columnIndex()}
-                    isRowHovered={rowIndex() === state.hover.row}
-                    isColHovered={columnIndex() === state.hover.col}
-                    onHover={(row, col) => setState('hover', {row, col})}
-                    onClick={(event) => {
-                      if (
-                        state.selection.row === rowIndex() &&
-                        state.selection.col === columnIndex()
-                      ) {
-                        return;
+                {(data, colIndex) => {
+                  return (
+                    <DataCell
+                      data={data}
+                      rowIndex={rowIndex()}
+                      colIndex={colIndex()}
+                      isSelected={
+                        state.selected.row === rowIndex() && state.selected.col === colIndex()
                       }
-                      const target = event.currentTarget;
-                      setState('selection', {
-                        row: rowIndex(),
-                        col: columnIndex(),
-                        top: target.offsetTop,
-                        left: target.offsetLeft,
-                      });
-                    }}
-                    onDoubleClick={(event) => {
-                      console.log('on double clicked', event);
-                    }}
-                  />
-                )}
+                      isHovered={state.hover.row === rowIndex()}
+                      onHover={(row, col) => setState('hover', {row, col})}
+                      onClick={(event) => {
+                        const target = event.currentTarget;
+                        setState('active', {x: target.offsetLeft, y: target.offsetTop});
+                      }}
+                      onDoubleClick={() => {
+                        setState('selected', {row: rowIndex(), col: colIndex()});
+                      }}
+                    />
+                  );
+                }}
               </For>
             </div>
           )}
         </For>
       </div>
       <div
-        class='z-10 absolute h-10 w-41 border-3 border-blue-400 rounded-lg pointer-events-none'
+        class='z-10 absolute border-3 border-blue-400 rounded-lg pointer-events-none'
         style={{
-          left: `${state.selection.left}px`,
-          top: `${state.selection.top}px`,
-          visibility: state.selection.row >= 0 ? 'visible' : 'hidden',
+          height: '46px',
+          width: '208px',
+          left: `${state.active.x - 2}px`,
+          top: `${state.active.y - 4}px`,
+          visibility: state.active.x !== -1 && state.active.y !== -1 ? 'visible' : 'hidden',
         }}
       />
     </div>
