@@ -16,13 +16,15 @@ type Props = {
 };
 
 export const DataCell = (props: Props): JSXElement => {
-  const isEmpty = () => props.data.content === '' && props.data.id === -1;
+  let editInput: HTMLInputElement;
+  createEffect(() => {
+    if (props.isSelected) {
+      editInput.focus();
+    }
+  });
 
   /** @tw */
   const borders = 'border-l-2 border-b-2 border-slate-700 last:border-r-2';
-
-  /** @tw */
-  // const empty = 'border-gray-800  first-of-type:border-l-gray-600';
 
   /** @tw */
   const height = 'h-10';
@@ -48,7 +50,11 @@ export const DataCell = (props: Props): JSXElement => {
           when={props.isSelected}
           fallback={<span class='text-gray-300 px-2'>{props.data.content}</span>}
         >
-          <Input class={`${height} ${width} pr-8 py-0 rounded-none`} value={props.data.content} />
+          <Input
+            ref={(element) => (editInput = element)}
+            class={`${height} ${width} pr-8 py-0 rounded-none`}
+            value={props.data.content}
+          />
           <div class='absolute right-1 top-2'>
             <Button size='xs'>
               <OpenNewWindowIcon width='16px' height='16px' />

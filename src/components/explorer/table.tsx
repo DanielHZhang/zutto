@@ -26,9 +26,16 @@ export const Table = (props: Props): JSXElement => {
 
   const resetHover = () => setState('hover', {row: -1, col: -1});
   const resetActiveCell = () => setState('active', {x: -1, y: -1});
+  const resetSelectedCell = () => setState('selected', {row: -1, col: -1});
 
   return (
-    <div class='overflow-x-auto relative pb-2' use:clickOutside={resetActiveCell}>
+    <div
+      class='overflow-x-auto relative pb-2'
+      use:clickOutside={() => {
+        resetActiveCell();
+        resetSelectedCell();
+      }}
+    >
       <div class='flex flex-col' onMouseLeave={resetHover}>
         <div class='flex'>
           <CheckboxColumn isHeader={true} />
@@ -51,27 +58,30 @@ export const Table = (props: Props): JSXElement => {
                 }}
               />
               <For each={row}>
-                {(data, colIndex) => {
-                  return (
-                    <DataCell
-                      data={data}
-                      rowIndex={rowIndex()}
-                      colIndex={colIndex()}
-                      isSelected={
-                        state.selected.row === rowIndex() && state.selected.col === colIndex()
+                {(data, colIndex) => (
+                  <DataCell
+                    data={data}
+                    rowIndex={rowIndex()}
+                    colIndex={colIndex()}
+                    isSelected={
+                      state.selected.row === rowIndex() && state.selected.col === colIndex()
+                    }
+                    isHovered={state.hover.row === rowIndex()}
+                    onHover={(row, col) => setState('hover', {row, col})}
+                    onClick={(event) => {
+                      const target = event.currentTarget;
+                      setState('active', {x: target.offsetLeft, y: target.offsetTop});
+
+                      // Reset selected if clicking on an unselected cell
+                      if (state.selected.row !== rowIndex() || state.selected.col !== colIndex()) {
+                        resetSelectedCell();
                       }
-                      isHovered={state.hover.row === rowIndex()}
-                      onHover={(row, col) => setState('hover', {row, col})}
-                      onClick={(event) => {
-                        const target = event.currentTarget;
-                        setState('active', {x: target.offsetLeft, y: target.offsetTop});
-                      }}
-                      onDoubleClick={() => {
-                        setState('selected', {row: rowIndex(), col: colIndex()});
-                      }}
-                    />
-                  );
-                }}
+                    }}
+                    onDoubleClick={() => {
+                      setState('selected', {row: rowIndex(), col: colIndex()});
+                    }}
+                  />
+                )}
               </For>
             </div>
           )}
