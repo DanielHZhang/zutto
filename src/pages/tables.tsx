@@ -1,11 +1,13 @@
 import Fuse from 'fuse.js';
+import PlusIcon from 'iconoir/icons/plus.svg';
 import type {JSXElement} from 'solid-js';
 import {createResource, createSignal, ErrorBoundary, Show} from 'solid-js';
 import {queryAllTables} from 'src/actions';
-import {Button, Grid, Input} from 'src/components/base';
+import {Button, Grid, Input, Modal} from 'src/components/base';
 import {TableCard} from 'src/components/cards';
 
 export const Tables = (): JSXElement => {
+  const [modalOpen, setModalOpen] = createSignal<string | null>(null);
   const [searchFilter, setSearchFilter] = createSignal('');
   const [tables] = createResource(queryAllTables);
 
@@ -32,7 +34,10 @@ export const Tables = (): JSXElement => {
       <ErrorBoundary fallback={(error) => <div>Error fetching tables: {error.message}</div>}>
         <Show when={tables()} fallback={<div>Loading...</div>}>
           <div class='flex space-x-4'>
-            <Button variant='primary'>New Table</Button>
+            <Button variant='primary' onClick={() => setModalOpen('New Table')}>
+              <PlusIcon />
+              <span class='mx-1'>New Table</span>
+            </Button>
             <Input
               class='flex-grow'
               placeholder='Search for table...'
@@ -44,6 +49,9 @@ export const Tables = (): JSXElement => {
           </Grid>
         </Show>
       </ErrorBoundary>
+      <Modal isOpen={modalOpen() !== null} onClose={() => null}>
+        <div>Testing</div>
+      </Modal>
     </section>
   );
 };

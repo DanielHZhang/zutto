@@ -60,7 +60,7 @@ export default function Home(): JSXElement {
         </div>
       </div>
       <Modal isOpen={isModalOpen()} onClose={() => setIsModalOpen(false)}>
-        <h1 class='font-semibold text-lg'>New Connection</h1>
+        <Heading>New Connection</Heading>
         <form onSubmit={onSubmit}>
           <div class='flex flex-col space-y-2'>
             <Input placeholder='Nickname' {...form.register('name')} />

@@ -4,7 +4,7 @@ import {mergeCss} from 'src/utils';
 
 export type ButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: JSXElement;
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'ghost';
 };
 
 export const Button = (props: ButtonProps): JSXElement => {
