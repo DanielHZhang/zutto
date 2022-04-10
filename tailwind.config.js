@@ -16,10 +16,13 @@ module.exports = defineConfig({
     plugin(({addUtilities, addComponents}) => {
       addComponents({
         '.input-focus': {
-          color: '#000',
+          // color: '#000',
           // '&:focus': {
           //   boxShadow: 'rgb(39 104 165) 0px 0px 0px 1px',
           // },
+        },
+        '.shadow-focus': {
+          boxShadow: 'rgb(39 104 165) 0px 0px 0px 1px',
         },
       });
       // const newUtilities = {
