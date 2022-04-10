@@ -45,26 +45,23 @@ export default function Explorer(): JSXElement {
       </div>
       <section class='flex justify-between mx-2'>
         <div class='flex space-x-2'>
-          <Button variant='primary'>
+          <Button variant='primary' size='sm'>
             <PlusIcon />
             <span>Add Record</span>
           </Button>
-          <SplitButton left={<span>Fields</span>} right={<span>0</span>} />
-          <Button>
-            <span>Filters</span>
-            <span>1</span>
-          </Button>
-          <Button>
-            <span>Showing</span>
-          </Button>
+          <SplitButton size='sm' left={<span>Fields</span>} right={<span>0</span>} />
+          <SplitButton size='sm' left={<span>Filters</span>} right={<span>1</span>} />
+          <SplitButton size='sm' left={<span>Showing</span>} right={<span>1</span>} />
         </div>
         <div class='flex space-x-2'>
           <Show when={modifications().length > 0}>
-            <Button variant='ghost'>Discard Changes</Button>
-            <Button>Save Changes</Button>
+            <Button variant='ghost' size='sm'>
+              Discard Changes
+            </Button>
+            <Button size='sm'>Save Changes</Button>
           </Show>
-          <Button>
-            <RefreshIcon /* width='16px' height='16px' */ />
+          <Button size='sm'>
+            <RefreshIcon width='16px' height='16px' />
           </Button>
         </div>
       </section>

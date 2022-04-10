@@ -6,11 +6,12 @@ import {mergeCss} from 'src/utils';
 export type ButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: JSXElement;
   variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
 };
 
 export const Button = (props: ButtonProps): JSXElement => {
   props = mergeProps({variant: 'secondary'}, props);
-  const [ownProps, htmlProps] = splitProps(props, ['children', 'variant', 'class']);
+  const [ownProps, htmlProps] = splitProps(props, ['children', 'variant', 'class', 'size']);
 
   /** @tw */
   const flex = 'flex justify-center items-center p-2 rounded-md';
@@ -22,14 +23,17 @@ export const Button = (props: ButtonProps): JSXElement => {
   const secondary = 'bg-zinc-600' + (props.disabled ? '' : ' hover:bg-zinc-700');
   /** @tw */
   const disabled = 'opacity-40 cursor-not-allowed';
+  /** @tw */
+  const small = 'h-8';
 
   return (
     <button
       class={mergeCss(`${flex} ${base}`, ownProps.class)}
       classList={{
+        [disabled]: htmlProps.disabled,
         [primary]: ownProps.variant === 'primary',
         [secondary]: ownProps.variant === 'secondary',
-        [disabled]: htmlProps.disabled,
+        [small]: ownProps.size === 'sm',
       }}
       {...htmlProps}
     >
@@ -38,12 +42,13 @@ export const Button = (props: ButtonProps): JSXElement => {
   );
 };
 
-type SplitButtonProps = {
+type SplitButtonProps = Omit<ButtonProps, 'children'> & {
   left: JSXElement;
   right: JSXElement;
 };
 
 export const SplitButton = (props: SplitButtonProps): JSXElement => {
+  const [ownProps, htmlProps] = splitProps(props, ['left', 'right']);
   const hoverCss = css({
     '&:hover': {
       '> .left': {
@@ -52,13 +57,14 @@ export const SplitButton = (props: SplitButtonProps): JSXElement => {
       },
     },
   });
+
   return (
-    <Button class={`p-0 ${hoverCss}`}>
+    <Button class={`p-0 ${hoverCss}`} {...htmlProps}>
       <div class='left bg-slate-500 transition-colors flex items-center self-stretch px-2 rounded-bl-md rounded-tl-md'>
-        {props.left}
+        {ownProps.left}
       </div>
       <div class='right bg-slate-600 transition-colors flex items-center self-stretch px-2 rounded-br-md rounded-tr-md'>
-        {props.right}
+        {ownProps.right}
       </div>
     </Button>
   );
