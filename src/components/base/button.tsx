@@ -15,12 +15,20 @@ export const Button = (props: ButtonProps): JSXElement => {
   const flex = 'flex justify-center items-center p-2 rounded-md';
   /** @tw */
   const base = 'transition-colors focus:shadow-focus outline-none';
+  /** @tw */
+  const primary = 'bg-blue-600' + (props.disabled ? '' : ' hover:bg-blue-700');
+  /** @tw */
+  const secondary = 'bg-zinc-600' + (props.disabled ? '' : ' hover:bg-zinc-700');
+  /** @tw */
+  const disabled = 'opacity-40 cursor-not-allowed';
+
   return (
     <button
       class={mergeCss(`${flex} ${base}`, ownProps.class)}
       classList={{
-        'bg-blue-600 hover:bg-blue-700': ownProps.variant === 'primary',
-        'bg-zinc-600 hover:bg-zinc-700': ownProps.variant === 'secondary',
+        [primary]: ownProps.variant === 'primary',
+        [secondary]: ownProps.variant === 'secondary',
+        [disabled]: htmlProps.disabled,
       }}
       {...htmlProps}
     >
