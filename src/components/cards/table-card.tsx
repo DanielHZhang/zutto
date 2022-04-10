@@ -27,9 +27,8 @@ export const TableCard = (props: Props): JSXElement => {
         </div>
       </Link>
       <Menu
-        onClose={() => {
-          setEditVisible(false);
-        }}
+        onClose={() => setEditVisible(false)}
+        onVisiblityChange={(visible) => setMenuVisible(visible)}
         onSelect={(key) => {
           props.onAction(key);
           setEditVisible(false);
@@ -37,12 +36,7 @@ export const TableCard = (props: Props): JSXElement => {
         }}
       >
         <Show when={isEditVisible()}>
-          <MenuButton
-            onClick={() => {
-              console.log('menu visible', isMenuVisible());
-              setMenuVisible(!isMenuVisible());
-            }}
-          >
+          <MenuButton>
             <EditIcon />
           </MenuButton>
         </Show>

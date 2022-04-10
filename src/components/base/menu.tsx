@@ -1,5 +1,5 @@
 import type {JSXElement} from 'solid-js';
-import {createContext, Show, splitProps, useContext} from 'solid-js';
+import {createContext, createEffect, Show, splitProps, useContext} from 'solid-js';
 import type {SetStoreFunction} from 'solid-js/store';
 import {createStore} from 'solid-js/store';
 import {css} from 'solid-styled-components';
@@ -34,6 +34,7 @@ type MenuProps = {
   children: JSXElement;
   onSelect?: (key: string) => void;
   onClose?: () => void;
+  onVisiblityChange?: (visible: boolean) => void;
 };
 
 export const Menu = (props: MenuProps): JSXElement => {
@@ -50,6 +51,10 @@ export const Menu = (props: MenuProps): JSXElement => {
       onClose: props.onClose,
     },
   ] as const;
+
+  createEffect(() => {
+    props.onVisiblityChange?.(state.visible);
+  });
 
   return <MenuContext.Provider value={store}>{props.children}</MenuContext.Provider>;
 };
