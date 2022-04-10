@@ -1,4 +1,5 @@
-import {JSXElement, Show} from 'solid-js';
+import type {JSXElement} from 'solid-js';
+import {Show} from 'solid-js';
 import {Portal} from 'solid-js/web';
 import {Button} from 'src/components/base/button';
 

@@ -1,4 +1,5 @@
-import {JSX, JSXElement, splitProps} from 'solid-js';
+import type {JSX, JSXElement} from 'solid-js';
+import {splitProps} from 'solid-js';
 import {mergeCss} from 'src/utils';
 
 type Props = JSX.InputHTMLAttributes<HTMLInputElement>;

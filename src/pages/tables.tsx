@@ -1,5 +1,6 @@
 import Fuse from 'fuse.js';
-import {createResource, createSignal, ErrorBoundary, JSXElement, Show} from 'solid-js';
+import type {JSXElement} from 'solid-js';
+import {createResource, createSignal, ErrorBoundary, Show} from 'solid-js';
 import {queryAllTables} from 'src/actions';
 import {Button, Grid, Input} from 'src/components/base';
 import {TableCard} from 'src/components/cards';

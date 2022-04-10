@@ -1,4 +1,5 @@
-import {JSX, JSXElement, mergeProps, splitProps} from 'solid-js';
+import type {JSX, JSXElement} from 'solid-js';
+import {mergeProps, splitProps} from 'solid-js';
 import {mergeCss} from 'src/utils';
 
 export type ButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {

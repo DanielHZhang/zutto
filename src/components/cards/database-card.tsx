@@ -1,6 +1,6 @@
 import RightArrowIcon from 'iconoir/icons/arrow-right.svg';
 import DatabaseIcon from 'iconoir/icons/db.svg';
-import {JSX, JSXElement} from 'solid-js';
+import type {JSX, JSXElement} from 'solid-js';
 import {Button, Subheading} from 'src/components/base';
 import type {PublicConnectionConfig} from 'src/types';
 

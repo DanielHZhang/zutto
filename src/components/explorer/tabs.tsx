@@ -1,5 +1,6 @@
 import PlusIcon from 'iconoir/icons/plus.svg';
-import {For, JSXElement} from 'solid-js';
+import type {JSXElement} from 'solid-js';
+import {For} from 'solid-js';
 
 const data = Array.from({length: 10}, (_, index) => ({
   title: `Tab ${index}`,

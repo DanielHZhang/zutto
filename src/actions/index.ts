@@ -1,6 +1,11 @@
 import {invoke} from '@tauri-apps/api';
 import {IS_TAURI_ENV} from 'src/config';
-import {ConnectionConfig, PublicConnectionConfig, RenamePayload, TableOverview} from 'src/types';
+import type {
+  ConnectionConfig,
+  PublicConnectionConfig,
+  RenamePayload,
+  TableOverview,
+} from 'src/types';
 
 type ConnectData = {id: string} | {config: ConnectionConfig};
 

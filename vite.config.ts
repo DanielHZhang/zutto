@@ -10,7 +10,7 @@ export default defineConfig({
       src: path.join(process.cwd(), 'src'),
     },
   },
-  plugins: [solidPlugin(), solidSvg(), WindiCSS()],
+  plugins: [solidPlugin({typescript: {onlyRemoveTypeImports: true}}), solidSvg(), WindiCSS()],
   build: {
     target: 'esnext',
     polyfillDynamicImport: false,

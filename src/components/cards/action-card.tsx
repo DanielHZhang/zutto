@@ -1,6 +1,7 @@
 import OpenIcon from 'iconoir/icons/open-in-window.svg';
 import PlusIcon from 'iconoir/icons/plus.svg';
-import {JSX, JSXElement, splitProps} from 'solid-js';
+import type {JSX, JSXElement} from 'solid-js';
+import {splitProps} from 'solid-js';
 
 type Props = JSX.HTMLAttributes<HTMLDivElement> & {
   title: string;

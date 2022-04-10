@@ -1,4 +1,5 @@
-import {Accessor, For, JSXElement} from 'solid-js';
+import type {Accessor, JSXElement} from 'solid-js';
+import {For} from 'solid-js';
 
 type Props<T> = {
   items: T[];

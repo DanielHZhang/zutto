@@ -1,5 +1,6 @@
 import {useNavigate} from 'solid-app-router';
-import {createResource, createSignal, For, JSXElement, Show} from 'solid-js';
+import type {JSXElement} from 'solid-js';
+import {createResource, createSignal, For, Show} from 'solid-js';
 import {connectToDatabase, queryRecentDatabases} from 'src/actions';
 import {Button, Heading, Input, Modal, Subheading} from 'src/components/base';
 import {ActionCard, DatabaseCard} from 'src/components/cards';

@@ -1,14 +1,17 @@
-import {createContext, JSXElement, Show, splitProps, useContext} from 'solid-js';
-import {createStore, SetStoreFunction} from 'solid-js/store';
+import type {JSXElement} from 'solid-js';
+import {createContext, Show, splitProps, useContext} from 'solid-js';
+import type {SetStoreFunction} from 'solid-js/store';
+import {createStore} from 'solid-js/store';
 import {css} from 'solid-styled-components';
-import {Button, ButtonProps} from 'src/components/base/button';
+import type {ButtonProps} from 'src/components/base/button';
+import {Button} from 'src/components/base/button';
+import {clickOutside} from 'src/directives';
 
 type ContextState = {
   visible: boolean;
   x: number;
   y: number;
   onSelect?: (key: string) => void;
-  // selectedKey: string;
 };
 
 type MenuContext = readonly [ContextState, SetStoreFunction<ContextState>];
@@ -18,6 +21,7 @@ const MenuContext = createContext<MenuContext>([{visible: false, x: 0, y: 0}, ()
 type MenuProps = {
   children: JSXElement;
   onSelect?: (key: string) => void;
+  onClose?: () => void;
 };
 
 export const Menu = (props: MenuProps): JSXElement => {
@@ -26,15 +30,7 @@ export const Menu = (props: MenuProps): JSXElement => {
     x: 0,
     y: 0,
     onSelect: props.onSelect,
-    // selectedKey: '',
   });
-
-  console.log('how many times doe sthis render');
-
-  // createEffect(() => {
-  //   console.log('when is effect run');
-  //   props.onSelect?.(state.selectedKey);
-  // });
 
   return <MenuContext.Provider value={[state, setState]}>{props.children}</MenuContext.Provider>;
 };
@@ -64,12 +60,36 @@ export const MenuButton = (props: MenuButtonProps): JSXElement => {
   );
 };
 
-export const MenuList = (props): JSXElement => {
-  const [menu] = useContext(MenuContext);
+type MenuListProps = {
+  children: JSXElement;
+};
+
+export const MenuList = (props: MenuListProps): JSXElement => {
+  const [menu, setMenu] = useContext(MenuContext);
+
+  // const onBodyClick = () => {
+  //   setMenu('visible', false);
+  //   // props.onClose?.();
+  //   console.log('body clicked');
+  // };
+
+  // window.addEventListener('click', onBodyClick);
+
+  // onCleanup(() => {
+  //   window.removeEventListener('click', onBodyClick);
+  // });
 
   return (
     <Show when={menu.visible}>
-      <div class='min-w-max absolute z-20 ' style={{left: `${menu.x}px`, top: `${menu.y}px`}}>
+      <div
+        use:clickOutside={() => setMenu('visible', false)}
+        // use:clickOutside={() => {
+        //   setMenu('visible', false);
+        //   console.log('setting');
+        // }}
+        class='min-w-max absolute z-20 '
+        style={{left: `${menu.x}px`, top: `${menu.y}px`}}
+      >
         <section class='bg-zinc-400 p-2 rounded-lg shadow-xl'>{props.children}</section>
       </div>
     </Show>

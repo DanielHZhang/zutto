@@ -1,5 +1,6 @@
 import {useRouteData} from 'solid-app-router';
-import {Component, createEffect, JSXElement, Suspense} from 'solid-js';
+import type {JSXElement} from 'solid-js';
+import {Component, createEffect, Suspense} from 'solid-js';
 
 export default function About(): JSXElement {
   const name = useRouteData<() => string>();

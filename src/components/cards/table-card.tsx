@@ -1,7 +1,8 @@
 import EditIcon from 'iconoir/icons/edit-pencil.svg';
 import TableIcon from 'iconoir/icons/table-2-columns.svg';
 import {Link} from 'solid-app-router';
-import {createSignal, JSXElement, Show} from 'solid-js';
+import type {JSXElement} from 'solid-js';
+import {createSignal, onCleanup, Show} from 'solid-js';
 import {Button, Menu, MenuButton, MenuItem, MenuList} from 'src/components/base';
 
 type Props = {
@@ -12,6 +13,13 @@ type Props = {
 export const TableCard = (props: Props): JSXElement => {
   const [isEditVisible, setEditVisible] = createSignal(false);
   const [isMenuVisible, setMenuVisible] = createSignal(false);
+
+  // const onBodyClick = () => setEditVisible(false);
+  // document.body.addEventListener('click', onBodyClick);
+
+  // onCleanup(() => {
+  //   document.body.removeEventListener('click', onBodyClick);
+  // });
 
   return (
     <div
@@ -26,6 +34,7 @@ export const TableCard = (props: Props): JSXElement => {
         </div>
       </Link>
       <Menu
+        onClose={() => setEditVisible(false)}
         onSelect={(key) => {
           props.onAction(key);
           setEditVisible(false);

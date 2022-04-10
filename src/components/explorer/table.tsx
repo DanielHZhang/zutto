@@ -1,4 +1,5 @@
-import {createSignal, For, JSXElement} from 'solid-js';
+import type {JSXElement} from 'solid-js';
+import {createSignal, For} from 'solid-js';
 
 type Data = {
   id: number;
