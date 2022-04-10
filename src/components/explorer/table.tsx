@@ -1,5 +1,7 @@
 import type {JSXElement} from 'solid-js';
 import {createSignal, For} from 'solid-js';
+import {createStore} from 'solid-js/store';
+import {Column} from 'src/components/explorer/column';
 
 type Data = {
   id: number;
@@ -12,8 +14,12 @@ type Props = {
 };
 
 export const Table = (props: Props): JSXElement => {
-  const [hover, setHover] = createSignal({row: -1, col: -1});
-  const [selection, setSelection] = createSignal({row: -1, col: -1, top: -1, left: -1});
+  const [state, setState] = createStore({
+    hover: {row: -1, col: -1},
+    selection: {row: -1, col: -1, top: -1, left: -1},
+  });
+  // const [hover, setHover] = createSignal({row: -1, col: -1});
+  // const [selection, setSelection] = createSignal({row: -1, col: -1, top: -1, left: -1});
   // const [selection, setSelection] = createSignal({
   //   start: {row: -1, col: -1},
   //   end: {row: -1, col: -1},
@@ -52,19 +58,9 @@ export const Table = (props: Props): JSXElement => {
     return props.headers;
   };
 
-  // const getPosition = () => {
-  //   if (selection().bottom === -1) {
-  //     return '';
-  //   }
-  //   return `bottom-[${selection().bottom}px] left-[${selection().left}px]`;
-  // };
-
-  /** @tw */
-  const borders = 'border-l-2 border-b-2 border-gray-600 last-of-type:border-r-2';
-
   return (
     <div class='overflow-x-auto relative'>
-      <div class='flex flex-col' onMouseLeave={() => setHover({row: -1, col: -1})}>
+      <div class='flex flex-col' onMouseLeave={() => setState('hover', {row: -1, col: -1})}>
         <div class='flex'>
           <For each={normalizeHeaders()}>
             {(header) => (
@@ -80,39 +76,27 @@ export const Table = (props: Props): JSXElement => {
           {(row, rowIndex) => (
             <div class='flex'>
               <For each={row}>
-                {(column, columnIndex) => (
-                  <div
-                    class={[
-                      'flex',
-                      'items-center',
-                      'h-10',
-
-                      borders,
-                      rowIndex() === hover().row ? 'bg-blue-500 bg-opacity-20' : '',
-                      // rowIndex() === selection().row && columnIndex() === selection().col
-                      //   ? 'border-blue-400 border-t-2 border-r-2 rounded-md'
-                      //   : '',
-                    ].join(' ')}
-                    onMouseOver={() => setHover({row: rowIndex(), col: columnIndex()})}
+                {(data, columnIndex) => (
+                  <Column
+                    data={data}
+                    rowIndex={rowIndex()}
+                    colIndex={columnIndex()}
+                    isRowHovered={rowIndex() === state.hover.row}
+                    isColHovered={columnIndex() === state.hover.col}
+                    onHover={(row, col) => setState('hover', {row, col})}
                     onClick={(event) => {
-                      // console.log(event.currentTarget);
-                      // const {top, left, x, y, height, width} =
-                      // event.currentTarget.getBoundingClientRect();
-                      // console.log(event.currentTarget.getBoundingClientRect());
-                      // setSelection({row: rowIndex(), col: columnIndex(), top: y - height, left});
                       const target = event.currentTarget;
-                      setSelection({
+                      setState('selection', {
                         row: rowIndex(),
                         col: columnIndex(),
                         top: target.offsetTop,
                         left: target.offsetLeft,
                       });
                     }}
-                  >
-                    <div class='w-40 px-2 overflow-hidden whitespace-nowrap overflow-ellipsis'>
-                      <span class='text-gray-300'>{column.content}</span>
-                    </div>
-                  </div>
+                    onDoubleClick={(event) => {
+                      console.log('on double clicked', event);
+                    }}
+                  />
                 )}
               </For>
             </div>
@@ -120,8 +104,8 @@ export const Table = (props: Props): JSXElement => {
         </For>
       </div>
       <div
-        class='z-10 absolute h-10 w-41 border-3 border-blue-400 rounded-lg'
-        style={{top: `${selection().top}px`, left: `${selection().left}px`}}
+        class='z-10 absolute h-10 w-41 border-3 border-blue-400 rounded-lg pointer-events-none'
+        style={{left: `${state.selection.left}px`, top: `${state.selection.top}px`}}
       />
     </div>
   );

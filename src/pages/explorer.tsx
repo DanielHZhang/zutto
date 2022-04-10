@@ -30,28 +30,21 @@ export default function Explorer(): JSXElement {
 
   console.log('table data:', tableData());
   return (
-    <div class='flex'>
-      <div class='flex flex-col basis-80 min-w-50'>
-        <Show when={tables()} fallback={<div>Loading...</div>}>
-          <For each={tables()}>{(item) => <div>{item.name}</div>}</For>
-        </Show>
+    <div class='flex flex-col'>
+      <div class='flex'>
+        <div>Home</div>
+        <Tabs />
       </div>
-      <div class='flex flex-col'>
-        <div class='flex'>
-          <div>Home</div>
-          <Tabs />
-        </div>
-        <section class='flex'>
-          <Button>Refresh</Button>
-          <div>Filters button</div>
-          <div>Show number of records button</div>
-          <Button>Add Record</Button>
-          <Button>Save Changes</Button>
-        </section>
-        <main>
-          <Table data={data} headers={headers} />
-        </main>
-      </div>
+      <section class='flex'>
+        <Button>Refresh</Button>
+        <div>Filters button</div>
+        <div>Show number of records button</div>
+        <Button>Add Record</Button>
+        <Button>Save Changes</Button>
+      </section>
+      <main>
+        <Table data={data} headers={headers} />
+      </main>
     </div>
   );
 }
