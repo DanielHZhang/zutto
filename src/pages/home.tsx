@@ -60,16 +60,16 @@ export default function Home(): JSXElement {
         </div>
       </div>
       <Modal isOpen={isModalOpen()} onClose={() => setIsModalOpen(false)}>
-        <Heading>New Connection</Heading>
+        <Heading class='mb-6'>New Connection</Heading>
         <form onSubmit={onSubmit}>
-          <div class='flex flex-col space-y-2'>
+          <div class='flex flex-col space-y-3'>
             <Input placeholder='Nickname' {...form.register('name')} />
             <Input placeholder='Host' {...form.register('host')} />
             <Input placeholder='Port' {...form.register('port')} />
             <Input placeholder='Database name' {...form.register('databaseName')} />
             <Input placeholder='Username' {...form.register('username')} />
             <Input placeholder='Password' type='password' {...form.register('password')} />
-            <Button type='submit' onClick={() => console.log('clicking')}>
+            <Button variant='primary' type='submit' onClick={() => console.log('clicking')}>
               Connect
             </Button>
           </div>

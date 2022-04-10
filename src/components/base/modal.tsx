@@ -3,6 +3,8 @@ import type {JSXElement} from 'solid-js';
 import {Show} from 'solid-js';
 import {Portal} from 'solid-js/web';
 import {Button} from 'src/components/base/button';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import {clickOutside} from 'src/directives';
 
 type Props = {
   isOpen: boolean;
@@ -21,7 +23,10 @@ export const Modal = (props: Props): JSXElement => {
       <Portal mount={modalRoot}>
         <div class={`${wholeScreen} bg-stone-800 bg-opacity-50`} />
         <div class={`${wholeScreen} overflow-auto flex items-center justify-center z-10`}>
-          <section class=' relative bg-slate-800 text-gray-100 rounded-lg w-120 max-h-150 shadow-md'>
+          <section
+            use:clickOutside={() => props.onClose()}
+            class='relative bg-slate-800 text-gray-100 rounded-lg w-120 max-h-150 shadow-md'
+          >
             <Button variant='ghost' class='absolute right-2 top-2' onClick={props.onClose}>
               <CancelIcon />
             </Button>

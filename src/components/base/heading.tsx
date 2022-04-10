@@ -5,18 +5,18 @@ import {mergeCss} from 'src/utils';
 type HeadingProps = JSX.HTMLAttributes<HTMLHeadingElement>;
 
 export const Heading = (props: HeadingProps): JSXElement => {
-  const [own, rest] = splitProps(props, ['class']);
+  const [ownProps, htmlProps] = splitProps(props, ['class']);
   return (
-    <h1 class={mergeCss('text-3xl font-bold', own.class)} {...rest}>
+    <h1 class={mergeCss('text-3xl font-bold', ownProps.class)} {...htmlProps}>
       {props.children}
     </h1>
   );
 };
 
 export const Subheading = (props: HeadingProps): JSXElement => {
-  const [own, rest] = splitProps(props, ['class']);
+  const [ownProps, htmlProps] = splitProps(props, ['class']);
   return (
-    <h2 class={mergeCss('text-xl font-medium', own.class)} {...rest}>
+    <h2 class={mergeCss('text-xl font-medium', ownProps.class)} {...htmlProps}>
       {props.children}
     </h2>
   );
