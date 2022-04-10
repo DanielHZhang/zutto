@@ -1,10 +1,10 @@
 import PlusIcon from 'iconoir/icons/plus.svg';
 import RefreshIcon from 'iconoir/icons/refresh.svg';
-import {useParams} from 'solid-app-router';
+import {Link, useParams} from 'solid-app-router';
 import type {JSXElement} from 'solid-js';
 import {createResource, createSignal, For, Show} from 'solid-js';
 import {queryAllTables, queryTableData} from 'src/actions';
-import {Button} from 'src/components/base';
+import {Button, SplitButton} from 'src/components/base';
 import {Table, Tabs} from 'src/components/explorer';
 import CubeIcon from 'src/components/icons/3d-select-face.svg';
 
@@ -35,10 +35,12 @@ export default function Explorer(): JSXElement {
   console.log('table data:', tableData());
   return (
     <div class='flex flex-col space-y-2'>
-      <div class='flex'>
-        <div class='flex items-center px-4'>
-          <CubeIcon />
-        </div>
+      <div class='flex bg-header'>
+        <Link href='/' class='flex items-center'>
+          <div class='flex items-center px-4'>
+            <CubeIcon />
+          </div>
+        </Link>
         <Tabs />
       </div>
       <section class='flex justify-between mx-2'>
@@ -47,9 +49,7 @@ export default function Explorer(): JSXElement {
             <PlusIcon />
             <span>Add Record</span>
           </Button>
-          <Button>
-            <span>Fields</span>
-          </Button>
+          <SplitButton left={<span>Fields</span>} right={<span>0</span>} />
           <Button>
             <span>Filters</span>
             <span>1</span>
@@ -60,6 +60,7 @@ export default function Explorer(): JSXElement {
         </div>
         <div class='flex space-x-2'>
           <Show when={modifications().length > 0}>
+            <Button variant='ghost'>Discard Changes</Button>
             <Button>Save Changes</Button>
           </Show>
           <Button>

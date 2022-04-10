@@ -18,6 +18,9 @@ module.exports = defineConfig({
         '.bg-app': {
           backgroundColor: '#1a212e',
         },
+        '.bg-header': {
+          backgroundColor: '#141b24',
+        },
         '.input-focus': {
           // color: '#000',
           // '&:focus': {

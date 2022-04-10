@@ -1,5 +1,6 @@
 import type {JSX, JSXElement} from 'solid-js';
 import {mergeProps, splitProps} from 'solid-js';
+import {css} from 'solid-styled-components';
 import {mergeCss} from 'src/utils';
 
 export type ButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -34,5 +35,31 @@ export const Button = (props: ButtonProps): JSXElement => {
     >
       {ownProps.children}
     </button>
+  );
+};
+
+type SplitButtonProps = {
+  left: JSXElement;
+  right: JSXElement;
+};
+
+export const SplitButton = (props: SplitButtonProps): JSXElement => {
+  const hoverCss = css({
+    '&:hover': {
+      '> .left': {
+        backgroundColor: '#1a2950',
+        transition: 'background-color 0.2s ease',
+      },
+    },
+  });
+  return (
+    <Button class={`p-0 ${hoverCss}`}>
+      <div class='left bg-slate-500 transition-colors flex items-center self-stretch px-2 rounded-bl-md rounded-tl-md'>
+        {props.left}
+      </div>
+      <div class='right bg-slate-600 transition-colors flex items-center self-stretch px-2 rounded-br-md rounded-tr-md'>
+        {props.right}
+      </div>
+    </Button>
   );
 };
