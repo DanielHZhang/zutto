@@ -18,6 +18,13 @@ export async function connectToDatabase(
   return invoke('connect_to_database', {data});
 }
 
+export async function editConnection(config: ConnectionConfig): Promise<void> {
+  if (!IS_TAURI_ENV) {
+    return;
+  }
+  return invoke('edit_connection', {config});
+}
+
 export async function deleteConnection(id: string): Promise<void> {
   if (!IS_TAURI_ENV) {
     return;

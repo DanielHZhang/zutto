@@ -1,7 +1,12 @@
 import {useNavigate} from 'solid-app-router';
 import type {JSXElement} from 'solid-js';
 import {createResource, createSignal, ErrorBoundary, For, Match, Show, Switch} from 'solid-js';
-import {connectToDatabase, deleteConnection, queryRecentDatabases} from 'src/actions';
+import {
+  connectToDatabase,
+  deleteConnection,
+  editConnection,
+  queryRecentDatabases,
+} from 'src/actions';
 import {Button, Heading, Input, Modal, Subheading} from 'src/components/base';
 import {ActionCard, DatabaseCard} from 'src/components/cards';
 import {ErrorContainer} from 'src/components/error';
@@ -29,8 +34,13 @@ export default function Home(): JSXElement {
   const resetModal = () => setModalOpen({name: '', id: ''});
 
   const onSubmit = form.handleSubmit(async (values) => {
-    await connectToDatabase({config: values});
-    navigate('/tables');
+    if (modalOpen().id) {
+      await editConnection(values);
+      resetModal();
+    } else {
+      await connectToDatabase({config: values});
+      navigate('/tables');
+    }
   });
 
   const onDelete = async () => {
@@ -97,7 +107,7 @@ export default function Home(): JSXElement {
                 <Input placeholder='Username' {...form.register('username')} />
                 <Input placeholder='Password' type='password' {...form.register('password')} />
                 <Button variant='primary' type='submit'>
-                  Connect
+                  <span>{modalOpen().id ? 'Save' : 'Connect'}</span>
                 </Button>
               </div>
             </form>

@@ -6,7 +6,9 @@ mod store;
 
 use tauri::{Manager, RunEvent};
 
-use commands::{connect_to_database, delete_connection, query_all_tables, query_recent_databases, query_table_data};
+use commands::{
+  connect_to_database, delete_connection, edit_connection, query_all_tables, query_recent_databases, query_table_data,
+};
 use store::Store;
 
 #[tokio::main]
@@ -20,6 +22,7 @@ async fn main() {
     .invoke_handler(tauri::generate_handler![
       connect_to_database,
       delete_connection,
+			edit_connection,
       query_all_tables,
       query_recent_databases,
       query_table_data,
