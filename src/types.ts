@@ -21,6 +21,11 @@ export type RenameTablePayload = {
   newName: string;
 };
 
+export type DeleteTablePayload = {
+  tableName: string;
+  cascade: boolean;
+};
+
 export type CreateTablePayload = {
   name: string;
   primaryKey: string;

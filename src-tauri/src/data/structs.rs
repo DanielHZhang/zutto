@@ -51,6 +51,13 @@ pub struct RenameTablePayload {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
+pub struct DeleteTablePayload {
+  pub table_name: String,
+  pub cascade: bool,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct TableOverview {
   pub name: String,
   pub num_records: i64,

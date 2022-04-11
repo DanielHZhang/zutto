@@ -7,7 +7,7 @@ use tauri::State;
 use tracing::instrument;
 
 use crate::{
-  data::{CellData, QueryTablePayload, RenameTablePayload, TableData, TableOverview},
+  data::{CellData, DeleteTablePayload, QueryTablePayload, RenameTablePayload, TableData, TableOverview},
   store::Store,
 };
 
@@ -137,6 +137,23 @@ pub async fn create_table(store: State<'_, Store>, rename: RenameTablePayload) -
       // } = &rename;
       // let query = format!("ALTER TABLE {original_name} RENAME TO {new_name}");
       // sqlx::query(&query).execute(pool).await?;
+      Ok(())
+    }
+    None => Err(CommandError::new("Client is not connected to a database")),
+  }
+}
+
+#[tauri::command]
+#[instrument(skip(store), ret, err)]
+pub async fn delete_table(store: State<'_, Store>, payload: DeleteTablePayload) -> CommandResult<()> {
+  match store.active_pool().await.as_ref() {
+    Some(pool) => {
+      let DeleteTablePayload { table_name, cascade } = payload;
+      let query = format!(
+        "DROP TABLE IF EXISTS {table_name} {}",
+        if cascade { "CASCADE" } else { "RESTRICT" }
+      );
+      sqlx::query(&query).execute(pool).await?;
       Ok(())
     }
     None => Err(CommandError::new("Client is not connected to a database")),

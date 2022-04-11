@@ -5,7 +5,7 @@ import type {JSXElement} from 'solid-js';
 import {createRenderEffect, createResource, ErrorBoundary, Match, Show, Switch} from 'solid-js';
 import {createStore} from 'solid-js/store';
 import {deleteTable, queryAllTables, renameTable} from 'src/actions';
-import {Button, Grid, Heading, Input, Modal} from 'src/components/base';
+import {Button, Checkbox, CheckboxState, Grid, Heading, Input, Modal} from 'src/components/base';
 import {TableCard} from 'src/components/cards';
 import {ErrorContainer} from 'src/components/error';
 
@@ -19,6 +19,7 @@ export const Tables = (): JSXElement => {
     searchFilter: '',
     selectedTable: '',
     newTableName: '',
+    cascade: false,
   });
   const [tables, {refetch}] = createResource(queryAllTables);
 
@@ -55,8 +56,8 @@ export const Tables = (): JSXElement => {
 
   const onDelete = async () => {
     try {
-      await deleteTable(state.selectedTable);
-      setState({modalOpen: '', selectedTable: ''});
+      await deleteTable({tableName: state.selectedTable, cascade: state.cascade});
+      setState({modalOpen: '', selectedTable: '', cascade: false});
       refetch();
     } catch (error) {
       console.error(error);
@@ -138,6 +139,12 @@ export const Tables = (): JSXElement => {
                 <pre class='p-1 bg-slate-900 rounded-md inline'>{state.selectedTable}</pre>
               </div>
               <div class='italic'>Warning: this action cannot be undone!</div>
+              <div class='flex items-center space-x-2'>
+                <Checkbox
+                  onCheck={(state) => setState('cascade', state === CheckboxState.Checked)}
+                />
+                <span>Cascade</span>
+              </div>
               <div class='flex justify-end space-x-2'>
                 <Button variant='ghost' onClick={() => setState('modalOpen', '')}>
                   Cancel

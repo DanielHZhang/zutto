@@ -3,6 +3,7 @@ import {IS_TAURI_ENV} from 'src/config';
 import type {
   ConnectionConfig,
   CreateTablePayload,
+  DeleteTablePayload,
   PublicConnectionConfig,
   RenameTablePayload,
   TableData,
@@ -46,11 +47,11 @@ export async function renameTable(rename: RenameTablePayload): Promise<void> {
   return invoke('rename_table', {rename});
 }
 
-export async function deleteTable(tableName: string): Promise<void> {
+export async function deleteTable(payload: DeleteTablePayload): Promise<void> {
   if (!IS_TAURI_ENV) {
     return;
   }
-  return invoke('delete_table', {tableName});
+  return invoke('delete_table', {payload});
 }
 
 export async function queryRecentDatabases(): Promise<PublicConnectionConfig[]> {
