@@ -7,8 +7,8 @@ mod store;
 use tauri::{Manager, RunEvent};
 
 use commands::{
-  connect_to_database, delete_connection, delete_table, edit_connection, query_all_tables, query_recent_databases,
-  query_table_data,
+  begin_connection, close_connection, delete_connection, delete_table, edit_connection, query_all_tables,
+  query_recent_databases, query_table_data,
 };
 use store::Store;
 
@@ -21,7 +21,8 @@ async fn main() {
   let app = tauri::Builder::default()
     .manage::<Store>(store)
     .invoke_handler(tauri::generate_handler![
-      connect_to_database,
+      begin_connection,
+      close_connection,
       delete_connection,
       delete_table,
       edit_connection,

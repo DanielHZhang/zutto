@@ -10,13 +10,20 @@ import type {
   TableOverview,
 } from 'src/types';
 
-export async function connectToDatabase(
+export async function beginConnection(
   data: {id: string} | {config: ConnectionConfig}
 ): Promise<void> {
   if (!IS_TAURI_ENV) {
     return;
   }
   return invoke('connect_to_database', {data});
+}
+
+export async function closeConnection(): Promise<void> {
+  if (!IS_TAURI_ENV) {
+    return;
+  }
+  return invoke('close_connection');
 }
 
 export async function editConnection(config: ConnectionConfig): Promise<void> {

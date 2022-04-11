@@ -1,8 +1,18 @@
 import {useNavigate} from 'solid-app-router';
 import type {JSXElement} from 'solid-js';
-import {createResource, createSignal, ErrorBoundary, For, Match, Show, Switch} from 'solid-js';
 import {
-  connectToDatabase,
+  createResource,
+  createSignal,
+  ErrorBoundary,
+  For,
+  Match,
+  onMount,
+  Show,
+  Switch,
+} from 'solid-js';
+import {
+  beginConnection,
+  closeConnection,
   deleteConnection,
   editConnection,
   queryRecentDatabases,
@@ -14,12 +24,12 @@ import {createForm} from 'src/hooks';
 import type {ConnectionConfig} from 'src/types';
 
 export default function Home(): JSXElement {
+  const navigate = useNavigate();
   const [modalOpen, setModalOpen] = createSignal({
     name: '',
     id: '',
   });
   const [recentDatabases, {refetch}] = createResource(queryRecentDatabases);
-  const navigate = useNavigate();
   const form = createForm<ConnectionConfig>({
     initialValues: {
       name: '',
@@ -38,7 +48,7 @@ export default function Home(): JSXElement {
       await editConnection(values);
       resetModal();
     } else {
-      await connectToDatabase({config: values});
+      await beginConnection({config: values});
       navigate('/tables');
     }
   });
@@ -52,6 +62,10 @@ export default function Home(): JSXElement {
       console.error(error);
     }
   };
+
+  onMount(async () => {
+    await closeConnection(); // Close the previous connection when navigating home
+  });
 
   return (
     <section class='flex flex-grow-1 flex-col space-y-10 text-gray-200 p-8'>
@@ -77,7 +91,7 @@ export default function Home(): JSXElement {
                     data={config}
                     onConnectClick={async () => {
                       try {
-                        await connectToDatabase({id: config.id});
+                        await beginConnection({id: config.id});
                         navigate('/tables');
                       } catch (error) {
                         console.error(error);

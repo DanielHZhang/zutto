@@ -10,7 +10,7 @@ use super::result::{CommandError, CommandResult};
 
 #[tauri::command]
 #[instrument(skip(store), ret, err)]
-pub async fn connect_to_database(store: State<'_, Store>, data: ConnectPayload) -> CommandResult<()> {
+pub async fn begin_connection(store: State<'_, Store>, data: ConnectPayload) -> CommandResult<()> {
   match data.id {
     Some(id) => {
       let state = store.state().await;
@@ -36,6 +36,13 @@ pub async fn connect_to_database(store: State<'_, Store>, data: ConnectPayload) 
       Ok(())
     }
   }
+}
+
+#[tauri::command]
+#[instrument(skip(store), ret, err)]
+pub async fn close_connection(store: State<'_, Store>) -> CommandResult<()> {
+  store.close_pool().await;
+  Ok(())
 }
 
 #[tauri::command]
