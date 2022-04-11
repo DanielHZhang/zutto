@@ -1,7 +1,7 @@
 import {useNavigate} from 'solid-app-router';
 import type {JSXElement} from 'solid-js';
 import {createResource, createSignal, ErrorBoundary, For, Match, Show, Switch} from 'solid-js';
-import {connectToDatabase, queryRecentDatabases} from 'src/actions';
+import {connectToDatabase, deleteConnection, queryRecentDatabases} from 'src/actions';
 import {Button, Heading, Input, Modal, Subheading} from 'src/components/base';
 import {ActionCard, DatabaseCard} from 'src/components/cards';
 import {ErrorContainer} from 'src/components/error';
@@ -34,7 +34,13 @@ export default function Home(): JSXElement {
   });
 
   const onDelete = async () => {
-    //
+    try {
+      await deleteConnection(modalOpen().id);
+      resetModal();
+      refetch();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
