@@ -4,8 +4,10 @@ import type {JSX, JSXElement} from 'solid-js';
 import {createSignal, Show} from 'solid-js';
 import {Button, Menu, MenuButton, MenuItem, MenuList, Subheading} from 'src/components/base';
 import DatabaseRoundedIcon from 'src/components/icons/database-rounded.svg';
+import EditIcon from 'src/components/icons/edit.svg';
 import MoreHorizontalIcon from 'src/components/icons/more-horiz.svg';
 import ServerConnectionIcon from 'src/components/icons/server-connection.svg';
+import TrashIcon from 'src/components/icons/trash.svg';
 import UserIcon from 'src/components/icons/user.svg';
 import type {PublicConnectionConfig} from 'src/types';
 
@@ -40,8 +42,14 @@ export const DatabaseCard = (props: Props): JSXElement => {
           </MenuButton>
         </Show>
         <MenuList>
-          <MenuItem key='connect'>Edit</MenuItem>
-          <MenuItem key='delete'>Delete</MenuItem>
+          <MenuItem key='connect'>
+            <EditIcon />
+            <span class='ml-2'>Edit</span>
+          </MenuItem>
+          <MenuItem key='delete'>
+            <TrashIcon />
+            <span class='ml-2'>Delete</span>
+          </MenuItem>
         </MenuList>
       </Menu>
       <div class='flex flex-col bg-slate-800 rounded-lg p-8 min-w-60 shadow-sm space-y-4'>

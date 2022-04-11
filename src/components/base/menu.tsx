@@ -128,7 +128,7 @@ export const MenuItem = (props: MenuItemProps): JSXElement => {
         setMenu('visible', false);
       }}
     >
-      <span>{props.children}</span>
+      {props.children}
     </Button>
   );
 };
