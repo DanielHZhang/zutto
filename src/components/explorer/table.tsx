@@ -1,4 +1,4 @@
-import type {JSXElement} from 'solid-js';
+import type {JSX, JSXElement} from 'solid-js';
 import {createEffect, For} from 'solid-js';
 import {createStore, produce} from 'solid-js/store';
 import {CheckboxState} from 'src/components/base';
@@ -7,6 +7,8 @@ import {DataCell} from 'src/components/explorer/data-cell';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {clickOutside} from 'src/directives';
 import type {CellData, ModificationsMap} from 'src/types';
+
+const handledKeys = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']);
 
 type Props = {
   data: CellData[][];
@@ -20,22 +22,69 @@ type Props = {
 export const Table = (props: Props): JSXElement => {
   const [state, setState] = createStore({
     hover: {row: -1, col: -1},
-    active: {x: -1, y: -1},
+    active: {row: -1, col: -1, x: -1, y: -1},
     selected: {row: -1, col: -1},
     selectedRows: {} as Record<number, boolean>,
   });
 
   const resetHover = () => setState('hover', {row: -1, col: -1});
-  const resetActiveCell = () => setState('active', {x: -1, y: -1});
+  const resetActiveCell = () => setState('active', {row: -1, col: -1, x: -1, y: -1});
   const resetSelectedCell = () => setState('selected', {row: -1, col: -1});
 
   createEffect(() => {
     console.log('running when selected cellc hagnes', state.selected.row);
   });
 
+  const onKeyDown: JSX.EventHandlerUnion<HTMLDivElement, KeyboardEvent> = (event) => {
+    setState(
+      produce((state) => {
+        if (!handledKeys.has(event.key)) {
+          return;
+        }
+        const {row, col} = state.active; // Get original row and col
+        switch (event.key) {
+          case 'ArrowLeft': {
+            if (state.active.col > 0) {
+              state.active.col -= 1;
+            }
+            break;
+          }
+          case 'ArrowRight': {
+            if (state.active.col < props.headers.length - 1) {
+              state.active.col += 1;
+            }
+            break;
+          }
+          case 'ArrowUp': {
+            if (state.active.row > 0) {
+              state.active.row -= 1;
+            }
+            break;
+          }
+          case 'ArrowDown': {
+            if (state.active.row < props.data.length - 1) {
+              state.active.row += 1;
+            }
+            break;
+          }
+        }
+
+        if (row !== state.active.row || col !== state.active.col) {
+          const element = document.querySelector<HTMLElement>(
+            `div[data-row="${state.active.row}"][data-col="${state.active.col}"]`
+          )!;
+          state.active.x = element.offsetLeft;
+          state.active.y = element.offsetTop;
+        }
+      })
+    );
+  };
+
   return (
     <div
-      class='overflow-x-auto relative pb-2'
+      class='overflow-x-auto relative pb-2 outline-none'
+      tabIndex={0}
+      onKeyDown={onKeyDown}
       use:clickOutside={() => {
         resetActiveCell();
         resetSelectedCell();
@@ -84,11 +133,13 @@ export const Table = (props: Props): JSXElement => {
                     isModified={!!props.modifications[`${rowIndex()},${colIndex()}`]}
                     onHover={(row, col) => setState('hover', {row, col})}
                     onClick={(event) => {
+                      const row = rowIndex();
+                      const col = colIndex();
                       const target = event.currentTarget;
-                      setState('active', {x: target.offsetLeft, y: target.offsetTop});
+                      setState('active', {row, col, x: target.offsetLeft, y: target.offsetTop});
 
                       // Reset selected if clicking on an unselected cell
-                      if (state.selected.row !== rowIndex() || state.selected.col !== colIndex()) {
+                      if (state.selected.row !== row || state.selected.col !== col) {
                         resetSelectedCell();
                       }
                     }}
@@ -101,6 +152,11 @@ export const Table = (props: Props): JSXElement => {
                         col: colIndex(),
                         value: event.currentTarget.value,
                       });
+                    }}
+                    onEditKeyPress={(event) => {
+                      if (event.key === 'Enter') {
+                        resetSelectedCell();
+                      }
                     }}
                   />
                 )}
@@ -116,7 +172,7 @@ export const Table = (props: Props): JSXElement => {
           width: '208px',
           left: `${state.active.x - 2}px`,
           top: `${state.active.y - 4}px`,
-          visibility: state.active.x !== -1 && state.active.y !== -1 ? 'visible' : 'hidden',
+          visibility: state.active.row !== -1 && state.active.col !== -1 ? 'visible' : 'hidden',
         }}
       />
     </div>
