@@ -30,11 +30,11 @@ module.exports = defineConfig({
         '.bg-header': {
           backgroundColor: '#141b24',
         },
-        '.input-focus': {
-          // color: '#000',
-          // '&:focus': {
-          //   boxShadow: 'rgb(39 104 165) 0px 0px 0px 1px',
-          // },
+        '.bg-popover': {
+          backgroundColor: '#111520ee',
+        },
+        '.bg-hover': {
+          backgroundColor: '#1a2950',
         },
         '.shadow-focus': {
           boxShadow: 'rgb(39 104 165) 0px 0px 0px 1px',

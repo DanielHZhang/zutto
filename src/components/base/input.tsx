@@ -9,7 +9,7 @@ export const Input = (props: Props): JSXElement => {
   return (
     <input
       class={mergeCss(
-        'input-focus rounded-md px-3 p-2 bg-slate-700 outline-none focus:shadow-focus',
+        'rounded-md px-3 p-2 bg-slate-700 outline-none focus:shadow-focus',
         own.class
       )}
       {...rest}

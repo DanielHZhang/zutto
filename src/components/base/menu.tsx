@@ -99,10 +99,10 @@ export const MenuList = (props: MenuListProps): JSXElement => {
           setMenu('visible', false);
           onClose?.();
         }}
-        class='min-w-max absolute z-20 '
+        class='min-w-max absolute z-20'
         style={{left: `${menu.x}px`, top: `${menu.y}px`}}
       >
-        <section class='bg-zinc-400 p-2 rounded-lg shadow-xl'>{props.children}</section>
+        <section class='bg-popover p-2 rounded-lg shadow-xl'>{props.children}</section>
       </div>
     </Show>
   );
@@ -121,7 +121,8 @@ export const MenuItem = (props: MenuItemProps): JSXElement => {
 
   return (
     <Button
-      class={`min-w-50 ${styledCss}`}
+      variant='ghost'
+      class={`${styledCss} min-w-50 hover:bg-hover`}
       onClick={() => {
         onSelect?.(props.key);
         setMenu('visible', false);
