@@ -35,3 +35,15 @@ pub async fn close_tab(store: State<'_, Store>, connection_id: String, table_nam
   open_tabs.remove(found_index);
   Ok(())
 }
+
+#[tauri::command]
+#[instrument(skip(store), ret, err)]
+pub async fn fetch_tabs(store: State<'_, Store>, connection_id: String) -> CommandResult<Vec<String>> {
+  let state = store.state().await;
+  let open_tabs = state
+    .tabs
+    .get(&connection_id)
+    .ok_or(CommandError::new("Unable to find connection with provided id"))?;
+
+  Ok(open_tabs.clone())
+}

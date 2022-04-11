@@ -7,8 +7,8 @@ mod store;
 use tauri::{Manager, RunEvent};
 
 use commands::{
-  begin_connection, close_connection, close_tab, delete_connection, delete_table, edit_connection, open_tab,
-  query_all_tables, query_recent_databases, query_table_data,
+  begin_connection, close_connection, close_tab, delete_connection, delete_table, edit_connection, fetch_tabs,
+  open_tab, query_all_tables, query_recent_databases, query_table_data,
 };
 use store::Store;
 
@@ -31,6 +31,7 @@ async fn main() {
       query_table_data,
       open_tab,
       close_tab,
+      fetch_tabs,
     ])
     .setup(|app| {
       #[cfg(debug_assertions)]
