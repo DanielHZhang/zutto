@@ -16,10 +16,10 @@ module.exports = defineConfig({
     plugin(({addBase, addComponents}) => {
       addBase({
         html: {
-          height: '100%',
+          minHeight: '100%',
         },
         body: {
-          height: '100%',
+          minHeight: '100%',
         },
       });
 

@@ -18,7 +18,7 @@ export default function Explorer(): JSXElement {
   const [tableData, {mutate, refetch}] = createResource(tableName, queryTableData);
 
   return (
-    <div class='flex flex-col space-y-2 flex-grow-1'>
+    <div class='flex flex-col space-y-2'>
       <div class='flex bg-header h-14'>
         <Link href='/' class='flex items-center px-4'>
           <CubeIcon />
