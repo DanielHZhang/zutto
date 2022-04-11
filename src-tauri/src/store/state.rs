@@ -12,15 +12,19 @@ use crate::data::{ConnectionConfig, Environment};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct State {
+  pub active_connection_id: Option<String>,
   pub databases: HashMap<String, ConnectionConfig>,
+  pub tabs: HashMap<String, Vec<String>>,
   environment: Environment,
 }
 
 impl Default for State {
   fn default() -> Self {
     Self {
+      active_connection_id: None,
       environment: Environment::Development,
       databases: HashMap::new(),
+      tabs: HashMap::new(),
     }
   }
 }

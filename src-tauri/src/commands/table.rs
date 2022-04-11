@@ -154,6 +154,18 @@ pub async fn delete_table(store: State<'_, Store>, payload: DeleteTablePayload) 
         if cascade { "CASCADE" } else { "RESTRICT" }
       );
       sqlx::query(&query).execute(pool).await?;
+
+      // Make sure tab is also deleted
+      let mut state = store.state().await;
+      if let Some(id) = state.active_connection_id.clone() {
+        if let Some(tabs) = state.tabs.get_mut(&id) {
+          let found_index = tabs.iter().position(|tab| tab == &table_name);
+          if let Some(index) = found_index {
+            tabs.remove(index);
+          }
+        }
+      }
+
       Ok(())
     }
     None => Err(CommandError::new("Client is not connected to a database")),
@@ -168,9 +180,23 @@ pub async fn rename_table(store: State<'_, Store>, rename: RenameTablePayload) -
       let RenameTablePayload {
         original_name,
         new_name,
-      } = &rename;
+      } = rename;
       let query = format!("ALTER TABLE {original_name} RENAME TO {new_name}");
       sqlx::query(&query).execute(pool).await?;
+
+      // Make sure tab is also renamed
+      let mut state = store.state().await;
+      if let Some(id) = state.active_connection_id.clone() {
+        if let Some(tabs) = state.tabs.get_mut(&id) {
+          for tab_name in tabs.iter_mut() {
+            if tab_name == &original_name {
+              *tab_name = new_name;
+              break;
+            }
+          }
+        }
+      }
+
       Ok(())
     }
     None => Err(CommandError::new("Client is not connected to a database")),

@@ -46,6 +46,7 @@ impl Store {
     if guard.is_some() {
       let pool = guard.as_ref().unwrap();
       pool.close().await;
+      self.state.lock().await.active_connection_id = None;
     }
   }
 

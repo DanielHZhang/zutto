@@ -1,14 +1,17 @@
 import CancelIcon from 'iconoir/icons/cancel.svg';
 import {useNavigate} from 'solid-app-router';
 import type {JSX, JSXElement} from 'solid-js';
+import {mergeProps} from 'solid-js';
 import {Button} from 'src/components/base';
 
 type Props = {
   title: string;
   isActive?: boolean;
+  allowClose?: boolean;
 };
 
 export const Tab = (props: Props): JSXElement => {
+  props = mergeProps({allowClose: true}, props);
   const navigate = useNavigate();
 
   const onCloseClick: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent> = (event) => {
@@ -31,6 +34,7 @@ export const Tab = (props: Props): JSXElement => {
         size='sm'
         variant='ghost'
         class='p-0 h-6 hover:bg-slate-100 hover:bg-opacity-10'
+        style={{visibility: props.allowClose && props.isActive ? 'visible' : 'hidden'}}
         onClick={onCloseClick}
       >
         <CancelIcon />

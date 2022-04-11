@@ -2,7 +2,7 @@ import PlusIcon from 'iconoir/icons/plus.svg';
 import RefreshIcon from 'iconoir/icons/refresh.svg';
 import {useParams} from 'solid-app-router';
 import type {JSXElement} from 'solid-js';
-import {createResource, createSignal, ErrorBoundary, For, Show} from 'solid-js';
+import {createEffect, createResource, createSignal, ErrorBoundary, For, Show} from 'solid-js';
 import {createStore} from 'solid-js/store';
 import {queryTableData} from 'src/actions';
 import {Button, Logo, SplitButton} from 'src/components/base';
@@ -20,6 +20,10 @@ export default function Explorer(): JSXElement {
   const [tableName] = createSignal(params.tableName);
   const [tableData, {mutate, refetch}] = createResource(tableName, queryTableData);
 
+  createEffect(() => {
+    console.log('what is this:', tableName());
+  });
+
   return (
     <div class='flex flex-col space-y-2'>
       <div class='flex bg-header h-14 border-gray border-b-1'>
@@ -29,13 +33,17 @@ export default function Explorer(): JSXElement {
             <For each={data}>
               {(item) => (
                 <li>
-                  <Tab title={item.title} isActive={true} />
+                  <Tab
+                    title={item.title}
+                    isActive={item.title === tableName()}
+                    allowClose={data.length > 1}
+                  />
                 </li>
               )}
             </For>
           </ul>
           <div class='flex items-center justify-center mx-2'>
-            <Button>
+            <Button variant='ghost' class='hover:bg-slate-100 hover:bg-opacity-10'>
               <PlusIcon />
             </Button>
           </div>

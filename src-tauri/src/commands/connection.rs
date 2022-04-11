@@ -13,7 +13,7 @@ use super::result::{CommandError, CommandResult};
 pub async fn begin_connection(store: State<'_, Store>, data: ConnectPayload) -> CommandResult<()> {
   match data.id {
     Some(id) => {
-      let state = store.state().await;
+      let mut state = store.state().await;
       let config = state
         .databases
         .get(&id)
@@ -21,6 +21,7 @@ pub async fn begin_connection(store: State<'_, Store>, data: ConnectPayload) -> 
 
       let connection_url = config.to_url();
       store.set_active_pool(&connection_url).await?;
+      state.active_connection_id = Some(id);
       Ok(())
     }
     None => {
@@ -32,6 +33,7 @@ pub async fn begin_connection(store: State<'_, Store>, data: ConnectPayload) -> 
 
       let mut state = store.state().await;
       let id = uuid::Uuid::new_v4().to_string();
+      state.active_connection_id = Some(id.clone());
       state.databases.insert(id, config);
       Ok(())
     }
