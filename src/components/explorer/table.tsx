@@ -6,11 +6,12 @@ import {CheckboxColumn} from 'src/components/explorer/checkbox-column';
 import {DataCell} from 'src/components/explorer/data-cell';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {clickOutside} from 'src/directives';
-import type {CellData} from 'src/types';
+import type {CellData, ModificationsMap} from 'src/types';
 
 type Props = {
-  headers: string[];
   data: CellData[][];
+  headers: string[];
+  modifications: ModificationsMap;
   onCellEdit: (data: {row: number; col: number; value: string}) => void;
   onColumnRename: () => void;
   onDelete: () => void;
@@ -80,6 +81,7 @@ export const Table = (props: Props): JSXElement => {
                     }
                     isHovered={state.hover.row === rowIndex()}
                     isRowSelected={state.selectedRows[rowIndex()]}
+                    isModified={!!props.modifications[`${rowIndex()},${colIndex()}`]}
                     onHover={(row, col) => setState('hover', {row, col})}
                     onClick={(event) => {
                       const target = event.currentTarget;

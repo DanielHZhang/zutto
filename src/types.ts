@@ -67,4 +67,4 @@ type Modificiation = {
 //   rows: Record<number, RowModification>; // Key is row number
 // };
 
-export type ModificationPayload = Record<`${number},${number}`, Modificiation>;
+export type ModificationsMap = Record<`${number},${number}`, Modificiation>;

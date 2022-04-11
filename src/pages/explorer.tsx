@@ -2,17 +2,17 @@ import PlusIcon from 'iconoir/icons/plus.svg';
 import RefreshIcon from 'iconoir/icons/refresh.svg';
 import {Link, useParams} from 'solid-app-router';
 import type {JSXElement} from 'solid-js';
-import {createResource, createSignal, For, Show, Suspense} from 'solid-js';
-import {createStore, produce} from 'solid-js/store';
-import {queryAllTables, queryTableData} from 'src/actions';
+import {createResource, createSignal, Show} from 'solid-js';
+import {createStore} from 'solid-js/store';
+import {queryTableData} from 'src/actions';
 import {Button, SplitButton} from 'src/components/base';
 import {Table, Tabs} from 'src/components/explorer';
 import CubeIcon from 'src/components/icons/3d-select-face.svg';
-import type {ModificationPayload} from 'src/types';
+import type {ModificationsMap} from 'src/types';
 
 export default function Explorer(): JSXElement {
   const params = useParams();
-  const [modifications, setModifications] = createStore<ModificationPayload>({});
+  const [modifications, setModifications] = createStore<ModificationsMap>({});
   const [tableName] = createSignal(params.tableName);
   const [tableData, {mutate, refetch}] = createResource(tableName, queryTableData);
 
@@ -44,7 +44,7 @@ export default function Explorer(): JSXElement {
               </Button>
               <Button size='sm'>Save Changes</Button>
             </Show>
-            <Button size='sm'>
+            <Button size='sm' onClick={() => refetch()}>
               <RefreshIcon width='16px' height='16px' />
             </Button>
           </div>
@@ -53,6 +53,7 @@ export default function Explorer(): JSXElement {
           <Table
             data={tableData()!.data}
             headers={tableData()!.headers}
+						modifications={modifications}
             onCellEdit={(modification) => {
               const {row, col, value} = modification;
               mutate((prevState) => {
