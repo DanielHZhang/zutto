@@ -19,9 +19,19 @@ export const TableCard = (props: Props): JSXElement => {
   const [isEditVisible, setEditVisible] = createSignal(false);
   const [isMenuVisible, setMenuVisible] = createSignal(false);
 
+  const formatNumber = (num: number) => {
+    if (num > 1e6) {
+      return `${(num / 1e6).toFixed(1)}M`;
+    }
+    if (num > 1e4) {
+      return `${(num / 1e3).toFixed(1)}K`;
+    }
+    return num;
+  };
+
   return (
     <div
-      class='flex justify-between items-center bg-card rounded-md px-6 py-4 min-h-20 shadow-md'
+      class='flex justify-between items-center bg-card rounded-md p-5 min-h-20 shadow-md'
       onMouseOver={() => setEditVisible(true)}
       onMouseLeave={() => !isMenuVisible() && setEditVisible(false)}
     >
@@ -57,13 +67,13 @@ export const TableCard = (props: Props): JSXElement => {
         </MenuList>
       </Menu>
       <div class='text-gray-300 flex flex-col space-y-1'>
-        <div class='flex items-center bg-cyan-700 border-b-2 border-b-cyan-400 rounded-md px-1'>
+        <div class='flex items-center bg-zinc-700 border-b-2 border-b-yellow-500 rounded-md px-1'>
           <TableRowsIcon width='16px' height='16px' />
-          <span class='ml-1'>{props.data.numRecords}</span>
+          <span class='ml-1'>{formatNumber(props.data.numRecords)}</span>
         </div>
-        <div class='flex items-center bg-cyan-700 border-b-2 border-b-cyan-400 rounded-md px-1'>
+        <div class='flex items-center bg-zinc-700 border-b-2 border-b-yellow-500 rounded-md px-1'>
           <TableColumnsIcon width='16px' height='16px' />
-          <span class='ml-1'>{props.data.numColumns}</span>
+          <span class='ml-1'>{formatNumber(props.data.numColumns)}</span>
         </div>
       </div>
     </div>

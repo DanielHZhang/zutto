@@ -39,6 +39,9 @@ module.exports = defineConfig({
         '.bg-hover': {
           backgroundColor: '#1a2950',
         },
+        '.bg-label': {
+          backgroundColor: '#283140',
+        },
         '.shadow-focus': {
           boxShadow: 'rgb(39 104 165) 0px 0px 0px 1px',
         },
