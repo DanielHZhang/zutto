@@ -12,9 +12,9 @@ import type {
 
 export async function beginConnection(
   data: {id: string} | {config: ConnectionConfig}
-): Promise<void> {
+): Promise<string> {
   if (!IS_TAURI_ENV) {
-    return;
+    return 'uuid';
   }
   return invoke('connect_to_database', {data});
 }
@@ -88,7 +88,7 @@ export async function queryRecentDatabases(): Promise<PublicConnectionConfig[]> 
 export async function queryAllTables(): Promise<TableOverview[]> {
   if (!IS_TAURI_ENV) {
     return Array.from({length: 10}, (_, index) => ({
-      name: `Table ${index} really long name`,
+      name: `Table ${index} long name`,
       numRecords: index * 100,
       numColumns: index,
     }));
@@ -116,4 +116,25 @@ export async function queryTableData(tableName: string): Promise<TableData> {
   const data = await invoke('query_table_data', {payload: {tableName, offset: 0}});
   console.log('got data:', data);
   return data;
+}
+
+export async function openTab(id: string, tableName: string): Promise<void> {
+  if (!IS_TAURI_ENV) {
+    return;
+  }
+  return invoke('open_tab', {connectionId: id, tableName});
+}
+
+export async function closeTab(id: string, tableName: string): Promise<void> {
+  if (!IS_TAURI_ENV) {
+    return;
+  }
+  return invoke('close_tab', {connectionId: id, tableName});
+}
+
+export async function fetchTabs(id: string): Promise<string[]> {
+  if (!IS_TAURI_ENV) {
+    return Array.from({length: 5}, (_, index) => `Table ${index} long name`);
+  }
+  return invoke('fetch_tabs', {connectionId: id});
 }

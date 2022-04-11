@@ -10,7 +10,7 @@ use super::result::{CommandError, CommandResult};
 
 #[tauri::command]
 #[instrument(skip(store), ret, err)]
-pub async fn begin_connection(store: State<'_, Store>, data: ConnectPayload) -> CommandResult<()> {
+pub async fn begin_connection(store: State<'_, Store>, data: ConnectPayload) -> CommandResult<String> {
   match data.id {
     Some(id) => {
       let mut state = store.state().await;
@@ -21,8 +21,8 @@ pub async fn begin_connection(store: State<'_, Store>, data: ConnectPayload) -> 
 
       let connection_url = config.to_url();
       store.set_active_pool(&connection_url).await?;
-      state.active_connection_id = Some(id);
-      Ok(())
+      state.active_connection_id = Some(id.clone());
+      Ok(id)
     }
     None => {
       let config = data
@@ -34,8 +34,8 @@ pub async fn begin_connection(store: State<'_, Store>, data: ConnectPayload) -> 
       let mut state = store.state().await;
       let id = uuid::Uuid::new_v4().to_string();
       state.active_connection_id = Some(id.clone());
-      state.databases.insert(id, config);
-      Ok(())
+      state.databases.insert(id.clone(), config);
+      Ok(id)
     }
   }
 }
