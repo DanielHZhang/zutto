@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use super::CellData;
+
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ConnectionConfig {
@@ -60,4 +62,11 @@ pub struct TableOverview {
 pub struct QueryTablePayload {
   pub table_name: String,
   pub offset: u32,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TableData {
+  pub headers: Vec<String>,
+  pub data: Vec<Vec<CellData>>,
 }

@@ -4,6 +4,7 @@ use std::result;
 use std::str;
 
 use serde::{Deserialize, Serialize};
+use time::error::ComponentRange;
 
 pub type CommandResult<T> = result::Result<T, CommandError>;
 
@@ -38,6 +39,14 @@ impl From<tauri::api::Error> for CommandError {
 
 impl From<sqlx::error::Error> for CommandError {
   fn from(err: sqlx::error::Error) -> Self {
+    Self {
+      message: err.to_string(),
+    }
+  }
+}
+
+impl From<ComponentRange> for CommandError {
+  fn from(err: ComponentRange) -> Self {
     Self {
       message: err.to_string(),
     }

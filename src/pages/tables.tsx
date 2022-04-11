@@ -7,6 +7,7 @@ import {createStore} from 'solid-js/store';
 import {queryAllTables, renameTable} from 'src/actions';
 import {Button, Grid, Heading, Input, Modal} from 'src/components/base';
 import {TableCard} from 'src/components/cards';
+import {ErrorContainer} from 'src/components/error';
 
 const NEW_TABLE_MODAL = 'New Table';
 const RENAME_TABLE_MODAL = 'Rename Table';
@@ -59,7 +60,7 @@ export const Tables = (): JSXElement => {
   return (
     <section class='flex flex-grow-1 flex-col space-y-10 text-gray-200 p-8'>
       <h1 class='text-3xl font-bold'>Tables</h1>
-      <ErrorBoundary fallback={(error) => <div>Error fetching tables: {error.message}</div>}>
+      <ErrorBoundary fallback={ErrorContainer}>
         <Show when={tables()} fallback={<div>Loading...</div>}>
           <div class='flex space-x-4'>
             <Button variant='primary' onClick={() => setState('modalOpen', NEW_TABLE_MODAL)}>

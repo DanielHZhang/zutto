@@ -17,15 +17,20 @@ tauri-build = { version = "1.0.0-rc.5", features = [] }
 [dependencies]
 directories = "4.0.1"
 futures = "0.3.21"
+rust_decimal = "1.23.1"
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 sqlx = { version = "0.5.11", features = [
+	"decimal",
+	"json",
 	"runtime-tokio-rustls",
 	"postgres",
+	"time",
 	"uuid",
 ] }
 tauri = { version = "1.0.0-rc.6", features = ["api-all"] }
 tauri-plugin-window-state = { git = "https://github.com/tauri-apps/tauri-plugin-window-state", branch = "dev" }
+time = { version = "0.3.9", features = ["serde"] }
 tokio = { version = "1.17.0", features = ["full"] }
 tracing = "0.1.32"
 tracing-subscriber = "0.3.10"

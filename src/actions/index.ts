@@ -85,5 +85,7 @@ export async function queryTableData(tableName: string): Promise<TableData> {
     ];
     return {headers, data};
   }
-  return invoke('query_table_data', {payload: {tableName, offset: 0}});
+  const data = await invoke('query_table_data', {payload: {tableName, offset: 0}});
+  console.log('got data:', data);
+  return data;
 }

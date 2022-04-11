@@ -1,10 +1,13 @@
 use futures::TryStreamExt;
-use sqlx::Row;
+use sqlx::{
+  types::time::{Date, OffsetDateTime},
+  Row,
+};
 use tauri::State;
 use tracing::instrument;
 
 use crate::{
-  data::{QueryTablePayload, RenameTablePayload, TableOverview},
+  data::{CellData, QueryTablePayload, RenameTablePayload, TableData, TableOverview},
   store::Store,
 };
 
@@ -51,48 +54,73 @@ pub async fn query_all_tables(store: State<'_, Store>) -> CommandResult<Vec<Tabl
 
 #[tauri::command]
 #[instrument(skip(store), ret, err)]
-pub async fn query_table_data(store: State<'_, Store>, payload: QueryTablePayload) -> CommandResult<Vec<Vec<String>>> {
+pub async fn query_table_data(store: State<'_, Store>, payload: QueryTablePayload) -> CommandResult<TableData> {
   match store.active_pool().await.as_ref() {
     Some(pool) => {
       let QueryTablePayload { table_name, offset } = payload;
-      let columns = sqlx::query(&format!(
+      let columns: Vec<(String, String)> = sqlx::query(&format!(
         "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '{table_name}'"
       ))
       .fetch_all(pool)
       .await?
       .into_iter()
-      .map(|row| -> (String, String) { (row.get(0), row.get(1)) })
-      .collect::<Vec<_>>();
+      .map(|row| {
+        let data_type: &str = row.get(1);
+        (row.get(0), data_type.to_lowercase())
+      })
+      .collect();
 
       let query = format!("SELECT * FROM {table_name} LIMIT 1000 OFFSET {offset}");
       let mut rows = sqlx::query(&query).fetch(pool);
-
       let mut table_data = Vec::new();
 
       while let Some(row) = rows.try_next().await? {
         let mut row_data = Vec::with_capacity(columns.len());
-        for (column_name, data_type) in columns.iter().map(|(c, d)| (c.as_ref(), d.as_ref())) {
-          let column_name: &str = column_name;
-          let data_type: &str = data_type;
-          // let data: String = row.try_get(column_name)?;
-          let wow: String = format!("{:#?}", row.try_get(column_name)?);
-          row_data.push(wow);
-          // match data_type {
-          //   "character varying" | "text" | "character" | "uuid" | "timestamp with time zone" => {
-          //     let data: String = row.try_get(column_name)?;
-          //     row_data.push(data);
-          //   }
-          //   "integer" => {
-          //     let data: i32 = row.try_get(column_name)?;
-          //     row_data.push(data.to_string());
-          //   }
-          //   _ => (),
-          // }
+        for (column_name, data_type) in columns
+          .iter()
+          .map(|(column_name, data_type)| -> (&str, &str) { (column_name.as_ref(), data_type.as_ref()) })
+        {
+          match data_type {
+            "character varying" | "text" | "character" | "uuid" => {
+              row_data.push(CellData::String(row.try_get(column_name)?));
+            }
+            "integer" => {
+              row_data.push(CellData::Integer(row.try_get(column_name)?));
+            }
+            "jsonb" => {
+              row_data.push(CellData::Json(row.try_get(column_name)?));
+            }
+            "numeric" => {
+              row_data.push(CellData::BigDecimal(row.try_get(column_name)?));
+            }
+            "boolean" => {
+              row_data.push(CellData::Boolean(row.try_get(column_name)?));
+            }
+            "date" => {
+              let date: Date = row.try_get(column_name)?;
+              let year = date.year();
+              let ordinal = date.ordinal();
+              row_data.push(CellData::Date(time::Date::from_ordinal_date(year, ordinal)?));
+            }
+            "timestamp with time zone" => {
+              let date_time: OffsetDateTime = row.try_get(column_name)?;
+              row_data.push(CellData::DateTimeZone(time::OffsetDateTime::from_unix_timestamp(
+                date_time.unix_timestamp(),
+              )?));
+            }
+            // "array" => {
+            //   //
+            // }
+            _ => (),
+          }
         }
         table_data.push(row_data);
       }
 
-      Ok(table_data)
+      Ok(TableData {
+        headers: columns.into_iter().map(|(column_name, _)| column_name).collect(),
+        data: table_data,
+      })
     }
     None => Err(CommandError::new("Client is not connected to a database")),
   }
