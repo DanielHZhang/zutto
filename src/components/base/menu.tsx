@@ -1,5 +1,13 @@
 import type {JSXElement} from 'solid-js';
-import {createContext, createEffect, Show, splitProps, useContext} from 'solid-js';
+import {
+  createContext,
+  createEffect,
+  createRenderEffect,
+  createSignal,
+  Show,
+  splitProps,
+  useContext,
+} from 'solid-js';
 import type {SetStoreFunction} from 'solid-js/store';
 import {createStore} from 'solid-js/store';
 import {css} from 'solid-styled-components';
@@ -12,6 +20,8 @@ type ContextState = {
   visible: boolean;
   x: number;
   y: number;
+  elementHeight: number;
+  elementWidth: number;
 };
 
 type MenuContext = readonly [
@@ -24,7 +34,7 @@ type MenuContext = readonly [
 ];
 
 const MenuContext = createContext<MenuContext>([
-  {visible: false, x: 0, y: 0},
+  {visible: false, x: 0, y: 0, elementHeight: 0, elementWidth: 0},
   {
     setMenu: () => undefined,
   },
@@ -42,6 +52,8 @@ export const Menu = (props: MenuProps): JSXElement => {
     visible: false,
     x: 0,
     y: 0,
+    elementHeight: 0,
+    elementWidth: 0,
   });
   const store = [
     state,
@@ -73,7 +85,9 @@ export const MenuButton = (props: MenuButtonProps): JSXElement => {
         setMenu({
           visible: !menu.visible,
           x: event.currentTarget.offsetLeft,
-          y: event.currentTarget.offsetTop + rect.height,
+          y: event.currentTarget.offsetTop,
+          elementHeight: rect.height,
+          elementWidth: rect.width,
         });
         ownProps.onClick?.(event);
       }}
@@ -90,17 +104,40 @@ type MenuListProps = {
 
 export const MenuList = (props: MenuListProps): JSXElement => {
   const [menu, {setMenu, onClose}] = useContext(MenuContext);
+  const [position, setPosition] = createSignal({x: menu.x, y: menu.y});
+  let menuDiv: HTMLDivElement;
+
+  createRenderEffect(() => {
+    let x = menu.x; // Needs to be outside if statement so that this effect tracks `menu`
+    let y = menu.y;
+    if (menuDiv) {
+      const GAP = 4;
+      const rect = menuDiv.getBoundingClientRect();
+
+      if (menu.x + rect.width > window.innerWidth) {
+        x = menu.x + menu.elementWidth - rect.width;
+      }
+      if (menu.y + rect.height > window.innerHeight) {
+        y = menu.y - rect.height - GAP;
+      } else {
+        y = menu.y + menu.elementHeight + GAP;
+      }
+
+      setPosition({x, y});
+    }
+  });
 
   return (
     <Show when={menu.visible}>
       <div
+        ref={(element) => (menuDiv = element)}
         use:clickOutside={(event) => {
           event.stopPropagation();
           setMenu('visible', false);
           onClose?.();
         }}
         class='min-w-max absolute z-20'
-        style={{left: `${menu.x}px`, top: `${menu.y}px`}}
+        style={{left: `${position().x}px`, top: `${position().y}px`}}
       >
         <section class='bg-popover p-2 rounded-lg shadow-xl'>{props.children}</section>
       </div>
