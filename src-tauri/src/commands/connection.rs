@@ -40,6 +40,27 @@ pub async fn connect_to_database(store: State<'_, Store>, data: ConnectPayload) 
 
 #[tauri::command]
 #[instrument(skip(store), ret, err)]
+pub async fn edit_connection(store: State<'_, Store>, data: ConnectPayload) -> CommandResult<()> {
+  match (data.id, data.config) {
+    (Some(id), Some(config)) => {
+      let mut state = store.state().await;
+      state.databases.insert(id, config);
+      Ok(())
+    }
+    _ => Err(CommandError::new("Missing connection id or config in payload")),
+  }
+}
+
+#[tauri::command]
+#[instrument(skip(store), ret, err)]
+pub async fn delete_connection(store: State<'_, Store>, id: String) -> CommandResult<()> {
+  let mut state = store.state().await;
+  let _ = state.databases.remove(&id);
+  Ok(())
+}
+
+#[tauri::command]
+#[instrument(skip(store), ret, err)]
 pub async fn query_recent_databases(store: State<'_, Store>) -> CommandResult<Vec<PublicConnectionConfig>> {
   let state = store.state().await;
   let public_connection_configs = state
