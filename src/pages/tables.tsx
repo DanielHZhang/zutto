@@ -21,6 +21,7 @@ import {
   Grid,
   Heading,
   Input,
+  Logo,
   Modal,
 } from 'src/components/base';
 import {TableCard} from 'src/components/cards';
@@ -101,7 +102,10 @@ export const Tables = (): JSXElement => {
 
   return (
     <section class='flex flex-grow-1 flex-col space-y-10 text-gray-200 p-8'>
-      <h1 class='text-3xl font-bold'>Tables</h1>
+      <div class='flex space-x-4'>
+        <Logo />
+        <Heading>Tables</Heading>
+      </div>
       <ErrorBoundary fallback={ErrorContainer}>
         <Show when={tables()} fallback={<div>Loading...</div>}>
           <div class='flex space-x-4'>

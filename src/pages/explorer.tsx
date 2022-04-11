@@ -5,7 +5,7 @@ import type {JSXElement} from 'solid-js';
 import {createResource, createSignal, ErrorBoundary, Show} from 'solid-js';
 import {createStore} from 'solid-js/store';
 import {queryTableData} from 'src/actions';
-import {Button, SplitButton} from 'src/components/base';
+import {Button, Logo, SplitButton} from 'src/components/base';
 import {ErrorContainer} from 'src/components/error';
 import {Table, Tabs} from 'src/components/explorer';
 import CubeIcon from 'src/components/icons/3d-select-face.svg';
@@ -20,9 +20,7 @@ export default function Explorer(): JSXElement {
   return (
     <div class='flex flex-col space-y-2'>
       <div class='flex bg-header h-14'>
-        <Link href='/' class='flex items-center px-4'>
-          <CubeIcon />
-        </Link>
+        <Logo class='px-4' />
         <Tabs />
       </div>
       <ErrorBoundary fallback={ErrorContainer}>

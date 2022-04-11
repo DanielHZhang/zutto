@@ -7,7 +7,7 @@ import {
   editConnection,
   queryRecentDatabases,
 } from 'src/actions';
-import {Button, Heading, Input, Modal, Subheading} from 'src/components/base';
+import {Button, Heading, Input, Logo, Modal, Subheading} from 'src/components/base';
 import {ActionCard, DatabaseCard} from 'src/components/cards';
 import {ErrorContainer} from 'src/components/error';
 import {createForm} from 'src/hooks';
@@ -55,7 +55,10 @@ export default function Home(): JSXElement {
 
   return (
     <section class='flex flex-grow-1 flex-col space-y-10 text-gray-200 p-8'>
-      <Heading>Databases</Heading>
+      <div class='flex space-x-4'>
+        <Logo />
+        <Heading>Databases</Heading>
+      </div>
       <div>
         <ActionCard
           title='Open Database'
