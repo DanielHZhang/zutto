@@ -40,7 +40,7 @@ export const DatabaseCard = (props: Props): JSXElement => {
           </MenuButton>
         </Show>
         <MenuList>
-          <MenuItem key='edit'>Edit</MenuItem>
+          <MenuItem key='connect'>Edit</MenuItem>
           <MenuItem key='delete'>Delete</MenuItem>
         </MenuList>
       </Menu>

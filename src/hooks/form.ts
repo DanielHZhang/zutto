@@ -1,10 +1,12 @@
-import {createStore, DeepReadonly} from 'solid-js/store';
+import type {DeepReadonly, SetStoreFunction} from 'solid-js/store';
+import {createStore} from 'solid-js/store';
 
 type FormHook<V extends object> = {
   handleSubmit: (func: (values: DeepReadonly<V>) => any) => (event: SubmitEvent) => void;
   register: (key: keyof V) => {
     onInput: (event: InputEvent & {currentTarget: HTMLInputElement}) => void;
   };
+  setValues: SetStoreFunction<V>;
 };
 
 type FormOptions<V> = {
@@ -16,7 +18,6 @@ export function createForm<V extends Record<any, any>>(options: FormOptions<V>):
 
   return {
     handleSubmit: (onSubmit) => async (event) => {
-      console.log('being called', event);
       event.preventDefault();
       try {
         const result = await onSubmit(formState);
@@ -24,6 +25,7 @@ export function createForm<V extends Record<any, any>>(options: FormOptions<V>):
         console.error(error);
       }
     },
+    setValues: setFormState,
     register: (key) => ({
       onInput: (event) => {
         if (event.currentTarget) {
