@@ -2,48 +2,20 @@ import PlusIcon from 'iconoir/icons/plus.svg';
 import RefreshIcon from 'iconoir/icons/refresh.svg';
 import {Link, useParams} from 'solid-app-router';
 import type {JSXElement} from 'solid-js';
-import {createResource, createSignal, For, Show} from 'solid-js';
+import {createResource, createSignal, For, Show, Suspense} from 'solid-js';
+import {createStore, produce} from 'solid-js/store';
 import {queryAllTables, queryTableData} from 'src/actions';
 import {Button, SplitButton} from 'src/components/base';
 import {Table, Tabs} from 'src/components/explorer';
 import CubeIcon from 'src/components/icons/3d-select-face.svg';
-
-const headers = ['Name', 'Date', 'Description'];
-
-const data = [
-  [
-    {id: 123, content: 'some string'},
-    {id: 123, content: 'some string really really long content'},
-    {id: 123, content: 'some string'},
-  ],
-  [
-    {id: 234, content: 'more string'},
-    {id: 234, content: 'more string'},
-    {id: 234, content: 'more string'},
-  ],
-];
-
-type Modification = {
-	originalValue: any;
-	newValue: any;
-};
-
-type RowModification = {
-	deleted: boolean;
-	changes: Record<number, Modification>;
-};
-
-type ModificationMap = Record<number, RowModification>;
+import type {ModificationPayload} from 'src/types';
 
 export default function Explorer(): JSXElement {
   const params = useParams();
-  console.log('got params:', {...params});
+  const [modifications, setModifications] = createStore<ModificationPayload>({});
+  const [tableName] = createSignal(params.tableName);
+  const [tableData, {mutate, refetch}] = createResource(tableName, queryTableData);
 
-  const [modifications, setModifications] = createSignal([]);
-  const [tableName, setTableName] = createSignal(params.tableName);
-  const [tableData] = createResource(tableName, queryTableData);
-
-  console.log('table data:', tableData());
   return (
     <div class='flex flex-col space-y-2'>
       <div class='flex bg-header'>
@@ -54,31 +26,61 @@ export default function Explorer(): JSXElement {
         </Link>
         <Tabs />
       </div>
-      <section class='flex justify-between mx-2'>
-        <div class='flex space-x-2'>
-          <Button variant='primary' size='sm'>
-            <PlusIcon />
-            <span>Add Record</span>
-          </Button>
-          <SplitButton size='sm' left={<span>Fields</span>} right={<span>0</span>} />
-          <SplitButton size='sm' left={<span>Filters</span>} right={<span>1</span>} />
-          <SplitButton size='sm' left={<span>Showing</span>} right={<span>1</span>} />
-        </div>
-        <div class='flex space-x-2'>
-          <Show when={modifications().length > 0}>
-            <Button variant='ghost' size='sm'>
-              Discard Changes
+      <Show when={tableData()} fallback={<div>Loading...</div>}>
+        <section class='flex justify-between mx-2'>
+          <div class='flex space-x-2'>
+            <Button variant='primary' size='sm'>
+              <PlusIcon />
+              <span>Add Record</span>
             </Button>
-            <Button size='sm'>Save Changes</Button>
-          </Show>
-          <Button size='sm'>
-            <RefreshIcon width='16px' height='16px' />
-          </Button>
-        </div>
-      </section>
-      <main>
-        <Table data={data} headers={headers} />
-      </main>
+            <SplitButton size='sm' left={<span>Fields</span>} right={<span>0</span>} />
+            <SplitButton size='sm' left={<span>Filters</span>} right={<span>1</span>} />
+            <SplitButton size='sm' left={<span>Showing</span>} right={<span>1</span>} />
+          </div>
+          <div class='flex space-x-2'>
+            <Show when={Object.keys(modifications).length > 0}>
+              <Button variant='ghost' size='sm'>
+                Discard Changes
+              </Button>
+              <Button size='sm'>Save Changes</Button>
+            </Show>
+            <Button size='sm'>
+              <RefreshIcon width='16px' height='16px' />
+            </Button>
+          </div>
+        </section>
+        <main>
+          <Table
+            data={tableData()!.data}
+            headers={tableData()!.headers}
+            onCellEdit={(modification) => {
+              const {row, col, value} = modification;
+              mutate((prevState) => {
+                const index = `${row},${col}` as const;
+
+                if (modifications[index]) {
+                  setModifications(index, 'newValue', value);
+                } else {
+                  setModifications(index, {
+                    originalValue: prevState!.data[row][col].content,
+                    newValue: value,
+                  });
+                }
+
+                const table = prevState!.data;
+                table[row][col].content = value;
+                return prevState;
+              });
+            }}
+            onColumnRename={() => {
+              //
+            }}
+            onDelete={() => {
+              //
+            }}
+          />
+        </main>
+      </Show>
     </div>
   );
 }

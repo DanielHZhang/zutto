@@ -5,6 +5,7 @@ import type {
   CreateTablePayload,
   PublicConnectionConfig,
   RenameTablePayload,
+  TableData,
   TableOverview,
 } from 'src/types';
 
@@ -66,11 +67,22 @@ export async function queryAllTables(): Promise<TableOverview[]> {
   return invoke('query_all_tables');
 }
 
-export async function queryTableData(tableName: string): Promise<any> {
+export async function queryTableData(tableName: string): Promise<TableData> {
   if (!IS_TAURI_ENV) {
-    return Array.from({length: 10}, (_, index) => ({
-      name: `Table ${index}`,
-    }));
+    const headers = ['Name', 'Date', 'Description'];
+    const data = [
+      [
+        {id: 123, content: 'some string'},
+        {id: 123, content: 'some string really really long content'},
+        {id: 123, content: 'some string'},
+      ],
+      [
+        {id: 234, content: 'more string'},
+        {id: 234, content: 'more string'},
+        {id: 234, content: 'more string'},
+      ],
+    ];
+    return {headers, data};
   }
   return invoke('query_table_data', {tableName});
 }

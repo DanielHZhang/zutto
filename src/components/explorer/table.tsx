@@ -1,21 +1,19 @@
 import type {JSXElement} from 'solid-js';
-import {createEffect, createSelector, createSignal, For} from 'solid-js';
+import {createEffect, For} from 'solid-js';
 import {createStore, produce} from 'solid-js/store';
 import {CheckboxState} from 'src/components/base';
 import {CheckboxColumn} from 'src/components/explorer/checkbox-column';
 import {DataCell} from 'src/components/explorer/data-cell';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {clickOutside} from 'src/directives';
-
-type Data = {
-  id: number;
-  content: string;
-};
+import type {CellData} from 'src/types';
 
 type Props = {
   headers: string[];
-  data: Data[][];
-  onCellEdit: () => void;
+  data: CellData[][];
+  onCellEdit: (data: {row: number; col: number; value: string}) => void;
+  onColumnRename: () => void;
+  onDelete: () => void;
 };
 
 export const Table = (props: Props): JSXElement => {
@@ -96,7 +94,11 @@ export const Table = (props: Props): JSXElement => {
                       setState('selected', {row: rowIndex(), col: colIndex()});
                     }}
                     onEditInput={(event) => {
-                      props.onCellEdit(rowIndex(), colIndex(), event.currentTarget.value);
+                      props.onCellEdit({
+                        row: rowIndex(),
+                        col: colIndex(),
+                        value: event.currentTarget.value,
+                      });
                     }}
                   />
                 )}
