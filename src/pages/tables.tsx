@@ -2,10 +2,27 @@ import Fuse from 'fuse.js';
 import NavArrowRightIcon from 'iconoir/icons/nav-arrow-right.svg';
 import PlusIcon from 'iconoir/icons/plus.svg';
 import type {JSXElement} from 'solid-js';
-import {createRenderEffect, createResource, ErrorBoundary, Match, Show, Switch} from 'solid-js';
+import {
+  createRenderEffect,
+  createResource,
+  createSignal,
+  ErrorBoundary,
+  Match,
+  Show,
+  Switch,
+} from 'solid-js';
 import {createStore} from 'solid-js/store';
 import {deleteTable, queryAllTables, renameTable} from 'src/actions';
-import {Button, Checkbox, CheckboxState, Grid, Heading, Input, Modal} from 'src/components/base';
+import {
+  Alert,
+  Button,
+  Checkbox,
+  CheckboxState,
+  Grid,
+  Heading,
+  Input,
+  Modal,
+} from 'src/components/base';
 import {TableCard} from 'src/components/cards';
 import {ErrorContainer} from 'src/components/error';
 
@@ -14,6 +31,7 @@ const RENAME_TABLE_MODAL = 'Rename Table';
 const DELETE_TABLE_MODAL = 'Delete Table';
 
 export const Tables = (): JSXElement => {
+  const [tables, {refetch}] = createResource(queryAllTables);
   const [state, setState] = createStore({
     modalOpen: '',
     searchFilter: '',
@@ -21,7 +39,7 @@ export const Tables = (): JSXElement => {
     newTableName: '',
     cascade: false,
   });
-  const [tables, {refetch}] = createResource(queryAllTables);
+  const [error, setError] = createSignal('');
 
   const filterTables = () => {
     const tableNames = tables();
@@ -46,21 +64,31 @@ export const Tables = (): JSXElement => {
 
   const onRename = async () => {
     try {
+      setError('');
       await renameTable({originalName: state.selectedTable, newName: state.newTableName});
       setState({modalOpen: '', selectedTable: '', newTableName: ''});
       refetch();
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        console.error(error);
+      }
     }
   };
 
   const onDelete = async () => {
     try {
+      setError('');
       await deleteTable({tableName: state.selectedTable, cascade: state.cascade});
       setState({modalOpen: '', selectedTable: '', cascade: false});
       refetch();
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -96,6 +124,9 @@ export const Tables = (): JSXElement => {
         <Switch>
           <Match when={state.modalOpen === NEW_TABLE_MODAL}>
             <Heading class='mb-6'>New Table</Heading>
+            <Show when={error()}>
+              <Alert status='error' description={error()} />
+            </Show>
             <div class='flex flex-col space-y-4'>
               <Input placeholder='New Table Name' />
               <div class='flex justify-end space-x-4'>
@@ -110,6 +141,9 @@ export const Tables = (): JSXElement => {
           <Match when={state.modalOpen === RENAME_TABLE_MODAL}>
             <Heading class='mb-6'>Rename Table</Heading>
             <div class='flex flex-col space-y-4'>
+              <Show when={error()}>
+                <Alert status='error' description={error()} />
+              </Show>
               <Input
                 ref={(element) => (renameInput = element)}
                 value={state.selectedTable}
@@ -134,6 +168,9 @@ export const Tables = (): JSXElement => {
           <Match when={state.modalOpen === DELETE_TABLE_MODAL}>
             <Heading class='mb-6'>Delete Table</Heading>
             <div class='flex flex-col space-y-4'>
+              <Show when={error()}>
+                <Alert status='error' description={error()} />
+              </Show>
               <div>
                 <span>Are you sure you want to delete this table?</span>
                 <pre class='p-1 bg-slate-900 rounded-md inline'>{state.selectedTable}</pre>
