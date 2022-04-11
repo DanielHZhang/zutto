@@ -73,7 +73,7 @@ export async function queryRecentDatabases(): Promise<PublicConnectionConfig[]> 
 export async function queryAllTables(): Promise<TableOverview[]> {
   if (!IS_TAURI_ENV) {
     return Array.from({length: 10}, (_, index) => ({
-      name: `Table ${index}`,
+      name: `Table ${index} really long name`,
       numRecords: index,
       numColumns: index,
     }));

@@ -33,6 +33,9 @@ module.exports = defineConfig({
         '.bg-popover': {
           backgroundColor: '#111520ee',
         },
+        '.bg-card': {
+          backgroundColor: '#212a3f',
+        },
         '.bg-hover': {
           backgroundColor: '#1a2950',
         },

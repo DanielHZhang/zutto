@@ -9,7 +9,7 @@ type Props<T> = {
 
 export const Grid = <T,>(props: Props<T>): JSXElement => {
   return (
-    <div class='grid grid-cols-3 gap-4 place-content-stretch'>
+    <div class='grid xs:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-content-stretch'>
       <Show when={props.items.length > 0} fallback={props.fallback}>
         <For each={props.items}>{props.children}</For>
       </Show>

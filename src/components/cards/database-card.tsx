@@ -52,7 +52,7 @@ export const DatabaseCard = (props: Props): JSXElement => {
           </MenuItem>
         </MenuList>
       </Menu>
-      <div class='flex flex-col bg-slate-800 rounded-lg p-8 min-w-60 shadow-sm space-y-4'>
+      <div class='flex flex-col bg-card rounded-lg p-8 min-w-60 shadow-md space-y-4'>
         <DatabaseIcon width='64' height='64' />
         <Subheading class='font-medium'>{props.data.name}</Subheading>
         <div class='flex flex-col space-y-1'>
