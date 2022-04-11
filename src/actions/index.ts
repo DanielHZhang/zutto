@@ -74,7 +74,7 @@ export async function queryAllTables(): Promise<TableOverview[]> {
   if (!IS_TAURI_ENV) {
     return Array.from({length: 10}, (_, index) => ({
       name: `Table ${index} really long name`,
-      numRecords: index,
+      numRecords: index * 100,
       numColumns: index,
     }));
   }

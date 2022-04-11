@@ -66,14 +66,14 @@ export const TableCard = (props: Props): JSXElement => {
           </MenuItem>
         </MenuList>
       </Menu>
-      <div class='text-gray-300 flex flex-col space-y-1'>
-        <div class='flex items-center bg-zinc-700 border-b-2 border-b-yellow-500 rounded-md px-1'>
+      <div class='text-gray-300 flex flex-col py-1 px-2 bg-slate-700 rounded-md'>
+        <div class='flex justify-end items-center '>
+          <span class='mr-1'>{formatNumber(props.data.numRecords)}</span>
           <TableRowsIcon width='16px' height='16px' />
-          <span class='ml-1'>{formatNumber(props.data.numRecords)}</span>
         </div>
-        <div class='flex items-center bg-zinc-700 border-b-2 border-b-yellow-500 rounded-md px-1'>
+        <div class='flex justify-end items-center'>
+          <div class='mr-1'>{formatNumber(props.data.numColumns)}</div>
           <TableColumnsIcon width='16px' height='16px' />
-          <span class='ml-1'>{formatNumber(props.data.numColumns)}</span>
         </div>
       </div>
     </div>
