@@ -1,5 +1,5 @@
 import type {JSX, JSXElement} from 'solid-js';
-import {createEffect, For} from 'solid-js';
+import {For} from 'solid-js';
 import {createStore, produce} from 'solid-js/store';
 import {CheckboxState} from 'src/components/base';
 import {CheckboxColumn} from 'src/components/explorer/checkbox-column';
@@ -30,10 +30,6 @@ export const Table = (props: Props): JSXElement => {
   const resetHover = () => setState('hover', {row: -1, col: -1});
   const resetActiveCell = () => setState('active', {row: -1, col: -1, x: -1, y: -1});
   const resetSelectedCell = () => setState('selected', {row: -1, col: -1});
-
-  createEffect(() => {
-    console.log('running when selected cellc hagnes', state.selected.row);
-  });
 
   const onKeyDown: JSX.EventHandlerUnion<HTMLDivElement, KeyboardEvent> = (event) => {
     setState(
@@ -103,8 +99,8 @@ export const Table = (props: Props): JSXElement => {
           <CheckboxColumn isHeader={true} />
           <For each={props.headers}>
             {(header) => (
-              <div class='flex items-center border-l-2 border-b-2 border-t-2 border-gray-600 h-10 last:border-r-2'>
-                <div class='w-40 overflow-hidden whitespace-nowrap overflow-ellipsis'>
+              <div class='flex items-center border-l-2 border-b-2 border-t-2 border-slate-700 h-10 last:border-r-2'>
+                <div class='w-50 overflow-hidden whitespace-nowrap overflow-ellipsis'>
                   <span class='px-2 font-semibold'>{header}</span>
                 </div>
               </div>
