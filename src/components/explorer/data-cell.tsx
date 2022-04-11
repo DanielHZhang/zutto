@@ -42,8 +42,8 @@ export const DataCell = (props: Props): JSXElement => {
     <div
       classList={{
         [hovered]: props.isHovered && !props.isRowSelected,
+        [modified]: props.isModified && !props.isRowSelected,
         [rowSelected]: props.isRowSelected,
-        [modified]: props.isModified,
       }}
       class={`flex items-center ${height} ${borders}`}
       onMouseOver={() => props.onHover(props.rowIndex, props.colIndex)}
