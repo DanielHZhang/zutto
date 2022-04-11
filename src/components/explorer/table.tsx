@@ -8,7 +8,7 @@ import {DataCell} from 'src/components/explorer/data-cell';
 import {clickOutside} from 'src/directives';
 import type {CellData, ModificationsMap} from 'src/types';
 
-const handledKeys = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']);
+const handledKeys = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Enter']);
 
 type Props = {
   data: CellData[][];
@@ -65,6 +65,14 @@ export const Table = (props: Props): JSXElement => {
             if (state.active.row < props.data.length - 1) {
               state.active.row += 1;
             }
+            break;
+          }
+          case 'Enter': {
+            event.preventDefault(); // Prevent input field from immediately handling "Enter"
+            state.selected = {
+              row: state.active.row,
+              col: state.active.col,
+            };
             break;
           }
         }
@@ -153,8 +161,8 @@ export const Table = (props: Props): JSXElement => {
                         value: event.currentTarget.value,
                       });
                     }}
-                    onEditKeyPress={(event) => {
-                      if (event.key === 'Enter') {
+                    onEditKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === 'Escape') {
                         resetSelectedCell();
                       }
                     }}

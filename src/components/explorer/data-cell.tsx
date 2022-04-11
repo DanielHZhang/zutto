@@ -15,7 +15,7 @@ type Props = {
   onClick: JSX.EventHandler<HTMLDivElement, MouseEvent>;
   onDoubleClick: JSX.EventHandler<HTMLDivElement, MouseEvent>;
   onEditInput: JSX.EventHandler<HTMLInputElement, InputEvent>;
-  onEditKeyPress: JSX.EventHandler<HTMLInputElement, KeyboardEvent>;
+  onEditKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent>;
 };
 
 export const DataCell = (props: Props): JSXElement => {
@@ -65,7 +65,7 @@ export const DataCell = (props: Props): JSXElement => {
             class={`${height} ${width} pr-8 py-0 rounded-none`}
             value={props.data.content}
             onInput={props.onEditInput}
-            onKeyPress={props.onEditKeyPress}
+            onKeyDown={props.onEditKeyDown}
           />
           <div class='absolute right-1 top-2'>
             <Button size='xs'>
