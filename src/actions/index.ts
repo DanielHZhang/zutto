@@ -46,6 +46,13 @@ export async function renameTable(rename: RenameTablePayload): Promise<void> {
   return invoke('rename_table', {rename});
 }
 
+export async function deleteTable(tableName: string): Promise<void> {
+  if (!IS_TAURI_ENV) {
+    return;
+  }
+  return invoke('delete_table', {tableName});
+}
+
 export async function queryRecentDatabases(): Promise<PublicConnectionConfig[]> {
   if (!IS_TAURI_ENV) {
     return [

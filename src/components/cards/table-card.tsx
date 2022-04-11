@@ -60,9 +60,9 @@ export const TableCard = (props: Props): JSXElement => {
             <PageEditIcon />
             <span class='ml-2'>Rename</span>
           </MenuItem>
-          <MenuItem key='drop'>
+          <MenuItem key='delete'>
             <TrashIcon />
-            <span class='ml-2'>Drop</span>
+            <span class='ml-2'>Delete</span>
           </MenuItem>
         </MenuList>
       </Menu>

@@ -4,13 +4,14 @@ import PlusIcon from 'iconoir/icons/plus.svg';
 import type {JSXElement} from 'solid-js';
 import {createRenderEffect, createResource, ErrorBoundary, Match, Show, Switch} from 'solid-js';
 import {createStore} from 'solid-js/store';
-import {queryAllTables, renameTable} from 'src/actions';
+import {deleteTable, queryAllTables, renameTable} from 'src/actions';
 import {Button, Grid, Heading, Input, Modal} from 'src/components/base';
 import {TableCard} from 'src/components/cards';
 import {ErrorContainer} from 'src/components/error';
 
 const NEW_TABLE_MODAL = 'New Table';
 const RENAME_TABLE_MODAL = 'Rename Table';
+const DELETE_TABLE_MODAL = 'Delete Table';
 
 export const Tables = (): JSXElement => {
   const [state, setState] = createStore({
@@ -37,13 +38,25 @@ export const Tables = (): JSXElement => {
   const onTableCardAction = (name: string) => (key: string) => {
     if (key === 'rename') {
       setState({modalOpen: RENAME_TABLE_MODAL, selectedTable: name, newTableName: name});
+    } else if (key === 'delete') {
+      setState({modalOpen: DELETE_TABLE_MODAL, selectedTable: name});
     }
   };
 
-  const submitRenamedTable = async () => {
+  const onRename = async () => {
     try {
       await renameTable({originalName: state.selectedTable, newName: state.newTableName});
       setState({modalOpen: '', selectedTable: '', newTableName: ''});
+      refetch();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onDelete = async () => {
+    try {
+      await deleteTable(state.selectedTable);
+      setState({modalOpen: '', selectedTable: ''});
       refetch();
     } catch (error) {
       console.error(error);
@@ -109,10 +122,28 @@ export const Tables = (): JSXElement => {
                 <Button
                   variant='primary'
                   disabled={state.selectedTable === state.newTableName}
-                  onClick={submitRenamedTable}
+                  onClick={onRename}
                 >
                   <span class='ml-2'>Continue</span>
                   <NavArrowRightIcon />
+                </Button>
+              </div>
+            </div>
+          </Match>
+          <Match when={state.modalOpen === DELETE_TABLE_MODAL}>
+            <Heading class='mb-6'>Delete Table</Heading>
+            <div class='flex flex-col space-y-4'>
+              <div>
+                <span>Are you sure you want to delete this table?</span>
+                <pre class='p-1 bg-slate-900 rounded-md inline'>{state.selectedTable}</pre>
+              </div>
+              <div class='italic'>Warning: this action cannot be undone!</div>
+              <div class='flex justify-end space-x-2'>
+                <Button variant='ghost' onClick={() => setState('modalOpen', '')}>
+                  Cancel
+                </Button>
+                <Button variant='primary' onClick={onDelete} class='bg-red-500 hover:bg-red-400'>
+                  Delete
                 </Button>
               </div>
             </div>
