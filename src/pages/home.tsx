@@ -54,7 +54,7 @@ export default function Home(): JSXElement {
         <div class='grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4'>
           <Show when={recentDatabases()} fallback={<div>Loading...</div>}>
             <For each={recentDatabases()}>
-              {(item, index) => <DatabaseCard data={item} onClick={onCardClick(index())} />}
+              {(item, index) => <DatabaseCard data={item} onConnectClick={onCardClick(index())} />}
             </For>
           </Show>
         </div>
