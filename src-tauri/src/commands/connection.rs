@@ -2,7 +2,7 @@ use tauri::State;
 use tracing::instrument;
 
 use crate::{
-  data::{ConnectData, PublicConnectionConfig},
+  data::{ConnectPayload, PublicConnectionConfig},
   store::Store,
 };
 
@@ -10,7 +10,7 @@ use super::result::{CommandError, CommandResult};
 
 #[tauri::command]
 #[instrument(skip(store), ret, err)]
-pub async fn connect_to_database(store: State<'_, Store>, data: ConnectData) -> CommandResult<()> {
+pub async fn connect_to_database(store: State<'_, Store>, data: ConnectPayload) -> CommandResult<()> {
   match data.id {
     Some(id) => {
       let state = store.state().await;

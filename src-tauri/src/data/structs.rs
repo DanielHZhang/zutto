@@ -26,7 +26,7 @@ impl ConnectionConfig {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct ConnectData {
+pub struct ConnectPayload {
   pub id: Option<String>,
   pub config: Option<ConnectionConfig>,
 }
@@ -42,7 +42,7 @@ pub struct PublicConnectionConfig {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct RenameTableData {
+pub struct RenameTablePayload {
   pub original_name: String,
   pub new_name: String,
 }
@@ -51,6 +51,13 @@ pub struct RenameTableData {
 #[serde(rename_all = "camelCase")]
 pub struct TableOverview {
   pub name: String,
-  pub num_records: u32,
-  pub num_columns: u32,
+  pub num_records: i64,
+  pub num_columns: i64,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct QueryTablePayload {
+  pub table_name: String,
+  pub offset: u32,
 }

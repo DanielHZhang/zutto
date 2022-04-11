@@ -13,7 +13,16 @@ module.exports = defineConfig({
     },
   },
   plugins: [
-    plugin(({addUtilities, addComponents}) => {
+    plugin(({addBase, addComponents}) => {
+      addBase({
+        html: {
+          height: '100%',
+        },
+        body: {
+          height: '100%',
+        },
+      });
+
       addComponents({
         '.bg-app': {
           backgroundColor: '#1a212e',
@@ -34,12 +43,6 @@ module.exports = defineConfig({
           boxShadow: 'inset 0px 2px 3px rgba(0, 0, 0, 0.1)',
         },
       });
-      // const newUtilities = {
-      //   '.fixed-center': {
-      //     //
-      //   },
-      // };
-      // addUtilities(newUtilities);
     }),
   ],
 });

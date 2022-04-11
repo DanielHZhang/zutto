@@ -69,6 +69,7 @@ export async function queryAllTables(): Promise<TableOverview[]> {
 
 export async function queryTableData(tableName: string): Promise<TableData> {
   if (!IS_TAURI_ENV) {
+    throw new Error('lol');
     const headers = ['Name', 'Date', 'Description'];
     const data = [
       [
@@ -84,5 +85,5 @@ export async function queryTableData(tableName: string): Promise<TableData> {
     ];
     return {headers, data};
   }
-  return invoke('query_table_data', {tableName});
+  return invoke('query_table_data', {payload: {tableName, offset: 0}});
 }

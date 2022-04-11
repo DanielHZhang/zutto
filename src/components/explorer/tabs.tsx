@@ -1,6 +1,7 @@
 import PlusIcon from 'iconoir/icons/plus.svg';
 import type {JSXElement} from 'solid-js';
 import {For} from 'solid-js';
+import {Button} from 'src/components/base';
 
 const data = Array.from({length: 10}, (_, index) => ({
   title: `Tab ${index}`,
@@ -12,7 +13,7 @@ type Props = {
 
 const Tab = (props: Props): JSXElement => {
   return (
-    <a class='flex p-3 bg-slate-800 max-w-20 min-w-20 border-r-2'>
+    <a class='flex items-center p-3 bg-slate-800 max-w-20 min-w-20 border-r-2 h-full'>
       <div>{props.title}</div>
     </a>
   );
@@ -20,8 +21,8 @@ const Tab = (props: Props): JSXElement => {
 
 export const Tabs = (): JSXElement => {
   return (
-    <div class='flex'>
-      <ul class='flex'>
+    <div class='flex overflow-x-auto'>
+      <ul class='flex overflow-x-auto overflow-y-hidden'>
         <For each={data}>
           {(item) => (
             <li>
@@ -30,8 +31,10 @@ export const Tabs = (): JSXElement => {
           )}
         </For>
       </ul>
-      <div>
-        <PlusIcon />
+      <div class='flex items-center justify-center mx-2'>
+        <Button>
+          <PlusIcon />
+        </Button>
       </div>
     </div>
   );
