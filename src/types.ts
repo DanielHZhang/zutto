@@ -50,26 +50,10 @@ export type TableData = {
   data: CellData[][];
 };
 
-// type RowModification = {
-//   deleted?: boolean;
-//   changes: Record<
-//     number, // Key is column number
-//     {
-//       originalValue: string;
-//       newValue?: string;
-//     }
-//   >;
-// };
-
 type Modificiation = {
   deleted?: boolean;
   originalValue: string;
   newValue?: string;
 };
-
-// export type ModificationPayload = {
-//   columns: Record<string, Modificiation>;
-//   rows: Record<number, RowModification>; // Key is row number
-// };
 
 export type ModificationsMap = Record<`${number},${number}`, Modificiation>;

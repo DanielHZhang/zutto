@@ -1,41 +1,40 @@
-import PlusIcon from 'iconoir/icons/plus.svg';
-import type {JSXElement} from 'solid-js';
-import {For} from 'solid-js';
+import CancelIcon from 'iconoir/icons/cancel.svg';
+import {useNavigate} from 'solid-app-router';
+import type {JSX, JSXElement} from 'solid-js';
 import {Button} from 'src/components/base';
-
-const data = Array.from({length: 10}, (_, index) => ({
-  title: `Tab ${index}`,
-}));
 
 type Props = {
   title: string;
+  isActive?: boolean;
 };
 
-const Tab = (props: Props): JSXElement => {
-  return (
-    <a class='flex items-center p-3 bg-slate-800 max-w-20 min-w-20 border-r-2 h-full'>
-      <div>{props.title}</div>
-    </a>
-  );
-};
+export const Tab = (props: Props): JSXElement => {
+  const navigate = useNavigate();
 
-export const Tabs = (): JSXElement => {
+  const onCloseClick: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent> = (event) => {
+    event.stopPropagation();
+  };
+
+  /** @tw */
+  const width = 'min-w-20 sm:max-w-30 md:max-w-40 lg:max-w-50';
+  /** @tw */
+  const active = 'bg-app';
+
   return (
-    <div class='flex overflow-x-auto'>
-      <ul class='flex overflow-x-auto overflow-y-hidden'>
-        <For each={data}>
-          {(item) => (
-            <li>
-              <Tab title={item.title} />
-            </li>
-          )}
-        </For>
-      </ul>
-      <div class='flex items-center justify-center mx-2'>
-        <Button>
-          <PlusIcon />
-        </Button>
-      </div>
+    <div
+      onClick={() => navigate(`/explorer/${props.title}`)}
+      class={`flex items-center ${width} p-3 border-gray border-r-1 h-full hover:bg-hover cursor-pointer`}
+      classList={{[active]: props.isActive}}
+    >
+      <span class='overflow-hidden whitespace-nowrap overflow-ellipsis'>{props.title}</span>
+      <Button
+        size='sm'
+        variant='ghost'
+        class='p-0 h-6 hover:bg-slate-100 hover:bg-opacity-10'
+        onClick={onCloseClick}
+      >
+        <CancelIcon />
+      </Button>
     </div>
   );
 };

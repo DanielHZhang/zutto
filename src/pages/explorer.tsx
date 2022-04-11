@@ -1,15 +1,18 @@
 import PlusIcon from 'iconoir/icons/plus.svg';
 import RefreshIcon from 'iconoir/icons/refresh.svg';
-import {Link, useParams} from 'solid-app-router';
+import {useParams} from 'solid-app-router';
 import type {JSXElement} from 'solid-js';
-import {createResource, createSignal, ErrorBoundary, Show} from 'solid-js';
+import {createResource, createSignal, ErrorBoundary, For, Show} from 'solid-js';
 import {createStore} from 'solid-js/store';
 import {queryTableData} from 'src/actions';
 import {Button, Logo, SplitButton} from 'src/components/base';
 import {ErrorContainer} from 'src/components/error';
-import {Table, Tabs} from 'src/components/explorer';
-import CubeIcon from 'src/components/icons/3d-select-face.svg';
+import {Tab, Table} from 'src/components/explorer';
 import type {ModificationsMap} from 'src/types';
+
+const data = Array.from({length: 4}, (_, index) => ({
+  title: `Tab ${index} really really long title`,
+}));
 
 export default function Explorer(): JSXElement {
   const params = useParams();
@@ -19,9 +22,24 @@ export default function Explorer(): JSXElement {
 
   return (
     <div class='flex flex-col space-y-2'>
-      <div class='flex bg-header h-14'>
-        <Logo class='px-4' />
-        <Tabs />
+      <div class='flex bg-header h-14 border-gray border-b-1'>
+        <Logo class='px-4 border-gray border-r-1' />
+        <div class='flex overflow-x-auto'>
+          <ul class='flex overflow-x-auto overflow-y-hidden'>
+            <For each={data}>
+              {(item) => (
+                <li>
+                  <Tab title={item.title} isActive={true} />
+                </li>
+              )}
+            </For>
+          </ul>
+          <div class='flex items-center justify-center mx-2'>
+            <Button>
+              <PlusIcon />
+            </Button>
+          </div>
+        </div>
       </div>
       <ErrorBoundary fallback={ErrorContainer}>
         <Show when={tableData()} fallback={<div>Loading...</div>}>

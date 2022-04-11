@@ -7,6 +7,7 @@ import {
   createResource,
   createSignal,
   ErrorBoundary,
+  For,
   Match,
   Show,
   Switch,
@@ -41,6 +42,10 @@ export const Tables = (): JSXElement => {
     cascade: false,
   });
   const [error, setError] = createSignal('');
+  const [newTable, setNewTable] = createStore({
+    name: '',
+    fields: [],
+  });
 
   const filterTables = () => {
     const tableNames = tables();
@@ -133,10 +138,19 @@ export const Tables = (): JSXElement => {
             </Show>
             <div class='flex flex-col space-y-4'>
               <Input placeholder='New Table Name' />
+              <div>
+                <For each={newTable.fields}>
+                  {(field) => (
+                    <div>
+                      <div>wow</div>
+                    </div>
+                  )}
+                </For>
+              </div>
               <div class='flex justify-end space-x-4'>
                 <Button variant='ghost'>Cancel</Button>
                 <Button variant='primary'>
-                  <span class='ml-2'>Continue</span>
+                  <span class='ml-2'>Create</span>
                   <NavArrowRightIcon />
                 </Button>
               </div>

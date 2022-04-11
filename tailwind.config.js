@@ -42,6 +42,9 @@ module.exports = defineConfig({
         '.bg-label': {
           backgroundColor: '#283140',
         },
+        '.border-gray': {
+          borderColor: '#242c3a',
+        },
         '.shadow-focus': {
           boxShadow: 'rgb(39 104 165) 0px 0px 0px 1px',
         },
