@@ -21,7 +21,7 @@ Functionality
 - [x] Edit existing records
 - [ ] Filter rows/columns
 
-## Developing Locally
+## Development
 
 Zutto requires the latest version of Rust (1.60 at the time of writing) and a recent version of Node.js (16+).
 
@@ -38,16 +38,22 @@ cd src-tauri
 cargo build
 ```
 
-3. Run frontend development server
+3. Run the application locally
+
+```
+yarn tauri dev
+```
+
+OR run the development server only for the frontend
 
 ```
 yarn dev
 ```
 
-4. OR compile the Tauri application
+4. Compile for production
 
 ```
-yarn tauri dev
+yarn tauri build
 ```
 
 ## Tech Stack
