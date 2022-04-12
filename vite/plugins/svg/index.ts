@@ -41,24 +41,25 @@ export default function svgLoader(options: Options = {}): Plugin {
 
       // E.g. node_modules import: iconoir/icons/some-icon.svg
       // E.g. local import: /Users/project/src/components/icons/some-icon.svg
-      const [importPath] = id.split('?', 1);
+      // E.g. local import: /src/components/some-icon.svg
+      let [importPath] = id.split('?', 1);
 
       if (importPath.startsWith(process.cwd())) {
         fullPath = importPath;
       } else {
-        const pathPrefixes = importPath.split('/', 2);
-        let rootFolder = '';
-
-        // E.g. /src/components/some-icon.svg OR src/components/some-icon.svg
-        if (importPath.startsWith('/')) {
-          rootFolder = aliases[pathPrefixes[1]] || 'node_modules';
-        }
-        // E.g. some-node-package/some-icon.svg
-        else {
-          rootFolder = aliases[pathPrefixes[0]] || 'node_modules';
+        if (importPath.startsWith(path.sep)) {
+          importPath = importPath.slice(1);
         }
 
-        fullPath = path.join(process.cwd(), rootFolder, importPath);
+        const [rootFolder, ...rest] = importPath.split(path.sep);
+
+        if (rootFolder in aliases) {
+          importPath = path.join(rootFolder, ...rest);
+        } else {
+          importPath = path.join('node_modules', rootFolder, ...rest);
+        }
+
+        fullPath = path.join(process.cwd(), importPath);
       }
 
       const file = await fs.readFile(fullPath);

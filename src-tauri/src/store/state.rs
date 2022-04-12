@@ -40,6 +40,9 @@ impl State {
     };
 
     let file_path = Self::get_file_path(&environment);
+    let directory_path = file_path.parent().unwrap();
+    std::fs::create_dir_all(&directory_path).expect("Failed to create directories");
+
     let file = OpenOptions::new()
       .read(true)
       .write(true)
