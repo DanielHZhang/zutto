@@ -6,12 +6,12 @@ import {CheckboxColumn} from 'src/components/explorer/checkbox-column';
 import {DataCell} from 'src/components/explorer/data-cell';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {clickOutside} from 'src/directives';
-import type {CellData, ModificationsMap} from 'src/types';
+import type {ModificationsMap} from 'src/types';
 
 const handledKeys = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Enter']);
 
 type Props = {
-  data: CellData[][];
+  data: string[][];
   headers: string[];
   modifications: ModificationsMap;
   onCellEdit: (data: {row: number; col: number; value: string}) => void;
@@ -126,7 +126,7 @@ export const Table = (props: Props): JSXElement => {
               <For each={row}>
                 {(data, colIndex) => (
                   <DataCell
-                    data={data}
+                    content={data}
                     rowIndex={rowIndex()}
                     colIndex={colIndex()}
                     isSelected={

@@ -2,10 +2,18 @@ import PlusIcon from 'iconoir/icons/plus.svg';
 import RefreshIcon from 'iconoir/icons/refresh.svg';
 import {useNavigate, useParams} from 'solid-app-router';
 import type {JSXElement} from 'solid-js';
-import {createEffect, createResource, createSignal, ErrorBoundary, For, Show} from 'solid-js';
+import {
+  createEffect,
+  createResource,
+  createSignal,
+  ErrorBoundary,
+  For,
+  onMount,
+  Show,
+} from 'solid-js';
 import {createStore} from 'solid-js/store';
-import {closeTab, fetchTabs, queryTableData} from 'src/actions';
-import {Button, Logo, SplitButton} from 'src/components/base';
+import {closeTab, fetchTabs, openTab, queryTableData} from 'src/actions';
+import {Button, Heading, Logo, Modal, SplitButton} from 'src/components/base';
 import {ErrorContainer} from 'src/components/error';
 import {Tab, Table} from 'src/components/explorer';
 import {getConnectionId} from 'src/stores';
@@ -18,8 +26,14 @@ export default function Explorer(): JSXElement {
   const [tableName] = createSignal(params.tableName);
   const [tableData, {mutate, refetch}] = createResource(tableName, queryTableData);
   const [tabs, {refetch: refetchTabs}] = createResource(fetchTabs);
+  const [isModalOpen, setModalOpen] = createSignal(false);
 
   const isTabActive = (name: string) => name.split(' ').join('') === params.tableName;
+
+  onMount(async () => {
+    await openTab(getConnectionId(), params.tableName);
+    refetchTabs();
+  });
 
   return (
     <div class='flex flex-col space-y-2'>
@@ -53,11 +67,24 @@ export default function Explorer(): JSXElement {
                 )}
               </For>
             </ul>
-            <div class='flex items-center justify-center mx-2'>
-              <Button variant='ghost' class='hover:bg-slate-100 hover:bg-opacity-10'>
+            {/* <div class='flex items-center justify-center mx-2'>
+              <Button
+                variant='ghost'
+                class='hover:bg-slate-100 hover:bg-opacity-10'
+                onClick={() => setModalOpen(true)}
+              >
                 <PlusIcon />
               </Button>
             </div>
+            <Modal isOpen={isModalOpen()} onClose={() => setModalOpen(false)}>
+              <Heading>Open another table</Heading>
+              <div class='flex flex-col space-y-2'>
+								<For each={}>
+
+								</For>
+                <Button>Test</Button>
+              </div>
+            </Modal> */}
           </div>
         </Show>
       </div>
@@ -80,7 +107,7 @@ export default function Explorer(): JSXElement {
                 </Button>
                 <Button size='sm'>Save Changes</Button>
               </Show>
-              <Button size='sm' onClick={() => refetch()}>
+              <Button variant='primary' size='sm' onClick={() => refetch()}>
                 <RefreshIcon width='16px' height='16px' />
               </Button>
             </div>
@@ -99,13 +126,13 @@ export default function Explorer(): JSXElement {
                     setModifications(index, 'newValue', value);
                   } else {
                     setModifications(index, {
-                      originalValue: prevState!.data[row][col].content,
+                      originalValue: prevState!.data[row][col],
                       newValue: value,
                     });
                   }
 
                   const table = prevState!.data;
-                  table[row][col].content = value;
+                  table[row][col] = value;
                   return prevState;
                 });
               }}

@@ -100,17 +100,22 @@ export async function queryTableData(tableName: string): Promise<TableData> {
   if (!IS_TAURI_ENV) {
     const headers = ['Name', 'Date', 'Description'];
     const data = [
-      [
-        {id: 123, content: 'some string'},
-        {id: 123, content: 'some string really really long content'},
-        {id: 123, content: 'some string'},
-      ],
-      [
-        {id: 234, content: 'more string'},
-        {id: 234, content: 'more string'},
-        {id: 234, content: 'more string'},
-      ],
+      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet'],
+      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet'],
+      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet'],
     ];
+    // const data = [
+    //   [
+    //     {id: 123, content: 'some string'},
+    //     {id: 123, content: 'some string really really long content'},
+    //     {id: 123, content: 'some string'},
+    //   ],
+    //   [
+    //     {id: 234, content: 'more string'},
+    //     {id: 234, content: 'more string'},
+    //     {id: 234, content: 'more string'},
+    //   ],
+    // ];
     return {headers, data};
   }
   const data = await invoke('query_table_data', {payload: {tableName, offset: 0}});

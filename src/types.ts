@@ -40,14 +40,14 @@ export type TableOverview = {
   numColumns: number;
 };
 
-export type CellData = {
-  id: number;
-  content: string;
-};
+// export type CellData = {
+//   id: number;
+//   content: string;
+// };
 
 export type TableData = {
   headers: string[];
-  data: CellData[][];
+  data: string[][];
 };
 
 type Modificiation = {

@@ -21,8 +21,11 @@ module.exports = defineConfig({
         body: {
           minHeight: '100%',
         },
+        a: {
+          color: 'inherit',
+          textDecoration: 'none',
+        },
       });
-
       addComponents({
         '.bg-app': {
           backgroundColor: '#1a212e',

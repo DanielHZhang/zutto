@@ -131,7 +131,7 @@ export const Tables = (): JSXElement => {
       </ErrorBoundary>
       <Modal isOpen={!!state.modalOpen} trapFocus={false} onClose={() => setState('modalOpen', '')}>
         <Switch>
-          <Match when={state.modalOpen === NEW_TABLE_MODAL}>
+          {/* <Match when={state.modalOpen === NEW_TABLE_MODAL}>
             <Heading class='mb-6'>New Table</Heading>
             <Show when={error()}>
               <Alert status='error' description={error()} />
@@ -155,7 +155,7 @@ export const Tables = (): JSXElement => {
                 </Button>
               </div>
             </div>
-          </Match>
+          </Match> */}
           <Match when={state.modalOpen === RENAME_TABLE_MODAL}>
             <Heading class='mb-6'>Rename Table</Heading>
             <div class='flex flex-col space-y-4'>

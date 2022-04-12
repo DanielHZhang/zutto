@@ -1,7 +1,7 @@
 import RightArrowIcon from 'iconoir/icons/arrow-right.svg';
 import DatabaseIcon from 'iconoir/icons/db.svg';
 import type {JSX, JSXElement} from 'solid-js';
-import {createSignal, Show} from 'solid-js';
+import {createEffect, createSignal, Show} from 'solid-js';
 import {Button, Menu, MenuButton, MenuItem, MenuList, Subheading} from 'src/components/base';
 import DatabaseRoundedIcon from 'src/components/icons/database-rounded.svg';
 import EditIcon from 'src/components/icons/edit.svg';
@@ -20,6 +20,10 @@ type Props = {
 export const DatabaseCard = (props: Props): JSXElement => {
   const [isEditVisible, setEditVisible] = createSignal(false);
   const [isMenuVisible, setMenuVisible] = createSignal(false);
+
+  createEffect(() => {
+    console.log(props);
+  });
 
   return (
     <div

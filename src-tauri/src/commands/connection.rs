@@ -77,6 +77,7 @@ pub async fn query_recent_databases(store: State<'_, Store>) -> CommandResult<Ve
     .iter()
     .map(|(id, config)| PublicConnectionConfig {
       id: id.into(),
+      name: config.name.clone(),
       host: config.host.clone(),
       port: config.port,
       username: config.username.clone(),

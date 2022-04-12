@@ -4,7 +4,7 @@ import {Button, Input} from 'src/components/base';
 import OpenNewWindowIcon from 'src/components/icons/open-new-window.svg';
 
 type Props = {
-  data: {id: number; content: string};
+  content: string;
   rowIndex: number;
   colIndex: number;
   isHovered: boolean;
@@ -58,12 +58,12 @@ export const DataCell = (props: Props): JSXElement => {
       >
         <Show
           when={props.isSelected}
-          fallback={<span class='text-gray-300 px-2'>{props.data.content}</span>}
+          fallback={<span class='text-gray-300 px-2'>{props.content}</span>}
         >
           <Input
             ref={(element) => (editInput = element)}
             class={`${height} ${width} pr-8 py-0 rounded-none`}
-            value={props.data.content}
+            value={props.content}
             onInput={props.onEditInput}
             onKeyDown={props.onEditKeyDown}
           />

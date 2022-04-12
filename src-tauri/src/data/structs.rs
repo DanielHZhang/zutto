@@ -34,8 +34,10 @@ pub struct ConnectPayload {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct PublicConnectionConfig {
   pub id: String,
+  pub name: String,
   pub host: String,
   pub port: u32,
   pub username: String,
