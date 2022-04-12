@@ -21,10 +21,6 @@ export const DatabaseCard = (props: Props): JSXElement => {
   const [isEditVisible, setEditVisible] = createSignal(false);
   const [isMenuVisible, setMenuVisible] = createSignal(false);
 
-  createEffect(() => {
-    console.log(props);
-  });
-
   return (
     <div
       class='relative'

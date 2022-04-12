@@ -1,41 +1,61 @@
-## Usage
+# Zutto
 
-Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
+Zutto is a database editor that provides a modern interface for viewing your data and performing database tasks.
 
-This is the reason you see a `pnpm-lock.yaml`. That being said, any package manager will work. This file can be safely be removed once you clone a template.
+## NOTE: development will continue on the `dev` branch until the SolidHack voting period is over
 
-```bash
-$ npm install # or pnpm install or yarn install
+## Features
+
+Database support
+
+- [x] PostgreSQL
+- [ ] MySQL (WIP)
+- [ ] SQLite (WIP)
+
+Functionality
+
+- [x] View queried data per table
+- [x] Insert new records
+- [x] Edit existing records
+- [ ] Filter rows/columns
+
+## Developing Locally
+
+Zutto requires the latest version of Rust (1.60 at the time of writing) and a recent version of Node.js (16+).
+
+1. Install Node.js dependencies
+
+```
+yarn install
 ```
 
-## Exploring the template
+2. Install and compile Rust dependencies
 
-This template's goal is to showcase the routing features of Solid.
-It also showcase how the router and Suspense work together to parallelize data fetching tied to a route via the `.data.ts` pattern.
+```
+cd src-tauri
+cargo build
+```
 
-You can learn more about it on the [`solid-app-router` repository](https://github.com/solidjs/solid-app-router)
+3. Run frontend development server
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+```
+yarn dev
+```
 
-## Available Scripts
+4. OR compile the Tauri application
 
-In the project directory, you can run:
+```
+yarn tauri dev
+```
 
-### `npm dev` or `npm start`
+## Tech Stack
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Solid.js: frontend UI framework
+- Windicss: CSS styling
+- Iconoir: icons
+- Tauri: backend webview runtime
+- SQLx: SQL query executer
 
-The page will reload if you make edits.<br>
+## License
 
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-## Deployment
-
-You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
+MIT or Apache 2.0 (see [LICENSE file](https://github.com/DanielHZhang/zutto/blob/main/LICENSE))

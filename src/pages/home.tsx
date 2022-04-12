@@ -9,6 +9,7 @@ import {
   onMount,
   Show,
   Switch,
+  useContext,
 } from 'solid-js';
 import {
   beginConnection,
@@ -21,7 +22,7 @@ import {Button, Heading, Input, Logo, Modal, Subheading} from 'src/components/ba
 import {ActionCard, DatabaseCard} from 'src/components/cards';
 import {ErrorContainer} from 'src/components/error';
 import {createForm} from 'src/hooks';
-import {setConnectionId} from 'src/stores';
+import {RootContext} from 'src/stores';
 import type {ConnectionConfig} from 'src/types';
 
 export default function Home(): JSXElement {
@@ -41,6 +42,7 @@ export default function Home(): JSXElement {
       databaseName: '',
     },
   });
+  const [root, setRoot] = useContext(RootContext);
 
   const resetModal = () => setModalOpen({name: '', id: ''});
 
@@ -50,7 +52,7 @@ export default function Home(): JSXElement {
       resetModal();
     } else {
       const id = await beginConnection({config: values});
-      setConnectionId(id);
+      setRoot('id', id);
       navigate('/tables');
     }
   });
@@ -67,7 +69,7 @@ export default function Home(): JSXElement {
 
   onMount(async () => {
     await closeConnection(); // Close the previous connection when navigating home
-    setConnectionId('');
+    setRoot('id', '');
   });
 
   return (
@@ -95,6 +97,7 @@ export default function Home(): JSXElement {
                     onConnectClick={async () => {
                       try {
                         await beginConnection({id: config.id});
+                        setRoot('id', config.id);
                         navigate('/tables');
                       } catch (error) {
                         console.error(error);

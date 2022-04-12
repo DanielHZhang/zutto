@@ -55,6 +55,6 @@ impl From<ComponentRange> for CommandError {
 
 impl fmt::Display for CommandError {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    write!(f, "Executing Tauri command failed")
+    write!(f, "{}", self.message)
   }
 }

@@ -23,10 +23,7 @@ export const Tab = (props: Props): JSXElement => {
 
   return (
     <div
-      onClick={() => {
-        console.log('clicked');
-        navigate(`/explorer/${props.title}`);
-      }}
+      onClick={() => navigate(`/explorer/${props.title}`)}
       class={`flex items-center ${width} p-3 border-gray border-r-1 h-full hover:bg-hover cursor-pointer`}
       classList={{[active]: props.isActive}}
       onMouseOver={() => setHovered(true)}

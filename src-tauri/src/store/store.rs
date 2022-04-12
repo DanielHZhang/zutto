@@ -41,11 +41,12 @@ impl Store {
   }
 
   pub async fn close_pool<'a>(&'a self) {
-    let guard = self.active_pool().await;
+    let mut guard = self.active_pool().await;
 
     if guard.is_some() {
       let pool = guard.as_ref().unwrap();
       pool.close().await;
+      *guard = None;
       self.state.lock().await.active_connection_id = None;
     }
   }

@@ -5,14 +5,18 @@ import {splitProps} from 'solid-js';
 import CubeIcon from 'src/components/icons/3d-select-face.svg';
 import {mergeCss} from 'src/utils';
 
-export const Logo = (props: Omit<LinkProps, 'href'>): JSXElement => {
-  const [ownProps, htmlProps] = splitProps(props, ['class']);
+type Props = Omit<LinkProps, 'href'> & {
+  href?: string;
+};
+
+export const Logo = (props: Props): JSXElement => {
+  const [ownProps, htmlProps] = splitProps(props, ['class', 'href']);
 
   /** @tw */
   const css = 'flex items-center';
 
   return (
-    <Link {...htmlProps} href='/' class={mergeCss(css, ownProps.class)}>
+    <Link href={ownProps.href || '/'} class={mergeCss(css, ownProps.class)} {...htmlProps}>
       <CubeIcon />
     </Link>
   );

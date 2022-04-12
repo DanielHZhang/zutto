@@ -40,6 +40,11 @@ export type TableOverview = {
   numColumns: number;
 };
 
+export type QueryDataPayload = {
+  tableName: string;
+  offset: number;
+};
+
 // export type CellData = {
 //   id: number;
 //   content: string;

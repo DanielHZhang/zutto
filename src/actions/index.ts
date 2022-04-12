@@ -5,6 +5,7 @@ import type {
   CreateTablePayload,
   DeleteTablePayload,
   PublicConnectionConfig,
+  QueryDataPayload,
   RenameTablePayload,
   TableData,
   TableOverview,
@@ -16,7 +17,7 @@ export async function beginConnection(
   if (!IS_TAURI_ENV) {
     return 'uuid';
   }
-  return invoke('connect_to_database', {data});
+  return invoke('begin_connection', {data});
 }
 
 export async function closeConnection(): Promise<void> {
@@ -96,7 +97,7 @@ export async function queryAllTables(): Promise<TableOverview[]> {
   return invoke('query_all_tables');
 }
 
-export async function queryTableData(tableName: string): Promise<TableData> {
+export async function queryTableData(payload: QueryDataPayload): Promise<TableData> {
   if (!IS_TAURI_ENV) {
     const headers = ['Name', 'Date', 'Description'];
     const data = [
@@ -118,9 +119,7 @@ export async function queryTableData(tableName: string): Promise<TableData> {
     // ];
     return {headers, data};
   }
-  const data = await invoke('query_table_data', {payload: {tableName, offset: 0}});
-  console.log('got data:', data);
-  return data;
+  return invoke('query_table_data', {payload});
 }
 
 export async function openTab(id: string, tableName: string): Promise<void> {
