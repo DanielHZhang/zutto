@@ -6,7 +6,7 @@ Zutto is a database editor that provides a modern interface for viewing your dat
 
 ## NOTE: development will continue on the `dev` branch until the SolidHack voting period is over
 
-## Features
+## Roadmap
 
 Database support
 
