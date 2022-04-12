@@ -37,6 +37,10 @@ export default function Explorer(): JSXElement {
   //   refetchTabs();
   // });
 
+  createEffect(() => {
+    console.log(tableData());
+  });
+
   return (
     <div class='flex flex-col space-y-2'>
       <div class='flex bg-header h-14 border-gray border-b-1'>

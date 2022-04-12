@@ -1,9 +1,10 @@
 use futures::TryStreamExt;
 use sqlx::{
-  types::time::{Date, OffsetDateTime},
+  types::time::{Date, OffsetDateTime, PrimitiveDateTime},
   Row,
 };
 use tauri::State;
+use time::{format_description::FormatItem, macros::format_description};
 use tracing::instrument;
 
 use crate::{
@@ -12,6 +13,8 @@ use crate::{
 };
 
 use super::{CommandError, CommandResult};
+
+const FORMAT: &[FormatItem] = format_description!("[year]-[month]-[day] [hour]:[minute]:[second]");
 
 #[tauri::command]
 #[instrument(skip(store), ret, err)]
@@ -107,6 +110,11 @@ pub async fn query_table_data(store: State<'_, Store>, payload: QueryTablePayloa
               row_data.push(CellData::DateTimeZone(time::OffsetDateTime::from_unix_timestamp(
                 date_time.unix_timestamp(),
               )?));
+            }
+            "timestamp without time zone" => {
+              let timestamp: PrimitiveDateTime = row.try_get(column_name)?;
+              let formatted = timestamp.format("%F %H:%M:%S");
+              row_data.push(CellData::DateTime(time::PrimitiveDateTime::parse(&formatted, FORMAT)?));
             }
             // "array" => {
             //   //

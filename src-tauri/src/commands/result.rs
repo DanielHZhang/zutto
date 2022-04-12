@@ -53,6 +53,14 @@ impl From<ComponentRange> for CommandError {
   }
 }
 
+impl From<time::error::Parse> for CommandError {
+  fn from(err: time::error::Parse) -> Self {
+    Self {
+      message: err.to_string(),
+    }
+  }
+}
+
 impl fmt::Display for CommandError {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     write!(f, "{}", self.message)

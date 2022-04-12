@@ -1,7 +1,6 @@
 fn main() {
-  // println!("cargo:rustc-env=RUST_BACKTRACE=1");
-  // println!("cargo:rustc-env=RUST_LOG=debug");
-  // println!("cargo:rustc-env=ENV=development");
-  println!("cargo:rustc-env=ENV=production");
+  println!("cargo:rustc-env=RUST_LOG=debug");
+  println!("cargo:rustc-env=ENV=development");
+  // println!("cargo:rustc-env=ENV=production");
   tauri_build::build()
 }
