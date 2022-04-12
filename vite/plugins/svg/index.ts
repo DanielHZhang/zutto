@@ -37,13 +37,30 @@ export default function svgLoader(options: Options = {}): Plugin {
       if (!svgRegex.exec(id)) {
         return;
       }
+      let fullPath: string;
+
+      // E.g. node_modules import: iconoir/icons/some-icon.svg
+      // E.g. local import: /Users/project/src/components/icons/some-icon.svg
       const [importPath] = id.split('?', 1);
-      const [pathPrefix] = importPath.slice(1).split('/', 1);
-      const fullPath = path.join(
-        process.cwd(),
-        aliases[pathPrefix] ? '' : 'node_modules',
-        importPath
-      );
+
+      if (importPath.startsWith(process.cwd())) {
+        fullPath = importPath;
+      } else {
+        const pathPrefixes = importPath.split('/', 2);
+        let rootFolder = '';
+
+        // E.g. /src/components/some-icon.svg OR src/components/some-icon.svg
+        if (importPath.startsWith('/')) {
+          rootFolder = aliases[pathPrefixes[1]] || 'node_modules';
+        }
+        // E.g. some-node-package/some-icon.svg
+        else {
+          rootFolder = aliases[pathPrefixes[0]] || 'node_modules';
+        }
+
+        fullPath = path.join(process.cwd(), rootFolder, importPath);
+      }
+
       const file = await fs.readFile(fullPath);
       return file.toString('utf-8');
     },
