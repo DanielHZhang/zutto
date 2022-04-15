@@ -165,14 +165,7 @@ pub async fn delete_table(store: State<'_, Store>, payload: DeleteTablePayload) 
 
       // Make sure tab is also deleted
       let mut state = store.state().await;
-      if let Some(id) = state.active_connection_id.clone() {
-        if let Some(tabs) = state.tabs.get_mut(&id) {
-          let found_index = tabs.iter().position(|tab| tab == &table_name);
-          if let Some(index) = found_index {
-            tabs.remove(index);
-          }
-        }
-      }
+      state.delete_tab(&table_name);
 
       Ok(())
     }
@@ -194,16 +187,7 @@ pub async fn rename_table(store: State<'_, Store>, rename: RenameTablePayload) -
 
       // Make sure tab is also renamed
       let mut state = store.state().await;
-      if let Some(id) = state.active_connection_id.clone() {
-        if let Some(tabs) = state.tabs.get_mut(&id) {
-          for tab_name in tabs.iter_mut() {
-            if tab_name == &original_name {
-              *tab_name = new_name;
-              break;
-            }
-          }
-        }
-      }
+      state.rename_tab(&original_name, new_name);
 
       Ok(())
     }

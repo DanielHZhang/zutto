@@ -85,4 +85,28 @@ impl State {
     let writer = BufWriter::new(file);
     serde_json::to_writer_pretty::<_, Self>(writer, &self).ok();
   }
+
+  pub fn rename_tab(&mut self, original: &str, new: String) {
+    if let Some(id) = self.active_connection_id.as_ref() {
+      if let Some(tabs) = self.tabs.get_mut(id) {
+        for tab_name in tabs.iter_mut() {
+          if tab_name == &original {
+            *tab_name = new.to_owned();
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  pub fn delete_tab(&mut self, name: &str) {
+    if let Some(id) = self.active_connection_id.as_ref() {
+      if let Some(tabs) = self.tabs.get_mut(id) {
+        let found_index = tabs.iter().position(|tab| tab == name);
+        if let Some(index) = found_index {
+          tabs.remove(index);
+        }
+      }
+    }
+  }
 }
