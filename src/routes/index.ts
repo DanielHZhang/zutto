@@ -1,6 +1,8 @@
 import type {RouteDefinition} from 'solid-app-router';
 import {lazy} from 'solid-js';
 
+export * from './link';
+
 export const routes: RouteDefinition[] = [
   {
     path: '/',
@@ -12,10 +14,6 @@ export const routes: RouteDefinition[] = [
   },
   {
     path: '/explorer/:tableName',
-    component: lazy(async () => import('src/pages/explorer')),
-  },
-  {
-    path: '/explorer',
     component: lazy(async () => import('src/pages/explorer')),
   },
   {

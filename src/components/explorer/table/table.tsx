@@ -86,7 +86,7 @@ export const Table = (props: Props): JSXElement => {
 
   return (
     <div
-      class='overflow-x-auto relative pb-2 outline-none'
+      class='overflow-x-auto relative py-2 outline-none'
       tabIndex={0}
       onKeyDown={onKeyDown}
       use:clickOutside={() => {

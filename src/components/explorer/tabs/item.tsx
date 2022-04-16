@@ -3,6 +3,7 @@ import {useNavigate} from 'solid-app-router';
 import type {JSXElement} from 'solid-js';
 import {createSignal, mergeProps} from 'solid-js';
 import {Button} from 'src/components/base';
+import {toExplorer} from 'src/routes';
 
 type Props = {
   title: string;
@@ -17,14 +18,16 @@ export const Tab = (props: Props): JSXElement => {
   const [isHovered, setHovered] = createSignal(false);
 
   /** @tw */
+  const active = 'bg-app';
+  /** @tw */
   const width = 'min-w-20 sm:max-w-30 md:max-w-40 lg:max-w-50';
   /** @tw */
-  const active = 'bg-app';
+  const color = 'hover:bg-hover transition-colors duration-100';
 
   return (
     <div
-      onClick={() => navigate(`/explorer/${props.title}`)}
-      class={`flex items-center ${width} p-3 border-gray border-r-1 h-full hover:bg-hover cursor-pointer`}
+      onClick={() => navigate(toExplorer(props.title))}
+      class={`flex items-center h-full p-3 border-gray border-r-1 cursor-pointer select-none ${width} ${color}`}
       classList={{[active]: props.isActive}}
       onMouseOver={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

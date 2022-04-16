@@ -1,23 +1,7 @@
 import {useNavigate} from 'solid-app-router';
 import type {JSXElement} from 'solid-js';
-import {
-  createResource,
-  createSignal,
-  ErrorBoundary,
-  For,
-  Match,
-  onMount,
-  Show,
-  Switch,
-  useContext,
-} from 'solid-js';
-import {
-  beginConnection,
-  closeConnection,
-  deleteConnection,
-  editConnection,
-  queryRecentDatabases,
-} from 'src/actions';
+import {createResource, createSignal, ErrorBoundary, For, Match, onMount, Show, Switch, useContext} from 'solid-js';
+import {beginConnection, closeConnection, deleteConnection, editConnection, queryRecentDatabases} from 'src/actions';
 import {Button, Heading, Input, Logo, Modal, Subheading} from 'src/components/base';
 import {ActionCard, DatabaseCard} from 'src/components/cards';
 import {ErrorContainer} from 'src/components/error';
@@ -27,11 +11,8 @@ import type {ConnectionConfig} from 'src/types';
 
 export default function Home(): JSXElement {
   const navigate = useNavigate();
-  const [, setGlobal] = useContext(GlobalContext);
-  const [modalOpen, setModalOpen] = createSignal({
-    name: '',
-    id: '',
-  });
+  const [global, setGlobal] = useContext(GlobalContext);
+  const [modalOpen, setModalOpen] = createSignal({name: '', id: ''});
   const [recentDatabases, {refetch}] = createResource(queryRecentDatabases);
   const form = createForm<ConnectionConfig>({
     initialValues: {
@@ -76,8 +57,10 @@ export default function Home(): JSXElement {
   };
 
   onMount(async () => {
-    await closeConnection(); // Close the previous connection when navigating home
-    setGlobal('connection', 'id', '');
+    if (global.connection.id) {
+      await closeConnection(); // Close the previous connection when navigating home
+      setGlobal('connection', 'id', '');
+    }
   });
 
   return (

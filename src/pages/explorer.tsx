@@ -1,10 +1,17 @@
+import {useParams} from 'solid-app-router';
 import type {JSXElement} from 'solid-js';
-import {ErrorBoundary, Suspense} from 'solid-js';
+import {createEffect, ErrorBoundary, Suspense} from 'solid-js';
 import {Logo} from 'src/components/base';
 import {ErrorContainer} from 'src/components/error';
 import {TableDataWrapper, Tabs} from 'src/components/explorer';
 
 export default function Explorer(): JSXElement {
+  const params = useParams();
+
+  createEffect(() => {
+    console.log('what are params:', params.tableName);
+    console.log(decodeURIComponent(params.tableName));
+  });
   // onMount(async () => {
   //   await openTab(root.id, params.tableName);
   //   refetchTabs();

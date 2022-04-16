@@ -5,6 +5,7 @@ import {createResource, createSignal, For, useContext} from 'solid-js';
 import {closeTab, fetchTabs} from 'src/actions';
 import {Button, Heading, Modal} from 'src/components/base';
 import {Tab} from 'src/components/explorer/tabs/item';
+import {toExplorer} from 'src/routes';
 import {GlobalContext} from 'src/stores';
 
 export const Tabs = (): JSXElement => {
@@ -13,7 +14,7 @@ export const Tabs = (): JSXElement => {
   const [global] = useContext(GlobalContext);
   const [tabs, {refetch: refetchTabs}] = createResource(() => global.connection.id, fetchTabs);
   const [isModalOpen, setModalOpen] = createSignal(false);
-  const isTabActive = (name: string) => name.split(' ').join('') === params.tableName;
+  const isTabActive = (name: string) => name === decodeURIComponent(params.tableName);
 
   return (
     <div class='flex overflow-x-auto'>
@@ -33,7 +34,7 @@ export const Tabs = (): JSXElement => {
                     if (index() < tabs()!.length - 1) {
                       newFocusIndex = index() + 1;
                     }
-                    navigate(`/explorer/${tabs()![newFocusIndex]}`);
+                    navigate(toExplorer(tabs()![newFocusIndex]));
                   }
 
                   refetchTabs();

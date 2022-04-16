@@ -8,6 +8,7 @@ import {createSignal, Show} from 'solid-js';
 import {Menu, MenuButton, MenuItem, MenuList} from 'src/components/base';
 import PageEditIcon from 'src/components/icons/page-edit.svg';
 import TrashIcon from 'src/components/icons/trash.svg';
+import {toExplorer} from 'src/routes';
 import type {TableOverview} from 'src/types';
 
 type Props = {
@@ -35,7 +36,7 @@ export const TableCard = (props: Props): JSXElement => {
       onMouseOver={() => setEditVisible(true)}
       onMouseLeave={() => !isMenuVisible() && setEditVisible(false)}
     >
-      <Link href={`/explorer/${props.data.name}`}>
+      <Link href={toExplorer(props.data.name)}>
         <div class='flex items-center'>
           <TableIcon />
           <div class='mx-4'>
