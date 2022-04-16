@@ -22,11 +22,12 @@ import {Button, Heading, Input, Logo, Modal, Subheading} from 'src/components/ba
 import {ActionCard, DatabaseCard} from 'src/components/cards';
 import {ErrorContainer} from 'src/components/error';
 import {createForm} from 'src/hooks';
-import {RootContext} from 'src/stores';
+import {GlobalContext} from 'src/stores';
 import type {ConnectionConfig} from 'src/types';
 
 export default function Home(): JSXElement {
   const navigate = useNavigate();
+  const [, setGlobal] = useContext(GlobalContext);
   const [modalOpen, setModalOpen] = createSignal({
     name: '',
     id: '',
@@ -42,18 +43,25 @@ export default function Home(): JSXElement {
       databaseName: '',
     },
   });
-  const [root, setRoot] = useContext(RootContext);
 
   const resetModal = () => setModalOpen({name: '', id: ''});
+
+  const handleConnect = async (...args: Parameters<typeof beginConnection>) => {
+    try {
+      const id = await beginConnection(...args);
+      setGlobal('connection', 'id', id);
+      navigate('/tables');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const onSubmit = form.handleSubmit(async (values) => {
     if (modalOpen().id) {
       await editConnection(values);
       resetModal();
     } else {
-      const id = await beginConnection({config: values});
-      setRoot('id', id);
-      navigate('/tables');
+      await handleConnect({config: values});
     }
   });
 
@@ -69,7 +77,7 @@ export default function Home(): JSXElement {
 
   onMount(async () => {
     await closeConnection(); // Close the previous connection when navigating home
-    setRoot('id', '');
+    setGlobal('connection', 'id', '');
   });
 
   return (
@@ -94,15 +102,7 @@ export default function Home(): JSXElement {
                 {(config) => (
                   <DatabaseCard
                     data={config}
-                    onConnectClick={async () => {
-                      try {
-                        await beginConnection({id: config.id});
-                        setRoot('id', config.id);
-                        navigate('/tables');
-                      } catch (error) {
-                        console.error(error);
-                      }
-                    }}
+                    onConnectClick={async () => handleConnect({id: config.id})}
                     onMenuAction={(key) => {
                       const {id, ...rest} = config;
                       setModalOpen({name: key, id});

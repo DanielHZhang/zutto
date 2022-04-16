@@ -1,0 +1,29 @@
+{
+	"extends": "@supersede",
+	"rules": {
+		"@typescript-eslint/consistent-type-assertions": [
+			"off"
+		],
+		"@typescript-eslint/no-dynamic-delete": [
+			"off"
+		],
+		"@typescript-eslint/consistent-type-imports": [
+			"error",
+			{
+				"prefer": "type-imports"
+			}
+		],
+		"@typescript-eslint/no-unused-vars": [
+			"warn"
+		],
+		"max-len": [
+			"error",
+			{
+				"code": 120,
+				"tabWidth": 2,
+				"ignorePattern": "class=('|\\{`).+"
+			}
+		],
+		"no-unused-vars": "off"
+	}
+}

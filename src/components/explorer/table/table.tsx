@@ -3,7 +3,7 @@ import {For} from 'solid-js';
 import {createStore, produce} from 'solid-js/store';
 import {CheckboxState} from 'src/components/base';
 import {CheckboxColumn} from 'src/components/explorer/checkbox-column';
-import {DataCell} from 'src/components/explorer/data-cell';
+import {DataCell} from 'src/components/explorer/table/data-cell';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {clickOutside} from 'src/directives';
 import type {ModificationsMap} from 'src/types';
@@ -129,9 +129,7 @@ export const Table = (props: Props): JSXElement => {
                     content={data}
                     rowIndex={rowIndex()}
                     colIndex={colIndex()}
-                    isSelected={
-                      state.selected.row === rowIndex() && state.selected.col === colIndex()
-                    }
+                    isSelected={state.selected.row === rowIndex() && state.selected.col === colIndex()}
                     isHovered={state.hover.row === rowIndex()}
                     isRowSelected={state.selectedRows[rowIndex()]}
                     isModified={!!props.modifications[`${rowIndex()},${colIndex()}`]}
