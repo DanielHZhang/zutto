@@ -21,7 +21,7 @@ pub async fn begin_connection(store: State<'_, Store>, data: ConnectPayload) -> 
 
       let connection_url = config.to_url();
       store.set_active_pool(&connection_url).await?;
-      state.active_connection_id = Some(id.clone());
+      state.set_connection(&id);
       Ok(id)
     }
     None => {
@@ -33,7 +33,7 @@ pub async fn begin_connection(store: State<'_, Store>, data: ConnectPayload) -> 
 
       let mut state = store.state().await;
       let id = uuid::Uuid::new_v4().to_string();
-      state.active_connection_id = Some(id.clone());
+      state.set_connection(&id);
       state.databases.insert(id.clone(), config);
       Ok(id)
     }
@@ -65,6 +65,7 @@ pub async fn edit_connection(store: State<'_, Store>, data: ConnectPayload) -> C
 pub async fn delete_connection(store: State<'_, Store>, id: String) -> CommandResult<()> {
   let mut state = store.state().await;
   let _ = state.databases.remove(&id);
+  let _ = state.tabs.remove(&id);
   Ok(())
 }
 

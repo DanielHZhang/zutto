@@ -71,10 +71,6 @@ impl State {
     storage_directory
   }
 
-  pub fn environment(&self) -> &Environment {
-    &self.environment
-  }
-
   pub fn save_to_file(&self) {
     let file_path = Self::get_file_path(&self.environment);
     let file = OpenOptions::new()
@@ -84,6 +80,14 @@ impl State {
       .expect("Failed to open state file for writing");
     let writer = BufWriter::new(file);
     serde_json::to_writer_pretty::<_, Self>(writer, &self).ok();
+  }
+
+  pub fn set_connection(&mut self, connection_id: &str) {
+    self.active_connection_id = Some(connection_id.into());
+    let tabs_for_connection = self.tabs.get(connection_id);
+    if tabs_for_connection.is_none() {
+      self.tabs.insert(connection_id.into(), Vec::new());
+    }
   }
 
   pub fn rename_tab(&mut self, original: &str, new: String) {

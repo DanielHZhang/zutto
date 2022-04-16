@@ -27,7 +27,7 @@ export default function Explorer(): JSXElement {
   const [modifications, setModifications] = createStore<ModificationsMap>({});
   const [tableName] = createSignal({tableName: params.tableName, offset: 0});
   const [tableData, {mutate, refetch}] = createResource(tableName, queryTableData);
-  // const [tabs, {refetch: refetchTabs}] = createResource(() => root.id, fetchTabs);
+  const [tabs, {refetch: refetchTabs}] = createResource(() => root.id, fetchTabs);
   const [isModalOpen, setModalOpen] = createSignal(false);
 
   const isTabActive = (name: string) => name.split(' ').join('') === params.tableName;
@@ -45,7 +45,7 @@ export default function Explorer(): JSXElement {
     <div class='flex flex-col space-y-2'>
       <div class='flex bg-header h-14 border-gray border-b-1'>
         <Logo href='/tables' class='px-4 border-gray border-r-1' />
-        {/* <Show when={tabs()}>
+        <Show when={tabs()}>
           <div class='flex overflow-x-auto'>
             <ul class='flex overflow-x-auto overflow-y-hidden'>
               <For each={tabs()}>
@@ -85,14 +85,14 @@ export default function Explorer(): JSXElement {
             <Modal isOpen={isModalOpen()} onClose={() => setModalOpen(false)}>
               <Heading>Open another table</Heading>
               <div class='flex flex-col space-y-2'>
-								<For each={}>
+                {/* <For each={}>
 
-								</For>
+								</For> */}
                 <Button>Test</Button>
               </div>
             </Modal>
           </div>
-        </Show> */}
+        </Show>
       </div>
       <ErrorBoundary fallback={ErrorContainer}>
         <Show when={tableData()} fallback={<div>Loading...</div>}>
