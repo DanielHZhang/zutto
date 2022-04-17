@@ -23,7 +23,7 @@ export const TableDataWrapper = (): JSX.Element => {
   });
 
   return (
-    <main>
+    <main class='space-y-2'>
       <section class='flex justify-between mx-2'>
         <div class='flex space-x-2'>
           <Button variant='primary' size='sm'>

@@ -84,19 +84,42 @@ export const Table = (props: Props): JSXElement => {
     );
   };
 
+  const onCellClick =
+    (row: number, col: number): JSX.EventHandler<HTMLDivElement, MouseEvent> =>
+    (event) => {
+      const target = event.currentTarget;
+      setState('active', {row, col, x: target.offsetLeft, y: target.offsetTop});
+
+      // Reset selected if clicking on an unselected cell
+      if (state.selected.row !== row || state.selected.col !== col) {
+        resetSelectedCell();
+      }
+    };
+
   return (
     <div
-      class='overflow-x-auto relative py-2 outline-none'
+      class='flex flex-col overflow-x-auto relative pb-1 outline-none'
       tabIndex={0}
       onKeyDown={onKeyDown}
       use:clickOutside={() => {
         resetActiveCell();
         resetSelectedCell();
       }}
+      onMouseLeave={resetHover}
     >
-      <div class='flex flex-col' onMouseLeave={resetHover}>
-        <div class='flex'>
-          <CheckboxColumn isHeader={true} />
+      <div
+        class='z-20 absolute border-3 border-blue-400 rounded-lg pointer-events-none'
+        style={{
+          height: '46px',
+          width: '208px',
+          left: `${state.active.x - 2}px`,
+          top: `${state.active.y - 4}px`,
+          visibility: state.active.row !== -1 && state.active.col !== -1 ? 'visible' : 'hidden',
+        }}
+      />
+      <div class='flex'>
+        <CheckboxColumn isHeader={true} />
+        <div class='flex ml-10'>
           <For each={props.headers}>
             {(header) => (
               <div class='flex items-center border-l-2 border-b-2 border-t-2 border-slate-700 h-10 last:border-r-2'>
@@ -107,22 +130,24 @@ export const Table = (props: Props): JSXElement => {
             )}
           </For>
         </div>
-        <For each={props.data}>
-          {(row, rowIndex) => (
-            <div class='flex' onMouseOver={() => setState('hover', 'row', rowIndex())}>
-              <CheckboxColumn
-                onCheck={(checked) => {
-                  setState(
-                    produce((state) => {
-                      if (checked === CheckboxState.Checked) {
-                        state.selectedRows[rowIndex()] = true;
-                      } else {
-                        delete state.selectedRows[rowIndex()];
-                      }
-                    })
-                  );
-                }}
-              />
+      </div>
+      <For each={props.data}>
+        {(row, rowIndex) => (
+          <div class='flex' onMouseOver={() => setState('hover', 'row', rowIndex())}>
+            <CheckboxColumn
+              onCheck={(checked) => {
+                setState(
+                  produce((state) => {
+                    if (checked === CheckboxState.Checked) {
+                      state.selectedRows[rowIndex()] = true;
+                    } else {
+                      delete state.selectedRows[rowIndex()];
+                    }
+                  })
+                );
+              }}
+            />
+            <div class='flex ml-10'>
               <For each={row}>
                 {(data, colIndex) => (
                   <DataCell
@@ -134,20 +159,8 @@ export const Table = (props: Props): JSXElement => {
                     isRowSelected={state.selectedRows[rowIndex()]}
                     isModified={!!props.modifications[`${rowIndex()},${colIndex()}`]}
                     onHover={(row, col) => setState('hover', {row, col})}
-                    onClick={(event) => {
-                      const row = rowIndex();
-                      const col = colIndex();
-                      const target = event.currentTarget;
-                      setState('active', {row, col, x: target.offsetLeft, y: target.offsetTop});
-
-                      // Reset selected if clicking on an unselected cell
-                      if (state.selected.row !== row || state.selected.col !== col) {
-                        resetSelectedCell();
-                      }
-                    }}
-                    onDoubleClick={() => {
-                      setState('selected', {row: rowIndex(), col: colIndex()});
-                    }}
+                    onClick={onCellClick(rowIndex(), colIndex())}
+                    onDoubleClick={() => setState('selected', {row: rowIndex(), col: colIndex()})}
                     onEditInput={(event) => {
                       props.onCellEdit({
                         row: rowIndex(),
@@ -164,19 +177,9 @@ export const Table = (props: Props): JSXElement => {
                 )}
               </For>
             </div>
-          )}
-        </For>
-      </div>
-      <div
-        class='z-10 absolute border-3 border-blue-400 rounded-lg pointer-events-none'
-        style={{
-          height: '46px',
-          width: '208px',
-          left: `${state.active.x - 2}px`,
-          top: `${state.active.y - 4}px`,
-          visibility: state.active.row !== -1 && state.active.col !== -1 ? 'visible' : 'hidden',
-        }}
-      />
+          </div>
+        )}
+      </For>
     </div>
   );
 };

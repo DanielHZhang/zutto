@@ -26,5 +26,8 @@
 		"strictNullChecks": true,
 		"strictPropertyInitialization": true,
 		"target": "ESNext",
-	}
+	},
+	"exclude": [
+		"dist"
+	]
 }

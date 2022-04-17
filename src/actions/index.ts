@@ -11,9 +11,7 @@ import type {
   TableOverview,
 } from 'src/types';
 
-export async function beginConnection(
-  data: {id: string} | {config: ConnectionConfig}
-): Promise<string> {
+export async function beginConnection(data: {id: string} | {config: ConnectionConfig}): Promise<string> {
   if (!IS_TAURI_ENV) {
     return 'uuid';
   }
@@ -99,34 +97,22 @@ export async function queryAllTables(): Promise<TableOverview[]> {
 
 export async function queryTableData(payload: QueryDataPayload): Promise<TableData> {
   if (!IS_TAURI_ENV) {
-    const headers = ['Name', 'Date', 'Description'];
+    const headers = ['Name', 'Date', 'Description', 'Age', 'Job'];
     const data = [
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet'],
+      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '23', 'Engineer'],
+      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '43', 'Engineer'],
+      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
     ];
-    // const data = [
-    //   [
-    //     {id: 123, content: 'some string'},
-    //     {id: 123, content: 'some string really really long content'},
-    //     {id: 123, content: 'some string'},
-    //   ],
-    //   [
-    //     {id: 234, content: 'more string'},
-    //     {id: 234, content: 'more string'},
-    //     {id: 234, content: 'more string'},
-    //   ],
-    // ];
     return {headers, data};
   }
   return invoke('query_table_data', {payload});
 }
 
-export async function openTab(id: string, tableName: string): Promise<void> {
+export async function openTab(data: {id: string; tableName: string}): Promise<string[]> {
   if (!IS_TAURI_ENV) {
-    return;
+    return Array.from({length: 5}, (_, index) => `Table ${index} long name`);
   }
-  return invoke('open_tab', {connectionId: id, tableName});
+  return invoke('open_tab', {connectionId: data.id, tableName: data.tableName});
 }
 
 export async function closeTab(id: string, tableName: string): Promise<void> {

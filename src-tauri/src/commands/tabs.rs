@@ -7,20 +7,31 @@ use super::{CommandError, CommandResult};
 
 #[tauri::command]
 #[instrument(skip(store), ret, err)]
-pub async fn open_tab(store: State<'_, Store>, connection_id: String, table_name: String) -> CommandResult<()> {
+pub async fn open_tab(
+  store: State<'_, Store>,
+  connection_id: String,
+  table_name: String,
+) -> CommandResult<Vec<String>> {
   let mut state = store.state().await;
   let open_tabs = state
     .tabs
     .get_mut(&connection_id)
     .ok_or(CommandError::new("Unable to find connection with provided id"))?;
 
-  open_tabs.push(table_name);
-  Ok(())
+  if !open_tabs.contains(&table_name) {
+    open_tabs.push(table_name);
+  }
+
+  Ok(open_tabs.clone())
 }
 
 #[tauri::command]
 #[instrument(skip(store), ret, err)]
-pub async fn close_tab(store: State<'_, Store>, connection_id: String, table_name: String) -> CommandResult<()> {
+pub async fn close_tab(
+  store: State<'_, Store>,
+  connection_id: String,
+  table_name: String,
+) -> CommandResult<Vec<String>> {
   let mut state = store.state().await;
   let open_tabs = state
     .tabs
@@ -33,7 +44,7 @@ pub async fn close_tab(store: State<'_, Store>, connection_id: String, table_nam
     .ok_or(CommandError::new("Unable to find tab with provided name"))?;
 
   open_tabs.remove(found_index);
-  Ok(())
+  Ok(open_tabs.clone())
 }
 
 #[tauri::command]

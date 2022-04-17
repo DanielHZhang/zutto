@@ -1,8 +1,8 @@
 import PlusIcon from 'iconoir/icons/plus.svg';
 import {useNavigate, useParams} from 'solid-app-router';
 import type {JSXElement} from 'solid-js';
-import {createResource, createSignal, For, useContext} from 'solid-js';
-import {closeTab, fetchTabs} from 'src/actions';
+import {createEffect, createResource, createSignal, For, useContext} from 'solid-js';
+import {closeTab, fetchTabs, openTab} from 'src/actions';
 import {Button, Heading, Modal} from 'src/components/base';
 import {Tab} from 'src/components/explorer/tabs/item';
 import {toExplorer} from 'src/routes';
@@ -12,9 +12,16 @@ export const Tabs = (): JSXElement => {
   const params = useParams();
   const navigate = useNavigate();
   const [global] = useContext(GlobalContext);
-  const [tabs, {refetch: refetchTabs}] = createResource(() => global.connection.id, fetchTabs);
+  const [tabs, {refetch: refetchTabs}] = createResource(
+    () => ({id: global.connection.id, tableName: params.tableName}),
+    openTab
+  );
   const [isModalOpen, setModalOpen] = createSignal(false);
   const isTabActive = (name: string) => name === decodeURIComponent(params.tableName);
+
+  createEffect(() => {
+    console.log('tabs finishes fetching:', tabs());
+  });
 
   return (
     <div class='flex overflow-x-auto'>
