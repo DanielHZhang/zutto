@@ -11,6 +11,9 @@
 		"editor.wordBasedSuggestions": false,
 		"editor.quickSuggestionsDelay": 100,
 	},
+	"css.customData": [
+		".vscode/css-metadata.json"
+	],
 	"eslint.packageManager": "yarn",
 	"eslint.validate": [
 		"javascript",

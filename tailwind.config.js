@@ -15,12 +15,6 @@ module.exports = defineConfig({
   plugins: [
     plugin(({addBase, addComponents}) => {
       addBase({
-        html: {
-          minHeight: '100%',
-        },
-        body: {
-          minHeight: '100%',
-        },
         a: {
           color: 'inherit',
           textDecoration: 'none',

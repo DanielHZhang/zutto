@@ -98,7 +98,7 @@ export const Table = (props: Props): JSXElement => {
 
   return (
     <div
-      class='flex flex-col overflow-x-auto relative pb-1 outline-none'
+      class='flex flex-initial flex-col overflow-y-auto relative pb-1 outline-none'
       tabIndex={0}
       onKeyDown={onKeyDown}
       use:clickOutside={() => {
@@ -119,7 +119,7 @@ export const Table = (props: Props): JSXElement => {
       />
       <div class='flex'>
         <CheckboxColumn isHeader={true} />
-        <div class='flex ml-10'>
+        <div class='flex'>
           <For each={props.headers}>
             {(header) => (
               <div class='flex items-center border-l-2 border-b-2 border-t-2 border-slate-700 h-10 last:border-r-2'>
@@ -147,7 +147,7 @@ export const Table = (props: Props): JSXElement => {
                 );
               }}
             />
-            <div class='flex ml-10'>
+            <div class='flex'>
               <For each={row}>
                 {(data, colIndex) => (
                   <DataCell

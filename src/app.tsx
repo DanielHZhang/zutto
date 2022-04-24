@@ -8,9 +8,7 @@ const App: Component = () => {
 
   return (
     <GlobalProvider>
-      <main class='bg-app text-gray-200 min-h-screen flex flex-col'>
-        <Route />
-      </main>
+      <Route />
     </GlobalProvider>
   );
 };

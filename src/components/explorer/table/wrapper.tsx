@@ -5,7 +5,7 @@ import type {JSX} from 'solid-js';
 import {createEffect, createResource, createSignal, Show} from 'solid-js';
 import {createStore} from 'solid-js/store';
 import {queryTableData} from 'src/actions';
-import {Button} from 'src/components/base';
+import {Button, SplitButton} from 'src/components/base';
 import {Table} from 'src/components/explorer';
 import type {ModificationsMap} from 'src/types';
 
@@ -23,16 +23,16 @@ export const TableDataWrapper = (): JSX.Element => {
   });
 
   return (
-    <main class='space-y-2'>
+    <div class='flex flex-col flex-auto pt-2 space-y-2 min-h-0'>
       <section class='flex justify-between mx-2'>
         <div class='flex space-x-2'>
           <Button variant='primary' size='sm'>
             <PlusIcon />
             <span>Add Record</span>
           </Button>
-          {/* <SplitButton size='sm' left={<span>Fields</span>} right={<span>0</span>} />
-		<SplitButton size='sm' left={<span>Filters</span>} right={<span>1</span>} />
-		<SplitButton size='sm' left={<span>Showing</span>} right={<span>1</span>} /> */}
+          <SplitButton size='sm' left={<span>Fields</span>} right={<span>0</span>} />
+          <SplitButton size='sm' left={<span>Filters</span>} right={<span>1</span>} />
+          <SplitButton size='sm' left={<span>Showing</span>} right={<span>1</span>} />
         </div>
         <div class='flex space-x-2'>
           <Show when={Object.keys(modifications).length > 0}>
@@ -76,6 +76,6 @@ export const TableDataWrapper = (): JSX.Element => {
           //
         }}
       />
-    </main>
+    </div>
   );
 };

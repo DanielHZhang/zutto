@@ -27,17 +27,19 @@ export default function Explorer(): JSXElement {
   // });
 
   return (
-    <div class='flex flex-col space-y-2'>
-      <div class='flex bg-header h-14 border-gray border-b-1'>
-        <Logo href='/tables' class='px-4 border-gray border-r-1' />
-        <Suspense fallback={<div>Loading...</div>}>
-          <Tabs />
-        </Suspense>
-      </div>
+    <div class='flex flex-col h-screen'>
       <ErrorBoundary fallback={ErrorContainer}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <TableDataWrapper />
-        </Suspense>
+        <header class='flex flex-grow-0 basis-14 bg-header border-gray border-b-1'>
+          <Logo href='/tables' class='px-4 border-gray border-r-1' />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Tabs />
+          </Suspense>
+        </header>
+        <main class='flex flex-col flex-auto min-h-0'>
+          <Suspense fallback={<div>Loading...</div>}>
+            <TableDataWrapper />
+          </Suspense>
+        </main>
       </ErrorBoundary>
     </div>
   );
