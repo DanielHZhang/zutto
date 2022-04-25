@@ -3,6 +3,7 @@ import {For} from 'solid-js';
 import {createStore, produce} from 'solid-js/store';
 import {CheckboxState} from 'src/components/base';
 import {CheckboxColumn} from 'src/components/explorer/checkbox-column';
+import {Cell} from 'src/components/explorer/table/cell';
 import {DataCell} from 'src/components/explorer/table/data-cell';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {clickOutside} from 'src/directives';
@@ -98,7 +99,7 @@ export const Table = (props: Props): JSXElement => {
 
   return (
     <div
-      class='flex flex-initial flex-col overflow-y-auto relative pb-1 outline-none'
+      class='relative pb-1 outline-none overflow-y-auto'
       tabIndex={0}
       onKeyDown={onKeyDown}
       use:clickOutside={() => {
@@ -108,32 +109,30 @@ export const Table = (props: Props): JSXElement => {
       onMouseLeave={resetHover}
     >
       <div
-        class='z-20 absolute border-3 border-blue-400 rounded-lg pointer-events-none'
+        class='z-10 absolute border-2 border-blue-400 pointer-events-none'
         style={{
-          height: '46px',
-          width: '208px',
-          left: `${state.active.x - 2}px`,
-          top: `${state.active.y - 4}px`,
+          height: '38px',
+          width: '206px',
+          left: `${state.active.x + 2}px`,
+          top: `${state.active.y}px`,
           visibility: state.active.row !== -1 && state.active.col !== -1 ? 'visible' : 'hidden',
         }}
       />
-      <div class='flex'>
+      <div class='flex sticky top-0 z-20'>
         <CheckboxColumn isHeader={true} />
-        <div class='flex'>
+        <div class='flex w-full '>
           <For each={props.headers}>
             {(header) => (
-              <div class='flex items-center border-l-2 border-b-2 border-t-2 border-slate-700 h-10 last:border-r-2'>
-                <div class='w-50 overflow-hidden whitespace-nowrap overflow-ellipsis'>
-                  <span class='px-2 font-semibold'>{header}</span>
-                </div>
-              </div>
+              <Cell class='border-t-2 bg-app'>
+                <span class='px-2 font-semibold'>{header}</span>
+              </Cell>
             )}
           </For>
         </div>
       </div>
       <For each={props.data}>
         {(row, rowIndex) => (
-          <div class='flex' onMouseOver={() => setState('hover', 'row', rowIndex())}>
+          <div class='flex flex-shrink-0' onMouseOver={() => setState('hover', 'row', rowIndex())}>
             <CheckboxColumn
               onCheck={(checked) => {
                 setState(
@@ -147,36 +146,36 @@ export const Table = (props: Props): JSXElement => {
                 );
               }}
             />
-            <div class='flex'>
-              <For each={row}>
-                {(data, colIndex) => (
-                  <DataCell
-                    content={data}
-                    rowIndex={rowIndex()}
-                    colIndex={colIndex()}
-                    isSelected={state.selected.row === rowIndex() && state.selected.col === colIndex()}
-                    isHovered={state.hover.row === rowIndex()}
-                    isRowSelected={state.selectedRows[rowIndex()]}
-                    isModified={!!props.modifications[`${rowIndex()},${colIndex()}`]}
-                    onHover={(row, col) => setState('hover', {row, col})}
-                    onClick={onCellClick(rowIndex(), colIndex())}
-                    onDoubleClick={() => setState('selected', {row: rowIndex(), col: colIndex()})}
-                    onEditInput={(event) => {
-                      props.onCellEdit({
-                        row: rowIndex(),
-                        col: colIndex(),
-                        value: event.currentTarget.value,
-                      });
-                    }}
-                    onEditKeyDown={(event) => {
-                      if (event.key === 'Enter' || event.key === 'Escape') {
-                        resetSelectedCell();
-                      }
-                    }}
-                  />
-                )}
-              </For>
-            </div>
+            <For each={row}>
+              {(data, colIndex) => (
+                <DataCell
+                  content={data}
+                  rowIndex={rowIndex()}
+                  colIndex={colIndex()}
+                  isSelected={state.selected.row === rowIndex() && state.selected.col === colIndex()}
+                  isHovered={state.hover.row === rowIndex()}
+                  isRowSelected={state.selectedRows[rowIndex()]}
+                  isModified={!!props.modifications[`${rowIndex()},${colIndex()}`]}
+                  onHover={(row, col) => setState('hover', {row, col})}
+                  onClick={onCellClick(rowIndex(), colIndex())}
+                  onDoubleClick={() => setState('selected', {row: rowIndex(), col: colIndex()})}
+                  onEditInput={(event) => {
+                    event.stopPropagation();
+                    props.onCellEdit({
+                      row: rowIndex(),
+                      col: colIndex(),
+                      value: event.currentTarget.value,
+                    });
+                  }}
+                  onEditKeyDown={(event) => {
+                    event.stopPropagation();
+                    if (event.key === 'Enter' || event.key === 'Escape') {
+                      resetSelectedCell();
+                    }
+                  }}
+                />
+              )}
+            </For>
           </div>
         )}
       </For>

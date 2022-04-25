@@ -35,7 +35,7 @@ export default function Explorer(): JSXElement {
             <Tabs />
           </Suspense>
         </header>
-        <main class='flex flex-col flex-auto min-h-0'>
+        <main class='flex flex-col min-h-0'>
           <Suspense fallback={<div>Loading...</div>}>
             <TableDataWrapper />
           </Suspense>

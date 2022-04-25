@@ -2,7 +2,7 @@ import PlusIcon from 'iconoir/icons/plus.svg';
 import RefreshIcon from 'iconoir/icons/refresh.svg';
 import {useParams} from 'solid-app-router';
 import type {JSX} from 'solid-js';
-import {createEffect, createResource, createSignal, Show} from 'solid-js';
+import {createEffect, createResource, createSignal, For, Show} from 'solid-js';
 import {createStore} from 'solid-js/store';
 import {queryTableData} from 'src/actions';
 import {Button, SplitButton} from 'src/components/base';
@@ -23,7 +23,7 @@ export const TableDataWrapper = (): JSX.Element => {
   });
 
   return (
-    <div class='flex flex-col flex-auto pt-2 space-y-2 min-h-0'>
+    <div class='flex flex-col pt-2 space-y-2 min-h-0'>
       <section class='flex justify-between mx-2'>
         <div class='flex space-x-2'>
           <Button variant='primary' size='sm'>

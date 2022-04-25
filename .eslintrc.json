@@ -21,6 +21,7 @@
 			{
 				"code": 120,
 				"tabWidth": 2,
+				"ignoreStrings": true,
 				"ignorePattern": "class=('|\\{`).+"
 			}
 		],
