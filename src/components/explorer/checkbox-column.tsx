@@ -13,7 +13,7 @@ export const CheckboxColumn = (props: Props): JSXElement => {
   return (
     <div
       class='sticky left-0 flex items-center justify-center h-10 w-10 min-w-10 border-b-2 border-slate-700 bg-app z-10'
-      classList={{'border-t-2': !!ownProps.isHeader}}
+      classList={{'border-t-2': ownProps.isHeader, 'shadow-light-right': !ownProps.isHeader}}
     >
       <Checkbox {...checkboxProps} />
     </div>

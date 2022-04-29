@@ -48,6 +48,12 @@ module.exports = defineConfig({
         '.shadow-checkbox': {
           boxShadow: 'inset 0px 2px 3px rgba(0, 0, 0, 0.1)',
         },
+        '.shadow-light-down': {
+          boxShadow: '0 2px 8px rgb(0 0 0 / 30%)',
+        },
+        '.shadow-light-right': {
+          boxShadow: '3px 0 8px rgba(0 0 0 / 30%)',
+        },
       });
     }),
   ],

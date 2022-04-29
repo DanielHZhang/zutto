@@ -102,11 +102,11 @@ export const Table = (props: Props): JSXElement => {
       class='relative pb-1 outline-none overflow-y-auto'
       tabIndex={0}
       onKeyDown={onKeyDown}
+      onMouseLeave={resetHover}
       use:clickOutside={() => {
         resetActiveCell();
         resetSelectedCell();
       }}
-      onMouseLeave={resetHover}
     >
       <div
         class='z-10 absolute border-2 border-blue-400 pointer-events-none'
@@ -120,10 +120,10 @@ export const Table = (props: Props): JSXElement => {
       />
       <div class='flex sticky top-0 z-20'>
         <CheckboxColumn isHeader={true} />
-        <div class='flex w-full '>
+        <div class='flex'>
           <For each={props.headers}>
             {(header) => (
-              <Cell class='border-t-2 bg-app'>
+              <Cell class='border-t-2 bg-app shadow-light-down'>
                 <span class='px-2 font-semibold'>{header}</span>
               </Cell>
             )}
