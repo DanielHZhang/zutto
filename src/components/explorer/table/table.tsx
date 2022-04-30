@@ -7,6 +7,7 @@ import {Cell} from 'src/components/explorer/table/cell';
 import {DataCell} from 'src/components/explorer/table/data-cell';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {clickOutside} from 'src/directives';
+import {zIndex} from 'src/styles';
 import type {ModificationsMap} from 'src/types';
 
 const handledKeys = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Enter']);
@@ -109,7 +110,7 @@ export const Table = (props: Props): JSXElement => {
       }}
     >
       <div
-        class='z-10 absolute border-2 border-blue-400 pointer-events-none'
+        class={`${zIndex.SELECTED_CELL} absolute border-2 border-blue-400 pointer-events-none`}
         style={{
           height: '38px',
           width: '206px',
@@ -118,7 +119,7 @@ export const Table = (props: Props): JSXElement => {
           visibility: state.active.row !== -1 && state.active.col !== -1 ? 'visible' : 'hidden',
         }}
       />
-      <div class='flex sticky top-0 z-20'>
+      <div class={`${zIndex.ROW_HEADER} flex sticky top-0`}>
         <CheckboxColumn isHeader={true} />
         <div class='flex'>
           <For each={props.headers}>

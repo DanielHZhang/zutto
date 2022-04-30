@@ -26,3 +26,13 @@ export const GlobalStyles = styled`
 		}
 	}
 `;
+
+export const zIndex = {
+  SELECTED_CELL: 'z-20',
+	COL_HEADER: 'z-21',
+  ROW_HEADER: 'z-22',
+  MODAL_OVERLAY: 'z-50',
+  MODAL_CONTENT: 'z-51',
+  MENU_POPOVER: 'z-60',
+  TOOLTIP_POPOVER: 'z-70',
+};

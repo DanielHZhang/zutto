@@ -5,6 +5,7 @@ import {Portal} from 'solid-js/web';
 import {Button} from 'src/components/base/button';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {clickOutside} from 'src/directives';
+import {zIndex} from 'src/styles';
 
 type Props = {
   isOpen: boolean;
@@ -31,7 +32,7 @@ export const Modal = (props: Props): JSXElement => {
   return (
     <Show when={props.isOpen}>
       <Portal mount={modalRoot}>
-        <div class={`${wholeScreen} bg-stone-800 bg-opacity-50`} />
+        <div class={`${wholeScreen} bg-stone-800 bg-opacity-50 ${zIndex.MODAL_OVERLAY}`} />
         <div
           tabIndex={0}
           onKeyDown={(event) => {
@@ -39,7 +40,7 @@ export const Modal = (props: Props): JSXElement => {
               props.onClose();
             }
           }}
-          class={`${wholeScreen} outline-none overflow-auto flex items-center justify-center z-10`}
+          class={`${wholeScreen} outline-none overflow-auto flex items-center justify-center ${zIndex.MODAL_CONTENT}`}
         >
           <section
             use:clickOutside={() => props.onClose()}

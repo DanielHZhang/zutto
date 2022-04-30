@@ -1,13 +1,5 @@
 import type {JSXElement} from 'solid-js';
-import {
-  createContext,
-  createEffect,
-  createRenderEffect,
-  createSignal,
-  Show,
-  splitProps,
-  useContext,
-} from 'solid-js';
+import {createContext, createEffect, createRenderEffect, createSignal, Show, splitProps, useContext} from 'solid-js';
 import type {SetStoreFunction} from 'solid-js/store';
 import {createStore} from 'solid-js/store';
 import {css} from 'solid-styled-components';
@@ -15,6 +7,7 @@ import type {ButtonProps} from 'src/components/base/button';
 import {Button} from 'src/components/base/button';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {clickOutside} from 'src/directives';
+import {zIndex} from 'src/styles';
 
 type ContextState = {
   visible: boolean;
@@ -136,7 +129,7 @@ export const MenuList = (props: MenuListProps): JSXElement => {
           setMenu('visible', false);
           onClose?.();
         }}
-        class='min-w-max absolute z-20'
+        class={`min-w-max absolute ${zIndex.MENU_POPOVER}`}
         style={{left: `${position().x}px`, top: `${position().y}px`}}
       >
         <section class='bg-popover p-2 rounded-lg shadow-xl'>{props.children}</section>
