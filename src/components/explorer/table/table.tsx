@@ -120,7 +120,14 @@ export const Table = (props: Props): JSXElement => {
       </div>
       <Index each={currentTable().data}>
         {(rowData, row) => (
-          <div class='flex flex-shrink-0' onMouseOver={() => setState('hover', 'row', row)}>
+          <div
+            class='flex flex-shrink-0'
+            onMouseOver={() => setState('hover', 'row', row)}
+            onClick={() => {
+              resetActiveCell();
+              resetSelectedCell();
+            }}
+          >
             <CheckboxColumn
               onCheck={(checked) => {
                 setState(
@@ -146,6 +153,8 @@ export const Table = (props: Props): JSXElement => {
                   isModified={Boolean(currentTable().modifications[`${row},${col}`])}
                   onHover={(row, col) => setState('hover', {row, col})}
                   onClick={(event) => {
+                    // Stop propagation so that row wrapper does not reset selected cell when this cell is clicked
+                    event.stopPropagation();
                     const target = event.currentTarget;
                     setState('active', {row, col, x: target.offsetLeft, y: target.offsetTop});
 
