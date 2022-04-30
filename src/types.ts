@@ -45,11 +45,6 @@ export type QueryDataPayload = {
   offset: number;
 };
 
-// export type CellData = {
-//   id: number;
-//   content: string;
-// };
-
 export type Modificiation = {
   deleted?: boolean;
   originalValue: string;

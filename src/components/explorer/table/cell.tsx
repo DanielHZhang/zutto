@@ -9,7 +9,7 @@ export const Cell: Component<Props> = (props) => {
 
   /** @tw */
   const baseClass =
-    'flex items-center flex-shrink-0 flex-grow basis-52 h-10 min-w-0 border-l-2 border-b-2 border-slate-700 last:border-r-2 select-none relative';
+    'flex items-center flex-shrink-0 w-52 h-10 min-w-0 border-l-2 border-b-2 border-slate-700 last:border-r-2 select-none relative';
 
   return (
     <div class={mergeCss(baseClass, ownProps.class)} {...htmlProps}>

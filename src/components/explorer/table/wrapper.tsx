@@ -51,37 +51,7 @@ export const TableDataWrapper = (): JSX.Element => {
           </Button>
         </div>
       </section>
-      <Table
-        tableName={tableName()}
-        // data={getData()}
-        // headers={getHeaders()}
-        // modifications={modifications}
-        // onCellEdit={(modification) => {
-        //   const {row, col, value} = modification;
-        //   mutate((prevState) => {
-        //     const index = `${row},${col}` as const;
-
-        //     if (modifications[index]) {
-        //       setModifications(index, 'newValue', value);
-        //     } else {
-        //       setModifications(index, {
-        //         originalValue: prevState!.data[row][col],
-        //         newValue: value,
-        //       });
-        //     }
-
-        //     const table = prevState!.data;
-        //     table[row][col] = value;
-        //     return prevState;
-        //   });
-        // }}
-        // onColumnRename={() => {
-        //   //
-        // }}
-        // onDelete={() => {
-        //   //
-        // }}
-      />
+      <Table tableName={tableName()} />
     </div>
   );
 };
