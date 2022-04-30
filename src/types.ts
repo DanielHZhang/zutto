@@ -50,15 +50,19 @@ export type QueryDataPayload = {
 //   content: string;
 // };
 
-export type TableData = {
-  headers: string[];
-  data: string[][];
-};
-
-type Modificiation = {
+export type Modificiation = {
   deleted?: boolean;
   originalValue: string;
   newValue?: string;
 };
 
-export type ModificationsMap = Record<`${number},${number}`, Modificiation>;
+export type Modifications = Record<`${number},${number}`, Modificiation>;
+
+export type TableData = {
+  headers: string[];
+  data: string[][];
+};
+
+export type Table = TableData & {
+  modifications: Modifications;
+};

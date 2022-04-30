@@ -98,33 +98,13 @@ export async function queryAllTables(): Promise<TableOverview[]> {
 export async function queryTableData(payload: QueryDataPayload): Promise<TableData> {
   if (!IS_TAURI_ENV) {
     const headers = ['Name', 'Date', 'Description', 'Age', 'Job'];
-    const data = [
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '23', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '43', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-      ['John', '2019-01-01', 'Lorem ipsum dolor sit amet', '12', 'Engineer'],
-    ];
+    const data = Array.from({length: 25}, (_, index) => [
+      'John',
+      '2019-01-01',
+      'Lorem ipsum dolor sit amet',
+      `${1 + index}`,
+      'Engineer',
+    ]);
     return {headers, data};
   }
   return invoke('query_table_data', {payload});

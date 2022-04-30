@@ -1,4 +1,5 @@
 import type {JSXElement} from 'solid-js';
+import {createEffect} from 'solid-js';
 import DbErrorIcon from 'src/components/icons/db-error.svg';
 
 type Props = {
@@ -6,6 +7,10 @@ type Props = {
 };
 
 export const ErrorContainer = (props: Props): JSXElement => {
+  createEffect(() => {
+    console.error('ErrorContainer caught:\n', props);
+  });
+
   return (
     <div class='flex items-center justify-center pt-30'>
       <div class='flex flex-col p-8 rounded-xl bg-slate-900 max-w-lg shadow-xl'>

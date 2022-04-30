@@ -6,12 +6,12 @@ import {closeTab, fetchTabs, openTab} from 'src/actions';
 import {Button, Heading, Modal} from 'src/components/base';
 import {Tab} from 'src/components/explorer/tabs/item';
 import {toExplorer} from 'src/routes';
-import {GlobalContext} from 'src/stores';
+import {RootContext} from 'src/stores';
 
 export const Tabs = (): JSXElement => {
   const params = useParams();
   const navigate = useNavigate();
-  const [global] = useContext(GlobalContext);
+  const [global] = useContext(RootContext);
   const [tabs, {refetch: refetchTabs}] = createResource(
     () => ({id: global.connection.id, tableName: params.tableName}),
     openTab

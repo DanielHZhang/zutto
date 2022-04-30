@@ -6,12 +6,12 @@ import {Button, Heading, Input, Logo, Modal, Subheading} from 'src/components/ba
 import {ActionCard, DatabaseCard} from 'src/components/cards';
 import {ErrorContainer} from 'src/components/error';
 import {createForm} from 'src/hooks';
-import {GlobalContext} from 'src/stores';
+import {RootContext} from 'src/stores';
 import type {ConnectionConfig} from 'src/types';
 
 export default function Home(): JSXElement {
   const navigate = useNavigate();
-  const [global, setGlobal] = useContext(GlobalContext);
+  const [global, setGlobal] = useContext(RootContext);
   const [modalOpen, setModalOpen] = createSignal({name: '', id: ''});
   const [recentDatabases, {refetch}] = createResource(queryRecentDatabases);
   const form = createForm<ConnectionConfig>({

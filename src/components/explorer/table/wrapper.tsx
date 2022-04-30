@@ -2,24 +2,29 @@ import PlusIcon from 'iconoir/icons/plus.svg';
 import RefreshIcon from 'iconoir/icons/refresh.svg';
 import {useParams} from 'solid-app-router';
 import type {JSX} from 'solid-js';
-import {createEffect, createResource, createSignal, For, Show} from 'solid-js';
-import {createStore} from 'solid-js/store';
+import {createEffect, createResource, createSignal, Show, useContext} from 'solid-js';
+import {produce} from 'solid-js/store';
 import {queryTableData} from 'src/actions';
 import {Button, SplitButton} from 'src/components/base';
 import {Table} from 'src/components/explorer';
-import type {ModificationsMap} from 'src/types';
+import {RootContext} from 'src/stores';
 
 export const TableDataWrapper = (): JSX.Element => {
   const params = useParams();
-  const [modifications, setModifications] = createStore<ModificationsMap>({});
-  const [tableName] = createSignal({tableName: params.tableName, offset: 0});
-  const [tableData, {mutate, refetch}] = createResource(tableName, queryTableData);
-
-  const getData = () => tableData()?.data || [];
-  const getHeaders = () => tableData()?.headers || [];
+  const tableName = () => decodeURIComponent(params.tableName);
+  const [root, setRoot] = useContext(RootContext);
+  const [offset, setOffset] = createSignal(0); // TODO: use offset to paginate
+  const [tableData, {refetch}] = createResource(() => ({tableName: tableName(), offset: offset()}), queryTableData);
 
   createEffect(() => {
-    console.log('what:', tableData());
+    const data = tableData();
+    if (data) {
+      setRoot(
+        produce((state) => {
+          state.tables[tableName()] = {...data, modifications: {}};
+        })
+      );
+    }
   });
 
   return (
@@ -35,7 +40,7 @@ export const TableDataWrapper = (): JSX.Element => {
           <SplitButton size='sm' left={<span>Showing</span>} right={<span>1</span>} />
         </div>
         <div class='flex space-x-2'>
-          <Show when={Object.keys(modifications).length > 0}>
+          <Show when={root.tables[tableName()] && Object.keys(root.tables[tableName()].modifications).length > 0}>
             <Button variant='ghost' size='sm'>
               Discard Changes
             </Button>
@@ -47,34 +52,35 @@ export const TableDataWrapper = (): JSX.Element => {
         </div>
       </section>
       <Table
-        data={getData()}
-        headers={getHeaders()}
-        modifications={modifications}
-        onCellEdit={(modification) => {
-          const {row, col, value} = modification;
-          mutate((prevState) => {
-            const index = `${row},${col}` as const;
+        tableName={tableName()}
+        // data={getData()}
+        // headers={getHeaders()}
+        // modifications={modifications}
+        // onCellEdit={(modification) => {
+        //   const {row, col, value} = modification;
+        //   mutate((prevState) => {
+        //     const index = `${row},${col}` as const;
 
-            if (modifications[index]) {
-              setModifications(index, 'newValue', value);
-            } else {
-              setModifications(index, {
-                originalValue: prevState!.data[row][col],
-                newValue: value,
-              });
-            }
+        //     if (modifications[index]) {
+        //       setModifications(index, 'newValue', value);
+        //     } else {
+        //       setModifications(index, {
+        //         originalValue: prevState!.data[row][col],
+        //         newValue: value,
+        //       });
+        //     }
 
-            const table = prevState!.data;
-            table[row][col] = value;
-            return prevState;
-          });
-        }}
-        onColumnRename={() => {
-          //
-        }}
-        onDelete={() => {
-          //
-        }}
+        //     const table = prevState!.data;
+        //     table[row][col] = value;
+        //     return prevState;
+        //   });
+        // }}
+        // onColumnRename={() => {
+        //   //
+        // }}
+        // onDelete={() => {
+        //   //
+        // }}
       />
     </div>
   );

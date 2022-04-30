@@ -55,12 +55,12 @@ export const DataCell = (props: Props): JSXElement => {
       >
         <Input
           ref={(element) => (editInput = element)}
-          class='py-0 pl-2 pr-8 w-full h-full rounded-none'
+          class='py-0 pl-2 pr-9 w-full h-full rounded-none'
           value={props.content}
           onInput={props.onEditInput}
           onKeyDown={props.onEditKeyDown}
         />
-        <div class='absolute right-1 top-2'>
+        <div class='absolute' style={{top: '7px', right: '6px'}}>
           <Button size='xs'>
             <OpenNewWindowIcon width='16px' height='16px' />
           </Button>

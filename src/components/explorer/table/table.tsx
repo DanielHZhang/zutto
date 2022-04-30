@@ -1,5 +1,5 @@
 import type {JSX, JSXElement} from 'solid-js';
-import {For} from 'solid-js';
+import {For, Index, useContext} from 'solid-js';
 import {createStore, produce} from 'solid-js/store';
 import {CheckboxState} from 'src/components/base';
 import {CheckboxColumn} from 'src/components/explorer/checkbox-column';
@@ -7,21 +7,17 @@ import {Cell} from 'src/components/explorer/table/cell';
 import {DataCell} from 'src/components/explorer/table/data-cell';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {clickOutside} from 'src/directives';
+import {RootContext} from 'src/stores';
 import {zIndex} from 'src/styles';
-import type {ModificationsMap} from 'src/types';
 
 const handledKeys = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Enter']);
 
 type Props = {
-  data: string[][];
-  headers: string[];
-  modifications: ModificationsMap;
-  onCellEdit: (data: {row: number; col: number; value: string}) => void;
-  onColumnRename: () => void;
-  onDelete: () => void;
+  tableName: string;
 };
 
 export const Table = (props: Props): JSXElement => {
+  const [root, setRoot] = useContext(RootContext);
   const [state, setState] = createStore({
     hover: {row: -1, col: -1},
     active: {row: -1, col: -1, x: -1, y: -1},
@@ -29,6 +25,7 @@ export const Table = (props: Props): JSXElement => {
     selectedRows: {} as Record<number, boolean>,
   });
 
+  const currentTable = () => root.tables[props.tableName] || {headers: [], data: []};
   const resetHover = () => setState('hover', {row: -1, col: -1});
   const resetActiveCell = () => setState('active', {row: -1, col: -1, x: -1, y: -1});
   const resetSelectedCell = () => setState('selected', {row: -1, col: -1});
@@ -39,6 +36,8 @@ export const Table = (props: Props): JSXElement => {
         if (!handledKeys.has(event.key)) {
           return;
         }
+
+        // const currentTable = global.tables[props.tableName];
         const {row, col} = state.active; // Get original row and col
         switch (event.key) {
           case 'ArrowLeft': {
@@ -48,7 +47,7 @@ export const Table = (props: Props): JSXElement => {
             break;
           }
           case 'ArrowRight': {
-            if (state.active.col < props.headers.length - 1) {
+            if (state.active.col < currentTable().headers.length - 1) {
               state.active.col += 1;
             }
             break;
@@ -60,7 +59,7 @@ export const Table = (props: Props): JSXElement => {
             break;
           }
           case 'ArrowDown': {
-            if (state.active.row < props.data.length - 1) {
+            if (state.active.row < currentTable().data.length - 1) {
               state.active.row += 1;
             }
             break;
@@ -86,18 +85,6 @@ export const Table = (props: Props): JSXElement => {
     );
   };
 
-  const onCellClick =
-    (row: number, col: number): JSX.EventHandler<HTMLDivElement, MouseEvent> =>
-    (event) => {
-      const target = event.currentTarget;
-      setState('active', {row, col, x: target.offsetLeft, y: target.offsetTop});
-
-      // Reset selected if clicking on an unselected cell
-      if (state.selected.row !== row || state.selected.col !== col) {
-        resetSelectedCell();
-      }
-    };
-
   return (
     <div
       class='relative pb-1 outline-none overflow-y-auto'
@@ -122,7 +109,7 @@ export const Table = (props: Props): JSXElement => {
       <div class={`${zIndex.ROW_HEADER} flex sticky top-0`}>
         <CheckboxColumn isHeader={true} />
         <div class='flex'>
-          <For each={props.headers}>
+          <For each={currentTable().headers}>
             {(header) => (
               <Cell class='border-t-2 bg-app shadow-light-down'>
                 <span class='px-2 font-semibold'>{header}</span>
@@ -131,42 +118,65 @@ export const Table = (props: Props): JSXElement => {
           </For>
         </div>
       </div>
-      <For each={props.data}>
-        {(row, rowIndex) => (
-          <div class='flex flex-shrink-0' onMouseOver={() => setState('hover', 'row', rowIndex())}>
+      <Index each={currentTable().data}>
+        {(rowData, row) => (
+          <div class='flex flex-shrink-0' onMouseOver={() => setState('hover', 'row', row)}>
             <CheckboxColumn
               onCheck={(checked) => {
                 setState(
                   produce((state) => {
                     if (checked === CheckboxState.Checked) {
-                      state.selectedRows[rowIndex()] = true;
+                      state.selectedRows[row] = true;
                     } else {
-                      delete state.selectedRows[rowIndex()];
+                      delete state.selectedRows[row];
                     }
                   })
                 );
               }}
             />
-            <For each={row}>
-              {(data, colIndex) => (
+            <Index each={rowData()}>
+              {(cellData, col) => (
                 <DataCell
-                  content={data}
-                  rowIndex={rowIndex()}
-                  colIndex={colIndex()}
-                  isSelected={state.selected.row === rowIndex() && state.selected.col === colIndex()}
-                  isHovered={state.hover.row === rowIndex()}
-                  isRowSelected={state.selectedRows[rowIndex()]}
-                  isModified={!!props.modifications[`${rowIndex()},${colIndex()}`]}
+                  content={cellData()}
+                  rowIndex={row}
+                  colIndex={col}
+                  isSelected={state.selected.row === row && state.selected.col === col}
+                  isHovered={state.hover.row === row}
+                  isRowSelected={state.selectedRows[row]}
+                  isModified={Boolean(currentTable().modifications[`${row},${col}`])}
                   onHover={(row, col) => setState('hover', {row, col})}
-                  onClick={onCellClick(rowIndex(), colIndex())}
-                  onDoubleClick={() => setState('selected', {row: rowIndex(), col: colIndex()})}
+                  onClick={(event) => {
+                    const target = event.currentTarget;
+                    setState('active', {row, col, x: target.offsetLeft, y: target.offsetTop});
+
+                    // Reset selected if clicking on an unselected cell
+                    if (state.selected.row !== row || state.selected.col !== col) {
+                      resetSelectedCell();
+                    }
+                  }}
+                  onDoubleClick={() => setState('selected', {row: row, col: col})}
                   onEditInput={(event) => {
                     event.stopPropagation();
-                    props.onCellEdit({
-                      row: rowIndex(),
-                      col: colIndex(),
-                      value: event.currentTarget.value,
-                    });
+
+                    setRoot(
+                      produce((state) => {
+                        const index = `${row},${col}` as const;
+                        const {modifications, data} = state.tables[props.tableName];
+                        const newValue = event.currentTarget.value;
+
+                        if (modifications[index]) {
+                          modifications[index].newValue = newValue;
+                        } else {
+                          modifications[index] = {
+                            originalValue: cellData(),
+                            newValue,
+                          };
+                        }
+
+                        data[row][col] = newValue;
+                        data[row] = [...data[row]];
+                      })
+                    );
                   }}
                   onEditKeyDown={(event) => {
                     event.stopPropagation();
@@ -176,10 +186,10 @@ export const Table = (props: Props): JSXElement => {
                   }}
                 />
               )}
-            </For>
+            </Index>
           </div>
         )}
-      </For>
+      </Index>
     </div>
   );
 };
