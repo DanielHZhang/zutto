@@ -7,12 +7,12 @@ license = ""
 repository = ""
 default-run = "app"
 edition = "2021"
-rust-version = "1.59"
+rust-version = "1.63"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.0.0-rc.5", features = [] }
+tauri-build = { version = "1", features = ["codegen"] }
 
 [dependencies]
 directories = "4.0.1"
@@ -20,7 +20,7 @@ futures = "0.3.21"
 rust_decimal = "1.23.1"
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-sqlx = { version = "0.5.11", features = [
+sqlx = { version = "0.6.1", features = [
 	"decimal",
 	"json",
 	"runtime-tokio-rustls",
@@ -28,13 +28,13 @@ sqlx = { version = "0.5.11", features = [
 	"time",
 	"uuid",
 ] }
-tauri = { version = "1.0.0-rc.6", features = ["api-all"] }
+tauri = { version = "1", features = ["api-all"] }
 tauri-plugin-window-state = { git = "https://github.com/tauri-apps/tauri-plugin-window-state", branch = "dev" }
 time = { version = "0.3.9", features = ["serde", "parsing", "macros"] }
 tokio = { version = "1.17.0", features = ["full"] }
 tracing = "0.1.32"
 tracing-subscriber = "0.3.10"
-uuid = { version = "0.8.2", features = ["serde", "v4"] }
+uuid = { version = "1.1.2", features = ["serde", "v4"] }
 
 [features]
 # by default Tauri runs in production mode
@@ -43,3 +43,11 @@ default = ["custom-protocol"]
 # this feature is used used for production builds where `devPath` points to the filesystem
 # DO NOT remove this
 custom-protocol = ["tauri/custom-protocol"]
+
+# default to small, optimized release binaries
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+incremental = false
+opt-level = "s"
